@@ -1,0 +1,22 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{40893D90-D136-31FF-99EC-B90C07AE7F16}") = "Imaginarium", "Assembly-CSharp.csproj", "{A2011A68-ED21-93F2-85B5-2F58D9794875}"
+EndProject
+Project("{40893D90-D136-31FF-99EC-B90C07AE7F16}") = "Imaginarium", "Assembly-CSharp-Editor-firstpass.csproj", "{4FB2074F-BE49-3561-C504-3409E58D96B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2011A68-ED21-93F2-85B5-2F58D9794875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2011A68-ED21-93F2-85B5-2F58D9794875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2011A68-ED21-93F2-85B5-2F58D9794875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2011A68-ED21-93F2-85B5-2F58D9794875}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FB2074F-BE49-3561-C504-3409E58D96B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FB2074F-BE49-3561-C504-3409E58D96B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FB2074F-BE49-3561-C504-3409E58D96B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FB2074F-BE49-3561-C504-3409E58D96B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
