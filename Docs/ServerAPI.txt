@@ -1,0 +1,41 @@
+1. JoinLobby
+Принимает POST запрос
+Формат:
+
+Ответ:
+{
+	"status":"WAITING",
+	"token":"token_in_integer"
+}
+2. UpdateLobby
+Принимает POST запрос вида application/json
+Формат:
+{
+	"token":"token_in_integer"
+}
+Ответ:
+{
+	"status":"WAITING/READY",
+}
+3. GetRoomStatus
+Принимает POST запрос вида application/json
+Формат:
+{
+	"token":"token_in_integer"
+}
+Ответ:
+{
+	"game_stage":"1-5",
+	//depends on stage, no more info before game logic is done
+}
+4. PushRoomUpdate
+Принимает POST запрос вида application/json
+Формат:
+{
+	"chosen_card":"card_id",
+	"text":"text"
+}
+Ответ:
+{
+	"status":"REQUEST_RECIEVED"
+}
