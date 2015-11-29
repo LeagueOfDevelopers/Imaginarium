@@ -2,11 +2,10 @@ package com.nirus.guice_confige;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Singleton;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
-import com.nirus.interfaces.ILobby;
-import com.nirus.services.Lobby;
+import com.nirus.interfaces.ILobbyManager;
+import com.nirus.services.LobbyManager;
 import com.nirus.servlets.JoinLobby;
 import com.nirus.servlets.UpdateLobby;
 
@@ -22,7 +21,7 @@ public class MyGuiceServletConfig extends GuiceServletContextListener {
             protected void configureServlets() {
                 serve("/JoinLobby").with(JoinLobby.class);
                 serve("/UpdateLobby").with(UpdateLobby.class);
-                bind(ILobby.class).to(Lobby.class);
+                bind(ILobbyManager.class).to(LobbyManager.class);
             }
         });
     }

@@ -4,12 +4,12 @@ package com.nirus.containers;
  * Created by ndiezel on 28.11.2015.
  */
 public class ResponseForLobby {
-    public ResponseForLobby(String status, Room room) {
+    public ResponseForLobby(String status, Integer token) {
         _status = status;
-        _room = null;
+        _token = token;
     }
     public String GetStatus(){ return _status;}
-    public Room GetRoom(){ return _room;}
+    public Integer GetToken(){ return _token;}
     private String _status;
-    private Room _room;
+    private Integer _token;
 }

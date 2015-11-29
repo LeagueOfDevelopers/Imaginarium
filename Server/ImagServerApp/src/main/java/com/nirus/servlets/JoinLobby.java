@@ -3,7 +3,8 @@ package com.nirus.servlets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.nirus.containers.Player;
-import com.nirus.interfaces.ILobby;
+import com.nirus.containers.ResponseForLobby;
+import com.nirus.interfaces.ILobbyManager;
 import com.nirus.parsers.JSONRequestParser;
 
 import javax.servlet.ServletException;
@@ -21,18 +22,25 @@ import java.io.PrintWriter;
 @Singleton
 public class JoinLobby extends HttpServlet {
     @Inject
-    public JoinLobby(ILobby lobby) {
+    public JoinLobby(ILobbyManager lobby) {
         _lobby=lobby;
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        JSONRequestParser parser = new JSONRequestParser(request);
         PrintWriter out = response.getWriter();
-        out.append(_lobby.JoinLobby(new Player(parser.GetStringByKey("name"))).GetStatus());
+        ResponseForLobby responseForLobby = new ResponseForLobby("Some Error happened", 0);
+        try {
+            responseForLobby = _lobby.JoinLobby();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        out.append(responseForLobby.GetStatus());
+        out.println();
+        out.append(responseForLobby.GetToken().toString());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-    ILobby _lobby;
+    ILobbyManager _lobby;
 }

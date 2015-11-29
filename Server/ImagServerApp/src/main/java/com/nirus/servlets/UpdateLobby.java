@@ -2,7 +2,7 @@ package com.nirus.servlets;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.nirus.interfaces.ILobby;
+import com.nirus.interfaces.ILobbyManager;
 import com.nirus.parsers.JSONRequestParser;
 
 import javax.servlet.ServletException;
@@ -19,7 +19,7 @@ import java.io.IOException;
 @Singleton
 public class UpdateLobby extends HttpServlet {
     @Inject
-    public UpdateLobby(ILobby lobby) {
+    public UpdateLobby(ILobbyManager lobby) {
         _lobby = lobby;
     }
 
@@ -30,5 +30,5 @@ public class UpdateLobby extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-    ILobby _lobby;
+    ILobbyManager _lobby;
 }
