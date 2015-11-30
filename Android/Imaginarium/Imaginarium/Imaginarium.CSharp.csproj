@@ -71,7 +71,8 @@
     <Compile Include="Assets\Scripts\Menu\MenuElement.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuListener.cs" />
-    <Compile Include="Assets\Scripts\ServerDriver.cs" />
+    <Compile Include="Assets\Scripts\Server\JsonDriver.cs" />
+    <Compile Include="Assets\Scripts\Server\ServerDriver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
