@@ -1,15 +1,17 @@
 package com.nirus.containers;
 
+import java.util.UUID;
+
 /**
  * Created by ndiezel on 28.11.2015.
  */
 public class ResponseForLobby {
-    public ResponseForLobby(String status, Integer token) {
+    public ResponseForLobby(String status, UUID token) {
         _status = status;
         _token = token;
     }
     public String GetStatus(){ return _status;}
-    public Integer GetToken(){ return _token;}
+    public UUID GetToken(){ return _token;}
     private String _status;
-    private Integer _token;
+    private UUID _token;
 }

@@ -5,7 +5,9 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.nirus.interfaces.ILobbyManager;
+import com.nirus.interfaces.IRoomHandler;
 import com.nirus.services.LobbyManager;
+import com.nirus.services.RoomHandler;
 import com.nirus.servlets.JoinLobby;
 import com.nirus.servlets.UpdateLobby;
 
@@ -22,6 +24,7 @@ public class MyGuiceServletConfig extends GuiceServletContextListener {
                 serve("/JoinLobby").with(JoinLobby.class);
                 serve("/UpdateLobby").with(UpdateLobby.class);
                 bind(ILobbyManager.class).to(LobbyManager.class);
+                bind(IRoomHandler.class).to(RoomHandler.class);
             }
         });
     }

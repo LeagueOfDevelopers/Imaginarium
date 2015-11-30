@@ -1,41 +1,28 @@
 package com.nirus.threads;
 
-import com.nirus.containers.Room;
 
 import java.util.HashMap;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.HashSet;
+import java.util.UUID;
 
 /**
  * Created by ndiezel on 29.11.2015.
  */
-public class Lobby implements Runnable {
-    public Lobby(HashMap<Integer, Lobby> playersBind, ArrayBlockingQueue<Integer> playersQueue, ArrayBlockingQueue<Integer> playersCountForI){
+public class Lobby {
+    public Lobby(HashMap<UUID, Lobby> playersBind){
         _playersBind = playersBind;
-        _playersQueue = playersQueue;
-        _playersCount = 0;
-        _playersCountForI = playersCountForI;
+        _playersSet = new HashSet<UUID>();
     }
-
-    public void run() {
-        while (_playersCount < 6){
-            Integer newPlayer = 0;
-            try {
-                newPlayer = _playersQueue.take();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            _playersBind.put(newPlayer, this);
-            _playersCount++;
-            try {
-                _playersCountForI.put(_playersCount);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public void AddPlayer(UUID newPlayer){
+        _playersBind.put(newPlayer, this);
+        _playersSet.add(newPlayer);
     }
-    private HashMap<Integer, Lobby> _playersBind;
-    private ArrayBlockingQueue<Integer> _playersQueue;
-    private Integer _playersCount;
-    private ArrayBlockingQueue<Integer> _playersCountForI;
-    private Thread lobbyThread;
+    public Integer GetCurrentPlayersCount(){
+        return _playersSet.size();
+    }
+    public HashSet<UUID> GetPlayersSet(){
+        return _playersSet;
+    }
+    HashMap<UUID, Lobby> _playersBind;
+    HashSet<UUID> _playersSet;
 }

@@ -1,15 +1,18 @@
 package com.nirus.interfaces;
 
-import java.util.Map;
+import com.nirus.containers.ResponseForAChange;
+import com.nirus.threads.Lobby;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.UUID;
 
 /**
  * Created by ndiezel on 28.11.2015.
  */
 public interface IRoomHandler {
-
-    Map<String, String> LeaveLobby(Map<String, String> request);
-
-    Map<String, String> MakeTurn(Map<String, String> request);
-    Map<String, String> UpdateGame(Map<String, String> request);
+    void CreateRoom(HashSet<UUID> playersBind);
+    ResponseForGameUpdate RoomStatus(UUID token);
+    ResponseForAChange ChangeRoomStatus(UUID token);
 
 }

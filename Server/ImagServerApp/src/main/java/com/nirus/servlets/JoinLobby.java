@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.UUID;
 
 /**
  * Created by ndiezel on 28.11.2015.
@@ -28,12 +29,7 @@ public class JoinLobby extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        ResponseForLobby responseForLobby = new ResponseForLobby("Some Error happened", 0);
-        try {
-            responseForLobby = _lobby.JoinLobby();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        ResponseForLobby responseForLobby = _lobby.JoinLobby();
         out.append(responseForLobby.GetStatus());
         out.println();
         out.append(responseForLobby.GetToken().toString());
