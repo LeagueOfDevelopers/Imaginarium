@@ -7,15 +7,17 @@ using UnityEngine;
 
 public class MenuElement
 {
-        private GameObject _element;
-        private Vector3 _pos;
-        private Vector3 _startPos;
+    public float speed = 3.0f;
 
-        public MenuElement(GameObject element) {
-        _element = element;
-        _startPos = _element.transform.position;
-        _pos = _startPos;
-        }
+    private GameObject _element;
+    private Vector3 _pos;
+    private Vector3 _startPos;
+
+    public MenuElement(GameObject element) {
+    _element = element;
+    _startPos = _element.transform.position;
+    _pos = _startPos;
+    }
 
     public void MoveTo(Vector3 destination)
     {
@@ -27,7 +29,7 @@ public class MenuElement
     }
 
     public void Update() {
-        _element.transform.position = Vector3.Lerp(_element.transform.position, _pos, Time.deltaTime);
+        _element.transform.position = Vector3.Lerp(_element.transform.position, _pos, Time.deltaTime*speed);
     }
 
 }
