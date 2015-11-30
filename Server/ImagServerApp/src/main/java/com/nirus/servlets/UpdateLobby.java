@@ -31,9 +31,7 @@ public class UpdateLobby extends HttpServlet {
         JSONRequestParser parser = new JSONRequestParser(request);
         UUID token = UUID.fromString(parser.GetStringByKey("token"));
         ResponseForLobby responseForLobby = _lobby.UpdateLobby(token);
-        out.append(responseForLobby.GetStatus());
-        out.println();
-        out.append(token.toString());
+        out.append(responseForLobby.GetAsJSON().toString());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
