@@ -1,9 +1,8 @@
 package com.nirus.interfaces;
 
 import com.nirus.containers.ResponseForAChange;
-import com.nirus.threads.Lobby;
+import com.nirus.containers.ResponseForGameUpdate;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 

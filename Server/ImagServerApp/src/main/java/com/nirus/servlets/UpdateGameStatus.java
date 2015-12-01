@@ -2,8 +2,8 @@ package com.nirus.servlets;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.nirus.containers.ResponseForLobby;
-import com.nirus.interfaces.ILobbyManager;
+import com.nirus.containers.ResponseForGameUpdate;
+import com.nirus.interfaces.IRoomHandler;
 import com.nirus.parsers.JSONRequestParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,30 +18,28 @@ import java.io.PrintWriter;
 import java.util.UUID;
 
 /**
- * Created by ndiezel on 28.11.2015.
+ * Created by ndiezel on 01.12.2015.
  */
-@WebServlet(name = "UpdateLobby")
+@WebServlet(name = "UpdateGameStatus")
 @Singleton
-public class UpdateLobby extends HttpServlet {
+public class UpdateGameStatus extends HttpServlet {
     @Inject
-    public UpdateLobby(ILobbyManager lobby) {
-        _lobby = lobby;
-
+    public UpdateGameStatus(IRoomHandler roomHandler) {
+        _roomHandler = roomHandler;
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
         JSONRequestParser parser = new JSONRequestParser(request);
         logger.debug(request.getReader());
+        PrintWriter out = response.getWriter();
         UUID token = UUID.fromString(parser.GetStringByKey("token"));
-        ResponseForLobby responseForLobby = _lobby.UpdateLobby(token);
-        out.append(responseForLobby.GetAsJSON().toString());
+        ResponseForGameUpdate responseForGameUpdate = _roomHandler.RoomStatus(token);
+        out.append(responseForGameUpdate.GetAsJSON().toString());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-
-    private ILobbyManager _lobby;
+    IRoomHandler _roomHandler;
     private Logger logger = LogManager.getFormatterLogger();
 }
