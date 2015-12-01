@@ -18,7 +18,10 @@ public class MenuHandler : MonoBehaviour {
         SearchButton = new MenuElement(gameObject.transform.FindChild("SearchButton").gameObject);
         CenterPos = gameObject.transform.FindChild("Center").position;
 
+        Debug.Log("Start method");
         OpenTitleScreen();
+
+        
     }
 	
 	// Update is called once per frame
@@ -53,6 +56,7 @@ public class MenuHandler : MonoBehaviour {
 
     protected void OpenSearchButtonScreen()
     {
+        
         CurrentScreen = ScreenState.SearchButton;
         Title.MoveToStart();
         StartButton.MoveToStart();

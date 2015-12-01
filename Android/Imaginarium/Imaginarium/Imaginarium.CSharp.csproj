@@ -68,11 +68,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\JSON\JSONObject.cs" />
+    <Compile Include="Assets\JSON\JSONTemplates.cs" />
+    <Compile Include="Assets\JSON\VectorTemplates.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuElement.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuListener.cs" />
-    <Compile Include="Assets\Scripts\Server\JsonDriver.cs" />
     <Compile Include="Assets\Scripts\Server\ServerDriver.cs" />
+    <Compile Include="Assets\Scripts\TestingWWW.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\JSON\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

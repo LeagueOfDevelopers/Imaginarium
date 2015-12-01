@@ -14,7 +14,7 @@ public class MenuListener : MenuHandler
 
     public void TitleTouchListener()
     {
-        if (Input.touchCount > 0)
+        if ((Input.touchCount > 0)||(Input.GetMouseButtonDown(0)))
         {
             OpenStartButtonScreen();
         }

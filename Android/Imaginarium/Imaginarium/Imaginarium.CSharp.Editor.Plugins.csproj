@@ -113,6 +113,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Imaginarium.CSharp.Plugins.csproj">
+      <Project>{D36AC302-9BC5-C586-A91E-6AE190369642}</Project>
+      <Name>Imaginarium.CSharp.Plugins</Name>
+    </ProjectReference>
     <ProjectReference Include="Imaginarium.CSharp.csproj">
       <Project>{336E942F-292E-DDA7-5100-C2E618BBB770}</Project>
       <Name>Imaginarium.CSharp</Name>

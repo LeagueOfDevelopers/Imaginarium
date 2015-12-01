@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imaginarium.CSharp", "Imaginarium.CSharp.csproj", "{336E942F-292E-DDA7-5100-C2E618BBB770}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imaginarium.CSharp.Editor.Plugins", "Imaginarium.CSharp.Editor.Plugins.csproj", "{73CCAA6E-7C6E-3A66-2F03-51049CA3C357}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imaginarium.CSharp.Editor", "Imaginarium.CSharp.Editor.csproj", "{26647A31-DD6F-1966-ACA4-7D4B547F98DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,10 @@ Global
 		{336E942F-292E-DDA7-5100-C2E618BBB770}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{336E942F-292E-DDA7-5100-C2E618BBB770}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{336E942F-292E-DDA7-5100-C2E618BBB770}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73CCAA6E-7C6E-3A66-2F03-51049CA3C357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73CCAA6E-7C6E-3A66-2F03-51049CA3C357}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73CCAA6E-7C6E-3A66-2F03-51049CA3C357}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73CCAA6E-7C6E-3A66-2F03-51049CA3C357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26647A31-DD6F-1966-ACA4-7D4B547F98DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26647A31-DD6F-1966-ACA4-7D4B547F98DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26647A31-DD6F-1966-ACA4-7D4B547F98DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26647A31-DD6F-1966-ACA4-7D4B547F98DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
