@@ -12,16 +12,12 @@ import java.util.UUID;
 public class Room {
     public Room(HashSet<UUID> players, HashMap<UUID, Room> roomBind) {
         _players = players;
-        _roomBind = roomBind;
         for (UUID player: _players) {
-            _roomBind.put(player, this);
+            roomBind.put(player, this);
         }
-        game = new CardPart();
+        game = new CardPart(players);
     }
-    public ResponseForGameUpdate UpdateGame(UUID token){
-        return game.GetGameStatus(token);
-    }
+    public ResponseForGameUpdate UpdateGame(UUID token){ return game.GetGameStatus(token);}
     private CardPart game;
     private HashSet<UUID> _players;
-    private HashMap<UUID, Room> _roomBind;
 }

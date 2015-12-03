@@ -1,6 +1,5 @@
 package com.nirus.containers;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.UUID;

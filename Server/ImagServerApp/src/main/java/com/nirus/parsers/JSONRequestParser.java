@@ -50,7 +50,6 @@ public class JSONRequestParser {
     private JsonObject ParseToJSONObject() throws IOException {
         if(_bufferOfJson == null)
             ParseToString();
-        JsonObject object = new JsonObject();
         JsonParser parser = new JsonParser();
         _readyJson = parser.parse(_bufferOfJson.toString()).getAsJsonObject();
         return _readyJson;

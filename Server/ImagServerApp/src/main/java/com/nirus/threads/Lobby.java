@@ -23,6 +23,6 @@ public class Lobby {
     public HashSet<UUID> GetPlayersSet(){
         return _playersSet;
     }
-    HashMap<UUID, Lobby> _playersBind;
-    HashSet<UUID> _playersSet;
+    private HashMap<UUID, Lobby> _playersBind;
+    private HashSet<UUID> _playersSet;
 }

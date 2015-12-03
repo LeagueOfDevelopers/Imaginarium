@@ -2,9 +2,9 @@ package com.nirus.services;
 
 import com.google.inject.Singleton;
 import com.nirus.containers.ResponseForAChange;
+import com.nirus.containers.ResponseForGameUpdate;
 import com.nirus.containers.Room;
 import com.nirus.interfaces.IRoomHandler;
-import com.nirus.containers.ResponseForGameUpdate;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,5 +31,5 @@ public class RoomHandler implements IRoomHandler {
     public ResponseForAChange ChangeRoomStatus(UUID token) {
         return null;
     }
-    HashMap<UUID, Room> roomBind;
+    private HashMap<UUID, Room> roomBind;
 }

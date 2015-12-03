@@ -46,7 +46,7 @@ public class LobbyManager implements ILobbyManager {
         }
     }
     private void ChangingLobby(){
-        oldLobby = lobby;
+        Lobby oldLobby = lobby;
         lobby = new Lobby(playersBind);
         HashSet<UUID> setOfPlayers = oldLobby.GetPlayersSet();
         _roomHandler.CreateRoom(setOfPlayers);
@@ -54,5 +54,4 @@ public class LobbyManager implements ILobbyManager {
     private IRoomHandler _roomHandler;
     private HashMap<UUID, Lobby> playersBind;
     private Lobby lobby;
-    private Lobby oldLobby;
 }
