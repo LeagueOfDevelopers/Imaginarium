@@ -1,41 +1,45 @@
-1. JoinLobby
-Принимает POST запрос
-Формат:
+1)JoinLobby
+request{
+}
+response{
+token
+}
 
-Ответ:
-{
-	"status":"WAITING",
-	"token":"token_in_integer"
+2)UpdateLobby
+request{
+token
 }
-2. UpdateLobby
-Принимает POST запрос вида application/json
-Формат:
-{
-	"token":"token_in_integer"
+response{
+token
+status: WAITING/READY/ERROR
+countOfPLayers
 }
-Ответ:
-{
-	"status":"WAITING/READY",
+
+3)GetRoomStatus()
+request{
+token
 }
-3. GetRoomStatus
-Принимает POST запрос вида application/json
-Формат:
-{
-	"token":"token_in_integer"
+
+response{
+stage: [1..4]		//В зависимости от стадии один из следующих ответов
+1)isHead, cardsInHand(card#1,card#2...card#6), score
+2)text	(текст ассоциации ведущего)
+3)CardsFromStageTwo	(Карты выбранные на 2 ходу)
+4)resultForEachCard (я бы делал ассоциацию {card#1 -> 2 card#2 -> 0 ...}), CardOfHead (ID карты ведущего), deltaScore (приращение очков этого игрока)
 }
-Ответ:
-{
-	"game_stage":"1-5",
-	//depends on stage, no more info before game logic is done
+
+4)UpdateRoomStatus
+RESPONSE{
+status: OK/ERROR/...
 }
-4. PushRoomUpdate
-Принимает POST запрос вида application/json
-Формат:
-{
-	"chosen_card":"card_id",
-	"text":"text"
-}
-Ответ:
-{
-	"status":"REQUEST_RECIEVED"
+
+request{
+1) (isHead == true) token, chosenCardHead (карта выбранная ведущим), text (текст ассоциации)
+2) (isHead == false) token, chosenCardPlayer
+3) (isHead == false) token, votedCardID
+4) token
+
+1) (isHead == false) Какая то ошибка
+2) (isHead == true) Какая то ошибка
+3) (isHead == true) Какая то ошибка
 }
