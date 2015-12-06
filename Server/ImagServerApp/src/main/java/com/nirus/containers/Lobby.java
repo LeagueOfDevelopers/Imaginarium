@@ -1,4 +1,4 @@
-package com.nirus.threads;
+package com.nirus.containers;
 
 
 import java.util.HashMap;

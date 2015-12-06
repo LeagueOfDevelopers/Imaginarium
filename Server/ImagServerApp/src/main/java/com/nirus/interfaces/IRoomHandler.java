@@ -1,5 +1,6 @@
 package com.nirus.interfaces;
 
+import com.nirus.containers.RequestForAChange;
 import com.nirus.containers.ResponseForAChange;
 import com.nirus.containers.ResponseForGameUpdate;
 
@@ -12,6 +13,6 @@ import java.util.UUID;
 public interface IRoomHandler {
     void CreateRoom(HashSet<UUID> playersBind);
     ResponseForGameUpdate RoomStatus(UUID token);
-    ResponseForAChange ChangeRoomStatus(UUID token);
+    ResponseForAChange ChangeRoomStatus(UUID token, RequestForAChange request);
 
 }

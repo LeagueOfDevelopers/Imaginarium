@@ -1,6 +1,8 @@
-package com.nirus.containers;
+package com.nirus.game_logic;
 
-import com.nirus.game_logic.CardPart;
+import com.nirus.containers.RequestForAChange;
+import com.nirus.containers.ResponseForAChange;
+import com.nirus.containers.ResponseForGameUpdate;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +20,11 @@ public class Room {
         game = new CardPart(players);
     }
     public ResponseForGameUpdate UpdateGame(UUID token){ return game.GetGameStatus(token);}
+    public ResponseForAChange ChangeGame(UUID token,
+                                         RequestForAChange requestForAChange)
+    {
+        return game.UpdateGameSituation(token, requestForAChange);
+    }
     private CardPart game;
     private HashSet<UUID> _players;
 }

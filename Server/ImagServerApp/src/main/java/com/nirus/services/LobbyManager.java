@@ -2,10 +2,10 @@ package com.nirus.services;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.nirus.containers.Lobby;
 import com.nirus.containers.ResponseForLobby;
 import com.nirus.interfaces.ILobbyManager;
 import com.nirus.interfaces.IRoomHandler;
-import com.nirus.threads.Lobby;
 
 import java.util.HashMap;
 import java.util.HashSet;

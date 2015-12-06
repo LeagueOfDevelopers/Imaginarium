@@ -9,7 +9,8 @@ import com.nirus.interfaces.IRoomHandler;
 import com.nirus.services.LobbyManager;
 import com.nirus.services.RoomHandler;
 import com.nirus.servlets.JoinLobby;
-import com.nirus.servlets.UpdateGameStatus;
+import com.nirus.servlets.RequestChangeOfGameStatus;
+import com.nirus.servlets.RequestGameStatus;
 import com.nirus.servlets.UpdateLobby;
 
 /**
@@ -24,7 +25,8 @@ public class MyGuiceServletConfig extends GuiceServletContextListener {
             protected void configureServlets() {
                 serve("/JoinLobby").with(JoinLobby.class);
                 serve("/UpdateLobby").with(UpdateLobby.class);
-                serve("/UpdateGameStatus").with(UpdateGameStatus.class);
+                serve("/GameStatus").with(RequestGameStatus.class);
+                serve("/ChangeGameStatus").with(RequestChangeOfGameStatus.class);
                 bind(ILobbyManager.class).to(LobbyManager.class);
                 bind(IRoomHandler.class).to(RoomHandler.class);
             }
