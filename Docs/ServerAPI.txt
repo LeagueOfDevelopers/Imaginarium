@@ -12,7 +12,7 @@ token
 response{
 token
 status: WAITING/READY/ERROR
-countOfPLayers
+countOfPLayers (пока нет, сделаю пойзже)
 }
 
 3)GetRoomStatus()
@@ -22,20 +22,20 @@ token
 
 response{
 stage: [1..4]		//¬ зависимости от стадии один из следующих ответов
-1)isHead, cardsInHand(card#1,card#2...card#6), score
-2)text	(текст ассоциации ведущего)
+1)isHead, card#1,card#2...card#6, score
+2)text	(текст ассоциации ведущего), card (карта, которую выбрал ведущий)
 3)CardsFromStageTwo	( арты выбранные на 2 ходу)
 4)resultForEachCard (€ бы делал ассоциацию {card#1 -> 2 card#2 -> 0 ...}), CardOfHead (ID карты ведущего), deltaScore (приращение очков этого игрока)
 }
 
 4)UpdateRoomStatus
-RESPONSE{
-status: OK/ERROR/...
-}
+RESPONSE for stages
+1) (isHead == true) "status":"OK"
+2) (isHead == false) "status":"OK"
 
 request{
-1) (isHead == true) token, chosenCardHead (карта выбранна€ ведущим), text (текст ассоциации)
-2) (isHead == false) token, chosenCardPlayer
+1) (isHead == true) token, card (карта выбранна€ ведущим), text (текст ассоциации)
+2) (isHead == false) token, card
 3) (isHead == false) token, votedCardID
 4) token
 
