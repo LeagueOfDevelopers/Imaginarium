@@ -10,24 +10,11 @@ public class ServerDriver {
         
     }
 
-    public IEnumerator request() {
-        WWWForm form = new WWWForm();
-        form.AddField("SOMETHING", 1234);
-        form.AddField("SomethingElse", "ElseShitOf");
+    private IEnumerator request() 
+    {
 
-        WWW request = new WWW(url, form);
-        Debug.Log("sdfsf");
-        yield return request;
-
-        if (!string.IsNullOrEmpty(request.error))
-        {
-            Debug.Log("Error downloading: " + request.error);
-        }
-        else
-        {
-            // show the highscores
-            Debug.Log(request.ToString());
-        }
+        WWW www = new WWW(url);
+        yield return www;
     }
 
 }
