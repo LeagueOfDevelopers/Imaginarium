@@ -1,11 +1,9 @@
 ﻿using System;
 
 
-namespace Assets.Scripts.Server
+public class ServerAPI
 {
-    class ServerAPI
-    {
 
-        public enum RequestType {JoinLobby}
-    }
+    public enum RequestType {JoinLobby, UpdateLobby, GetRoomStatus, UpdateRoomStatus, Test}
 }
+
