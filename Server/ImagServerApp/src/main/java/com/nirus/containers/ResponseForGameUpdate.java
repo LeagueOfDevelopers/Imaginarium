@@ -11,15 +11,14 @@ import java.util.Iterator;
 public class ResponseForGameUpdate {
     public ResponseForGameUpdate(String status) {
         _status = status;
-        firstStage = new HashSet<Integer>();
+        firstStage = new HashSet<Card>();
     }
-    public void SetFirstStage(HashSet<Integer> cards, Boolean head){
+    public void SetFirstStage(HashSet<Card> cards, Boolean head){
         firstStage = cards;
         _head = head;
     }
-    public void SetSecondStage(String text, Integer cardID){
+    public void SetSecondStage(String text){
         this.text = text;
-        this.cardID = cardID;
     }
     public JsonObject GetAsJSON(){
         JsonObject response = new JsonObject();
@@ -27,12 +26,11 @@ public class ResponseForGameUpdate {
         if(_status == "FIRST_STAGE"){
             response.addProperty("is_head", _head.toString());
             response.addProperty("score", score.toString());
-            Iterator<Integer> iterator = firstStage.iterator();
+            Iterator<Card> iterator = firstStage.iterator();
             for(Integer i = 0; iterator.hasNext(); i++){
-                response.addProperty("card#"+i.toString(), iterator.next());
+                response.addProperty("card#"+i.toString(), iterator.next().GetId());
             }
         } else if(_status == "SECOND_STAGE"){
-            response.addProperty("card", cardID.toString());
             response.addProperty("text", text);
         }
         return response;
@@ -40,7 +38,6 @@ public class ResponseForGameUpdate {
     private Integer score = 0;
     private Boolean _head;
     private String _status;
-    private HashSet<Integer> firstStage;
+    private HashSet<Card> firstStage;
     private String text;
-    private Integer cardID;
 }

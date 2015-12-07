@@ -1,6 +1,7 @@
 package com.nirus.game_logic;
 
 import com.google.gson.JsonObject;
+import com.nirus.containers.Card;
 import com.nirus.containers.RequestForAChange;
 import com.nirus.containers.ResponseForAChange;
 import com.nirus.containers.ResponseForGameUpdate;
@@ -14,8 +15,8 @@ import java.lang.Math;
 public class CardPart {
     public CardPart(HashSet<UUID> players) {
         clientRequests = new ArrayList<UUID>();
-        cardsInADeck = new ArrayList<Integer>();
-        cardBind = new HashMap<UUID, HashSet<Integer>>();
+        cardsInADeck = new ArrayList<Card>();
+        cardBind = new HashMap<UUID, HashSet<Card>>();
         gameStage = 0;
         playersList = players;
         InitCards();
@@ -28,7 +29,7 @@ public class CardPart {
         if(gameStage == 0){
             if(!clientRequests.contains(token)){
                 clientRequests.add(token);
-                HashSet<Integer> cardsForPlayer = FirstStage(token);
+                HashSet<Card> cardsForPlayer = FirstStage(token);
                 ResponseForGameUpdate response = new ResponseForGameUpdate("FIRST_STAGE");
                 response.SetFirstStage(cardsForPlayer, token.equals(currentHead));
                 return response;
@@ -43,7 +44,7 @@ public class CardPart {
             if(!clientRequests.contains(token)){
                 clientRequests.add(token);
                 ResponseForGameUpdate response = new ResponseForGameUpdate("SECOND_STAGE");
-                response.SetSecondStage(headsText, headsCard);
+                response.SetSecondStage(headsText);
                 return response;
             } else{
                 return new ResponseForGameUpdate("SAME");
@@ -56,7 +57,7 @@ public class CardPart {
         if(gameStage == 0){
             if(token.equals(currentHead)){
                 JsonObject jsonRequest = request.GetJson();
-                Integer cardId = jsonRequest.get("card").getAsInt();
+                Card cardId = new Card(jsonRequest.get("card").getAsInt());
                 String text = jsonRequest.get("text").getAsString();
                 headsCard = cardId;
                 headsText = text;
@@ -75,21 +76,21 @@ public class CardPart {
         }
     }
     private void InitCards(){
-        cardsInADeck = new ArrayList<Integer>(72);
+        cardsInADeck = new ArrayList<Card>(72);
         for (int i = 0; i < 72; i++) {
-            cardsInADeck.add(i);
+            cardsInADeck.add(new Card(i));
         }
     }
-    private HashSet<Integer> FirstStage(UUID token){
-        HashSet<Integer> newSetOfCards = GiveCards(6);
+    private HashSet<Card> FirstStage(UUID token){
+        HashSet<Card> newSetOfCards = GiveCards(6);
 
         cardBind.put(token, newSetOfCards);
         return newSetOfCards;
     }
-    private HashSet<Integer> GiveCards(Integer howMuch){
-        HashSet<Integer> setOfCards = new HashSet<Integer>(howMuch);
+    private HashSet<Card> GiveCards(Integer howMuch){
+        HashSet<Card> setOfCards = new HashSet<Card>(howMuch);
         for(int i = 0; i < howMuch; i++){
-            Integer card = cardsInADeck.get(Math.abs(rand.nextInt()%cardsInADeck.size()));
+            Card card = cardsInADeck.get(Math.abs(rand.nextInt()%cardsInADeck.size()));
             setOfCards.add(card);
             cardsInADeck.remove(card);
         }
@@ -101,8 +102,8 @@ public class CardPart {
     private ArrayList<UUID> clientRequests;
     private Iterator<UUID> iteratorForHead;
     private HashSet<UUID> playersList;
-    private HashMap<UUID, HashSet<Integer>> cardBind;
-    private ArrayList<Integer> cardsInADeck;
-    private Integer headsCard = null;
+    private HashMap<UUID, HashSet<Card>> cardBind;
+    private ArrayList<Card> cardsInADeck;
+    private Card headsCard = null;
     private String headsText = null;
 }
