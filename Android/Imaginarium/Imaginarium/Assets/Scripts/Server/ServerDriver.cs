@@ -2,24 +2,26 @@
 using UnityEngine.UI;
 using UnityEngine;
 
-public class ServerDriver :MonoBehaviour {
+public class ServerDriver {
 
     private string url = "http://185.87.49.245:8080/ImagServerApp_war";
-    private JSONObject response;
+    private WWW www;
 
-    void Start() {
-        JSONObject data = new JSONObject();
-        data.AddField("token", "123235e4rgdfhdfhfdgd");
-        request(ServerAPI.RequestType.Test, data);
+    public bool isDone() {
+        return www.isDone;
     }
 
+    public JSONObject getResponse() {
+        if (isDone())
+            return new JSONObject(www.text.ToString());
 
-    public IEnumerator request(ServerAPI.RequestType type, JSONObject data) 
+        return new JSONObject();
+    } 
+
+    public void sendRequest(ServerAPI.RequestType type, JSONObject dataObject) 
     {
-        WWW www = new WWW(url+type.ToString(), data);
-        yield return www;
-        Text text = GetComponent<Text>();
-        text.text = www.text;
+        byte[] data = System.Text.Encoding.UTF8.GetBytes(dataObject.ToString());
+        www = new WWW(url+'/'+type.ToString(), data);
     }
 
 }
