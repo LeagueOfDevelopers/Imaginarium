@@ -16,9 +16,30 @@ public class ServerDriver {
             return new JSONObject(www.text.ToString());
 
         return new JSONObject();
-    } 
+    }
 
-    public void sendRequest(ServerAPI.RequestType type, JSONObject dataObject) 
+    public void JoinLobby() {
+        sendRequest(ServerAPI.RequestType.JoinLobby, new JSONObject());
+    }
+
+    public void UpdateLobby(string token) {
+        JSONObject data = new JSONObject();
+        data.AddField("token", token);
+        sendRequest(ServerAPI.RequestType.UpdateLobby, data);
+    }
+
+    public void GetRoomStatus(string token) {
+        JSONObject data = new JSONObject();
+        data.AddField("token", token);
+        sendRequest(ServerAPI.RequestType.GetRoomStatus, data);
+    }
+
+    public void UpdateRoomStatus(string token, JSONObject data) {
+        data.AddField("token", token);
+        sendRequest(ServerAPI.RequestType.UpdateRoomStatus, data);
+    }
+
+    private void sendRequest(ServerAPI.RequestType type, JSONObject dataObject) 
     {
         byte[] data = System.Text.Encoding.UTF8.GetBytes(dataObject.ToString());
         www = new WWW(url+'/'+type.ToString(), data);
