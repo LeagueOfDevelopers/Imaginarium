@@ -40,4 +40,40 @@ public class Prefs {
         return cards;
     }
 
+    public void setChosenCards(int[] cards)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            PlayerPrefs.SetInt("chosenCard" + i.ToString(), cards[i]);
+        }
+    }
+
+    public int[] getChosenCards()
+    {
+        int[] cards = new int[6];
+        for (int i = 0; i < 6; i++)
+        {
+            cards[i] = PlayerPrefs.GetInt("chosenCard" + i.ToString(), -1);
+        }
+        return cards;
+    }
+
+    public void setScore(int score)
+    {
+        PlayerPrefs.SetInt("score", score);
+    }
+
+    public int getScore() {
+        return PlayerPrefs.GetInt("score", 0);
+    }
+
+    public void setOwnCard(int card)
+    {
+        PlayerPrefs.SetInt("ownCard", card);
+    }
+
+    public int getOwnCard()
+    {
+        return PlayerPrefs.GetInt("ownCard", -1);
+    }
 }
