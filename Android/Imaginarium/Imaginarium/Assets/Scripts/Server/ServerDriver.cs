@@ -14,8 +14,11 @@ public class ServerDriver {
     public JSONObject getResponse() {
         if (isDone())
             return new JSONObject(www.text.ToString());
-
         return new JSONObject();
+    }
+
+    public string text() {
+        return www.text.ToString();
     }
 
     public void JoinLobby() {
@@ -24,9 +27,11 @@ public class ServerDriver {
 
     public void UpdateLobby(string token) {
         JSONObject data = new JSONObject();
+        Debug.Log(token);
         data.AddField("token", token);
         sendRequest(ServerAPI.RequestType.UpdateLobby, data);
     }
+
 
     public void GetRoomStatus(string token) {
         JSONObject data = new JSONObject();
@@ -37,6 +42,10 @@ public class ServerDriver {
     public void UpdateRoomStatus(string token, JSONObject data) {
         data.AddField("token", token);
         sendRequest(ServerAPI.RequestType.UpdateRoomStatus, data);
+    }
+
+    public void TestRequest() {
+        www = new WWW(url + "/Test");
     }
 
     private void sendRequest(ServerAPI.RequestType type, JSONObject dataObject) 
