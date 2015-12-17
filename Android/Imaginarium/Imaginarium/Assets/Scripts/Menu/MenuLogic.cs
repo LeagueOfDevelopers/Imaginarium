@@ -2,80 +2,98 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class MenuLogic : MonoBehaviour {
+public class MenuLogic : MonoBehaviour
+{
 
-    private enum Stage {Idle, TryOldToken, WaitingForToken, SearchingGame }
+    private enum Stage { Idle, JoinLobby, SearchingGame }
     private Stage currentStage = Stage.Idle;
     ServerDriver driver = new ServerDriver();
     Prefs prefs = new Prefs();
-    string token = "5b952355-1cdf-42eb-aa7a-961021b195c8";
+    string token = "";
+    private bool requesting = false;
 
-    void Start() {
+    void Start()
+    {
         driver.TestRequest();
     }
 
-	// Update is called once per frame
-	void Update () {
-        if (driver.isDone())
+    // Update is called once per frame
+    void Update()
+    {
+        if (requesting)
         {
-            switch (currentStage)
+            if (driver.isDone())
             {
-                case Stage.TryOldToken:
-                    if (driver.getResponse().GetField("status").ToString() == "ERROR")
-                        WaitingForToken();
-                    else
-                        SearchingGame();
-                    break;
+                switch (currentStage)
+                {
 
-                case Stage.WaitingForToken:
-                        token = driver.getResponse().GetField("token").ToString();
-                        Debug.Log(token);
-                        SearchingGame();
-                    break;
-                case Stage.SearchingGame:
-                    Debug.Log(driver.text());          
-                        if (driver.getResponse().GetField("token").ToString() != token)
+                    case Stage.JoinLobby:
+                        Debug.Log("JoinLobby");
+                        prefs.setToken(driver.getResponse()["token"].ToString());
+                        TryToken();
+                        break;
+
+                    case Stage.SearchingGame:
+                        Debug.Log("SearchingGame" + token);
+                        Debug.Log(driver.text().ToString());
+                        if (!driver.getResponse()["token"].ToString().Equals(token)
+                            || driver.getResponse()["status"].Equals("ERROR"))
                         {
-                            currentStage = Stage.TryOldToken;
-                            return;
+                            JoinLobby();
+                            break;
                         }
-                    if (driver.getResponse().GetField("status").ToString() == "READY")
-                        StartGame();
-                    break;
-                default:
-                    break;
+
+
+                        if (driver.getResponse()["status"].Equals("READY_FOR_GAME"))
+                        {
+                            GameStart();
+                            break;
+                        }
+
+                        SearchingGame();
+
+                        break;
+                }
             }
         }
-	}
-
-    private void WaitingForToken() {
-        driver.JoinLobby();
-        currentStage = Stage.WaitingForToken;
     }
 
-    private void SearchingGame() {
+    public void LobbyJoining()
+    {
+        requesting = true;
+        TryToken();
+    }
+
+    public void MenuIdle()
+    {
+        requesting = false;
+        currentStage = Stage.Idle;
+    }
+
+    private void TryToken()
+    {
+        token = prefs.getToken();
+        Debug.Log("TryToken" + token);
+        if (token.Equals(string.Empty))
+            JoinLobby();
+        else
+            SearchingGame();
+    }
+
+    private void SearchingGame()
+    {
         driver.UpdateLobby(token);
         currentStage = Stage.SearchingGame;
     }
 
-    private void StartGame() {
+    private void JoinLobby()
+    {
+        driver.JoinLobby();
+        currentStage = Stage.JoinLobby;
+    }
+
+    private void GameStart() {
         prefs.setToken(token);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Game");  
     }
-
-    public void SetIdle() {
-        currentStage = Stage.Idle;
-    }
-
-    public void SetTryOldToken() {
-        token = prefs.getToken();
-        if (token == string.Empty)
-            WaitingForToken();
-        else
-        {
-            driver.UpdateLobby(token);
-            currentStage = Stage.TryOldToken;
-        }
-    }
-
 }

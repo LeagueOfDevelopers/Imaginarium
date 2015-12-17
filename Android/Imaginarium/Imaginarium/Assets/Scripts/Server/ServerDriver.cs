@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -11,10 +11,9 @@ public class ServerDriver {
         return www.isDone;
     }
 
-    public JSONObject getResponse() {
-        if (isDone())
-            return new JSONObject(www.text.ToString());
-        return new JSONObject();
+    public Dictionary<string,string> getResponse() {
+
+            return new JSONObject(www.text.ToString()).ToDictionary();
     }
 
     public string text() {
@@ -27,8 +26,8 @@ public class ServerDriver {
 
     public void UpdateLobby(string token) {
         JSONObject data = new JSONObject();
-        Debug.Log(token);
         data.AddField("token", token);
+        Debug.Log(data.ToString());
         sendRequest(ServerAPI.RequestType.UpdateLobby, data);
     }
 
@@ -50,8 +49,8 @@ public class ServerDriver {
 
     private void sendRequest(ServerAPI.RequestType type, JSONObject dataObject) 
     {
+        Debug.Log(dataObject.ToString());
         byte[] data = System.Text.Encoding.UTF8.GetBytes(dataObject.ToString());
         www = new WWW(url+'/'+type.ToString(), data);
     }
-
 }
