@@ -94,6 +94,6 @@ public class MenuLogic : MonoBehaviour
 
     private void GameStart() {
         prefs.setToken(token);
-        SceneManager.LoadScene("Game");  
+        SceneManager.LoadSceneAsync("Game");  
     }
 }
