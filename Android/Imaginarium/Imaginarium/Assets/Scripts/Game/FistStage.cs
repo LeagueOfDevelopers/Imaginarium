@@ -4,15 +4,18 @@ using System.Collections;
 public class FistStage : MonoBehaviour {
 
     public GameObject Cards;
-    public float DeltaCardMove=-270;
+    public float DeltaCardMove=0 ;
 
     Vector3 destination;
+    Vector3 startPosition;
     int currentCard = 0;
 
 	// Use this for initialization
 	void Start () {
-        destination = Cards.transform.position;
-	}
+        startPosition = Cards.transform.position;
+        destination = startPosition;
+        DeltaCardMove = Cards.transform.GetChild(0).position.x - Cards.transform.GetChild(1).position.x;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -21,19 +24,18 @@ public class FistStage : MonoBehaviour {
             MoveCards();
             NormalizeCurrentCard();
         }
-        destination.x = currentCard * DeltaCardMove;
-        Vector3 delta = (destination - transform.position) * Time.deltaTime;
-        transform.Translate(delta);
+        destination.x = startPosition.x + currentCard * DeltaCardMove;
+        Cards.transform.position = Vector3.Lerp(Cards.transform.position, destination, Time.deltaTime*10);
 	}
 
 
     private void MoveCards()
     {
-        if (Input.GetTouch(0).deltaPosition.x > 100)
+        if (Input.GetTouch(0).deltaPosition.x > 50)
         {
             currentCard--;
         }
-        if (Input.GetTouch(0).deltaPosition.x < 100)
+        if (Input.GetTouch(0).deltaPosition.x < -50)
         {
             currentCard++;
         }
