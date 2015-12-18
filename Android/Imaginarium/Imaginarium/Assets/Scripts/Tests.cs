@@ -3,21 +3,23 @@ using System.Collections;
 
 public class Tests : MonoBehaviour {
     ServerDriver driver;
-    string token = "5b1f3c20-0cc1-470d-a130-64e14bd2280d";
-    bool smth = true;
     // Use this for initialization
     void Start () {
-        driver = new ServerDriver();
-        Debug.Log("123");
-        driver.UpdateLobby(token);    
+           
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (driver.isDone() && smth)
+        
+    }
+
+
+    public void AddMOOOOOOREPlayers() {
+        driver = new ServerDriver();
+        for (int i = 0; i < 6; i++)
         {
-            Debug.Log(driver.text());
-            smth = false;
+            driver.JoinLobby();
+            Debug.Log("Player №" + (i + 1) + " Connected");
         }
     }
 }
