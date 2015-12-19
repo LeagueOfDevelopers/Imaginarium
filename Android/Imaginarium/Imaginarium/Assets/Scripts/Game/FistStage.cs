@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class FistStage : MonoBehaviour {
 
     public GameObject Cards;
-    public float DeltaCardMove=0 ;
 
     Vector3 destination;
+    float deltaCardMove = 0;
+    float limitMove;
     Vector3 startPosition;
     int currentCard = 0;
 
@@ -14,7 +16,8 @@ public class FistStage : MonoBehaviour {
 	void Start () {
         startPosition = Cards.transform.position;
         destination = startPosition;
-        DeltaCardMove = Cards.transform.GetChild(0).position.x - Cards.transform.GetChild(1).position.x;
+        deltaCardMove = Cards.transform.GetChild(0).position.x - Cards.transform.GetChild(1).position.x;
+        limitMove = Mathf.Abs(deltaCardMove / 2);
     }
 	
 	// Update is called once per frame
@@ -22,29 +25,30 @@ public class FistStage : MonoBehaviour {
         if (Input.touchCount > 0)
         {
             MoveCards();
-            NormalizeCurrentCard();
         }
-        destination.x = startPosition.x + currentCard * DeltaCardMove;
-        Cards.transform.position = Vector3.Lerp(Cards.transform.position, destination, Time.deltaTime*10);
+        else
+        {
+            destination.x = startPosition.x + currentCard * deltaCardMove;
+            Cards.transform.position = Vector3.Lerp(Cards.transform.position, destination, Time.deltaTime * 10);
+        }
 	}
 
 
     private void MoveCards()
     {
-        if (Input.GetTouch(0).deltaPosition.x > 50)
+        float delta = Input.GetTouch(0).deltaPosition.x*3;
+        float curentPositionX = Cards.transform.position.x;
+        if (alowedMovement(delta, curentPositionX))
         {
-            currentCard--;
-        }
-        if (Input.GetTouch(0).deltaPosition.x < -50)
-        {
-            currentCard++;
+            Cards.transform.position = new Vector3(curentPositionX + delta, startPosition.y, startPosition.z);
+            currentCard = Mathf.RoundToInt(Mathf.Abs((Cards.transform.position.x-startPosition.x) / deltaCardMove));
         }
     }
 
-    private void NormalizeCurrentCard()
-    {
-        if (currentCard < 0) currentCard = 0;
-        if (currentCard > 5) currentCard = 5;
+    private bool alowedMovement(float delta, float current) {
+        float destination = delta + current;
+        return (destination < startPosition.x) &&
+            (destination > startPosition.x + deltaCardMove * 5);
     }
 
     public void cardPlus() {
