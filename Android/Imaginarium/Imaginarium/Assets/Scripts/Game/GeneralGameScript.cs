@@ -73,10 +73,10 @@ public class GeneralGameScript : MonoBehaviour {
                         SceneManager.LoadSceneAsync("ThirdStage");
                     break;
                 case 4:
-                    int[] ResultForCards = new int[6];
+                    int[] VoteForCards = new int[6];
                     for (int i = 0; i < 6; i++)
-                        ResultForCards[i] = Convert.ToInt32(response[("card#" + i)]);
-                    prefs.setResultForCards(ResultForCards);
+                        VoteForCards[i] = Convert.ToInt32(response[("vote#" + i)]);
+                    prefs.setVoteForCards(VoteForCards);
                     prefs.setHeadCard(Convert.ToInt32(response["cardOfHead"]));
                     SceneManager.LoadSceneAsync("FourthStage");
                     break;

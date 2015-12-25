@@ -69,7 +69,7 @@ public class Prefs {
         return cards;
     }
 
-    public void setResultForCards(int[] cards)
+    public void setVoteForCards(int[] cards)
     {
         for (int i = 0; i < 6; i++)
         {
@@ -77,7 +77,7 @@ public class Prefs {
         }
     }
 
-    public int[] getResultForCards()
+    public int[] getVoteForCards()
     {
         int[] cards = new int[6];
         for (int i = 0; i < 6; i++)
