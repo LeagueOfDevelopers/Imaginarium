@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class Prefs {
@@ -10,6 +11,16 @@ public class Prefs {
 
     public string getToken() {
         return PlayerPrefs.GetString("token", string.Empty);
+    }
+
+    public void setHead(bool isHead)
+    {
+        PlayerPrefs.SetString("isHead",isHead.ToString());
+    }
+
+    public bool getHead()
+    {
+        return Convert.ToBoolean(PlayerPrefs.GetString("isHead")); 
     }
 
     public void setText(string text)
@@ -58,6 +69,24 @@ public class Prefs {
         return cards;
     }
 
+    public void setResultForCards(int[] cards)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            PlayerPrefs.SetInt("resultForCards" + i.ToString(), cards[i]);
+        }
+    }
+
+    public int[] getResultForCards()
+    {
+        int[] cards = new int[6];
+        for (int i = 0; i < 6; i++)
+        {
+            cards[i] = PlayerPrefs.GetInt("resultForCards" + i.ToString(), 0);
+        }
+        return cards;
+    }
+
     public void setScore(int score)
     {
         PlayerPrefs.SetInt("score", score);
@@ -76,4 +105,16 @@ public class Prefs {
     {
         return PlayerPrefs.GetInt("ownCard", -1);
     }
+
+    public void setHeadCard(int card)
+    {
+        PlayerPrefs.SetInt("headCard", card);
+    }
+
+    public int getHeadCard()
+    {
+        return PlayerPrefs.GetInt("headCard", -1);
+    }
+
+
 }
