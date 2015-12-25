@@ -30,7 +30,8 @@ public class CardPart {
             if(!clientRequests.contains(token)){
                 clientRequests.add(token);
                 HashSet<Card> cardsForPlayer = FirstStage(token);
-                ResponseForGameUpdate response = new ResponseForGameUpdate("FIRST_STAGE");
+                ResponseForGameUpdate response = new ResponseForGameUpdate("OK");
+                response.SetStage(gameStage + 1);
                 response.SetFirstStage(cardsForPlayer, token.equals(currentHead));
                 return response;
             } else{
@@ -43,13 +44,28 @@ public class CardPart {
         } else if(gameStage == 1){
             if(!clientRequests.contains(token)){
                 clientRequests.add(token);
-                ResponseForGameUpdate response = new ResponseForGameUpdate("SECOND_STAGE");
+                ResponseForGameUpdate response = new ResponseForGameUpdate("OK");
+                response.SetStage(gameStage + 1);
                 response.SetSecondStage(headsText);
                 return response;
             } else{
+                if(currentCards.size()>5){
+                    gameStage = 2;
+                    clientRequests.clear();
+                }
                 return new ResponseForGameUpdate("SAME");
             }
-        }  else{
+        }  else if(gameStage == 2){
+            if(!clientRequests.contains(token)){
+                clientRequests.add(token);
+                ResponseForGameUpdate response = new ResponseForGameUpdate("OK");
+                response.SetStage(gameStage + 1);
+                response.SetThirdStage(currentCards);
+                return response;
+            } else {
+                return new ResponseForGameUpdate("SAME");
+            }
+        }else{
             return new ResponseForGameUpdate("ERROR");
         }
     }
@@ -60,6 +76,7 @@ public class CardPart {
                 Card cardId = new Card(jsonRequest.get("card").getAsInt());
                 String text = jsonRequest.get("text").getAsString();
                 headsCard = cardId;
+                currentCards.put(headsCard, 0);
                 headsText = text;
                 return new ResponseForAChange("OK");
             } else{
@@ -67,8 +84,19 @@ public class CardPart {
             }
         } else if(gameStage == 1){
             if(!token.equals(currentHead)){
+                Card chosenCard = new Card(request.GetJson().get("card").getAsInt());
+                //cardBind.get(token).remove(chosenCard);
+                currentCards.put(chosenCard, 0);
                 return new ResponseForAChange("OK");
             }else {
+                return new ResponseForAChange("YOU_ARE_HEAD");
+            }
+        } else if(gameStage == 2){
+            if(!token.equals(currentHead)){
+                Card chosenCard = new Card(request.GetJson().get("card").getAsInt());
+                currentCards.put(chosenCard, currentCards.get(chosenCard) + 1);
+                return new ResponseForAChange("OK");
+            }else{
                 return new ResponseForAChange("YOU_ARE_HEAD");
             }
         } else{
@@ -83,7 +111,6 @@ public class CardPart {
     }
     private HashSet<Card> FirstStage(UUID token){
         HashSet<Card> newSetOfCards = GiveCards(6);
-
         cardBind.put(token, newSetOfCards);
         return newSetOfCards;
     }
@@ -102,6 +129,7 @@ public class CardPart {
     private ArrayList<UUID> clientRequests;
     private Iterator<UUID> iteratorForHead;
     private HashSet<UUID> playersList;
+    private HashMap<Card, Integer> currentCards;
     private HashMap<UUID, HashSet<Card>> cardBind;
     private ArrayList<Card> cardsInADeck;
     private Card headsCard = null;

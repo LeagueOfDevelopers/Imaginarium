@@ -2,6 +2,7 @@ package com.nirus.containers;
 
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -11,33 +12,50 @@ import java.util.Iterator;
 public class ResponseForGameUpdate {
     public ResponseForGameUpdate(String status) {
         _status = status;
-        firstStage = new HashSet<Card>();
+        cards = new HashSet<Card>();
     }
     public void SetFirstStage(HashSet<Card> cards, Boolean head){
-        firstStage = cards;
+        this.cards = cards;
         _head = head;
     }
+    public void SetStage(Integer stage){ this.stage = stage;}
     public void SetSecondStage(String text){
         this.text = text;
+    }
+    public void SetThirdStage(HashMap<Card, Integer> cards){
+        this.cards = new HashSet<Card>(cards.keySet());
     }
     public JsonObject GetAsJSON(){
         JsonObject response = new JsonObject();
         response.addProperty("status", _status);
-        if(_status == "FIRST_STAGE"){
-            response.addProperty("is_head", _head.toString());
-            response.addProperty("score", score.toString());
-            Iterator<Card> iterator = firstStage.iterator();
-            for(Integer i = 0; iterator.hasNext(); i++){
-                response.addProperty("card#"+i.toString(), iterator.next().GetId());
+        if(_status == "OK"){
+            if(stage == 1){
+                response.addProperty("stage", stage);
+                response.addProperty("is_head", _head.toString());
+                response.addProperty("score", score.toString());
+                Iterator<Card> iterator = cards.iterator();
+                for(Integer i = 0; iterator.hasNext(); i++){
+                    response.addProperty("card#"+i.toString(), iterator.next().GetId());
+                }
             }
-        } else if(_status == "SECOND_STAGE"){
-            response.addProperty("text", text);
+            if (stage == 2){
+                response.addProperty("stage", stage);
+                response.addProperty("text", text);
+            }
+            if(stage == 3){
+                response.addProperty("stage", stage);
+                Iterator<Card> iterator = cards.iterator();
+                for(Integer i = 0; iterator.hasNext(); i++){
+                    response.addProperty("card#"+i.toString(), iterator.next().GetId());
+                }
+            }
         }
         return response;
     }
     private Integer score = 0;
+    public Integer stage;
     private Boolean _head;
     private String _status;
-    private HashSet<Card> firstStage;
+    private HashSet<Card> cards;
     private String text;
 }

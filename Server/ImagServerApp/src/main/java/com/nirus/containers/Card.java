@@ -10,5 +10,11 @@ public class Card {
     public Integer GetId(){
         return id;
     }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
     private Integer id;
 }
