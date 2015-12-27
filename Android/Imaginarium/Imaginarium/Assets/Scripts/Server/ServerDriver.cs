@@ -12,8 +12,9 @@ public class ServerDriver {
     }
 
     public Dictionary<string,string> getResponse() {
-
-            return new JSONObject(www.text.ToString()).ToDictionary();
+        JSONObject json = new JSONObject(www.text);
+        Debug.Log(www.text);
+        return json.ToDictionary();
     }
 
     public string text() {
@@ -35,7 +36,7 @@ public class ServerDriver {
     public void GetRoomStatus(string token) {
         JSONObject data = new JSONObject();
         data.AddField("token", token);
-        sendRequest(ServerAPI.RequestType.GetRoomStatus, data);
+        sendRequest(ServerAPI.RequestType.GameStatus, data);
     }
 
     public void UpdateRoomStatus(string token, JSONObject data) {
@@ -51,6 +52,7 @@ public class ServerDriver {
     {
         Debug.Log(dataObject.ToString());
         byte[] data = System.Text.Encoding.UTF8.GetBytes(dataObject.ToString());
+        Debug.Log(url + '/' + type.ToString());
         www = new WWW(url+'/'+type.ToString(), data);
     }
 }

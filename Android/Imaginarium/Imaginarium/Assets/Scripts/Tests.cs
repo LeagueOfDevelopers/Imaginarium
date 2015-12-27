@@ -5,12 +5,12 @@ public class Tests : MonoBehaviour {
     ServerDriver driver;
     // Use this for initialization
     void Start () {
-           
+        TestGetRoomStatus();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        
+        Debug.Log(driver.ToString());
     }
 
 
@@ -21,5 +21,10 @@ public class Tests : MonoBehaviour {
             driver.JoinLobby();
             Debug.Log("Player №" + (i + 1) + " Connected");
         }
+    }
+
+    public void TestGetRoomStatus() {
+        Prefs prefs = new Prefs();
+        driver.GetRoomStatus(prefs.getToken());
     }
 }
