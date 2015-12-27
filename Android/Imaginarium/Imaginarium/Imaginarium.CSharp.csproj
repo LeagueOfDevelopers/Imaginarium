@@ -66,8 +66,11 @@
     <Compile Include="Assets\JSON\JSONTemplates.cs" />
     <Compile Include="Assets\JSON\VectorTemplates.cs" />
     <Compile Include="Assets\Scripts\Common\Prefs.cs" />
-    <Compile Include="Assets\Scripts\Game\FistStage.cs" />
+    <Compile Include="Assets\Scripts\Game\Common\CardMove.cs" />
+    <Compile Include="Assets\Scripts\Game\Common\CardNamer.cs" />
+    <Compile Include="Assets\Scripts\Game\Common\CardSpriteHandler.cs" />
     <Compile Include="Assets\Scripts\Game\GeneralGameScript.cs" />
+    <Compile Include="Assets\Scripts\Game\StageLogic\FirstStageLogic.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuElement.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuListener.cs" />
@@ -78,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JSON\readme.txt" />
+    <None Include="Assets\Resources\Textures\Game\Cards\Картиночки.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

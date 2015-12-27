@@ -18,6 +18,8 @@ public class GeneralGameScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Exit();
         if (driver.isDone())
         {
             if (isRequestHasReaden)
@@ -56,7 +58,7 @@ public class GeneralGameScript : MonoBehaviour {
                         cards[i] = Convert.ToInt32(response[("card#" + i)]);
                     prefs.setCards(cards);
                     prefs.setScore(Convert.ToInt32(response["score"]));
-                    if (Convert.ToBoolean(response["isHead"]))
+                    if (Convert.ToBoolean(response["is_head"]))
                         SceneManager.LoadSceneAsync("FirstStage");
                     break;
                 case 2:
@@ -85,6 +87,11 @@ public class GeneralGameScript : MonoBehaviour {
                 }
 
         }
+    }
+
+    public void Exit() {
+        Debug.Log("exit");
+        SceneManager.LoadSceneAsync("Menu");
     }
 }
 

@@ -5,12 +5,11 @@ public class Tests : MonoBehaviour {
     ServerDriver driver;
     // Use this for initialization
     void Start () {
-        TestGetRoomStatus();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log(driver.ToString());
+
     }
 
 
@@ -23,8 +22,8 @@ public class Tests : MonoBehaviour {
         }
     }
 
-    public void TestGetRoomStatus() {
+    public void resetToken() {
         Prefs prefs = new Prefs();
-        driver.GetRoomStatus(prefs.getToken());
+        prefs.setToken("");
     }
 }
