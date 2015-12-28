@@ -116,5 +116,23 @@ public class Prefs {
         return PlayerPrefs.GetInt("headCard", -1);
     }
 
+    public void setStage(int stage) {
+        PlayerPrefs.SetInt("stage", stage);
+    }
 
+    public int getStage()
+    {
+        return PlayerPrefs.GetInt("stage", 0);
+    }
+
+    public void setIsHead(int head)
+    {
+        PlayerPrefs.SetInt("isHead", head);
+    }
+
+    public bool getIsHead() {
+        if (PlayerPrefs.GetInt("isHead", 0) == 0)
+            return false;
+        return true;
+    }
 }

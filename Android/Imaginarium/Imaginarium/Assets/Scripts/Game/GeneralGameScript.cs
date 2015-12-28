@@ -53,11 +53,19 @@ public class GeneralGameScript : MonoBehaviour {
             switch (stage)
                 {
                 case 1:
+                    prefs.setStage(1);
+                    if (response["is_head"] == "false")
+                        prefs.setIsHead(0);
+                    else
+                        prefs.setIsHead(1);
+
                     int[] cards = new int[6];
                     for (int i = 0; i < 6; i++)
                         cards[i] = Convert.ToInt32(response[("card#" + i)]);
                     prefs.setCards(cards);
+
                     prefs.setScore(Convert.ToInt32(response["score"]));
+                    
                     if (Convert.ToBoolean(response["is_head"]))
                         SceneManager.LoadSceneAsync("FirstStage");
                     break;
@@ -86,6 +94,33 @@ public class GeneralGameScript : MonoBehaviour {
 
                 }
 
+        }
+
+        if (response["status"] == "SAME")
+        {
+            SameStatusRedirect();
+        }
+    }
+
+    private void SameStatusRedirect() {
+
+        switch (prefs.getStage())
+        {
+            case 1:
+                if(prefs.getIsHead())
+                    SceneManager.LoadSceneAsync("FirstStage");
+                break;
+            case 2:
+                if (!prefs.getIsHead())
+                    SceneManager.LoadSceneAsync("SecondStage");
+                break;
+            case 3:
+                if (!prefs.getIsHead())
+                    SceneManager.LoadSceneAsync("ThirdStage");
+                break;
+            case 4:
+                SceneManager.LoadSceneAsync("FourthStage");
+                break;
         }
     }
 

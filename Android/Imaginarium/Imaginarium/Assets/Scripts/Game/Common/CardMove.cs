@@ -50,13 +50,8 @@ public class CardMove : MonoBehaviour {
             (destination > startPosition.x + deltaCardMove * 5);
     }
 
-    public void cardPlus() {
-        currentCard++;
-    }
-
-    public void cardMinus()
-    {
-        currentCard--;
+    public int GetCurrentCard() {
+        return currentCard;
     }
 
 }
