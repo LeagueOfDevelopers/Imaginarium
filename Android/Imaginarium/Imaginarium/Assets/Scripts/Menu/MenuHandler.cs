@@ -19,9 +19,7 @@ public class MenuHandler : MonoBehaviour {
         CenterPos = gameObject.transform.FindChild("Center").position;
 
         Debug.Log("Start method");
-        OpenTitleScreen();
-
-        
+        OpenTitleScreen();   
     }
 	
 	// Update is called once per frame

@@ -7,7 +7,6 @@ public class FirstStageLogic : MonoBehaviour {
     public GameObject TextBox;
     Prefs prefs = new Prefs();
     ServerDriver driver = new ServerDriver();
-    public 
 	// Use this for initialization
 	void Start () {
         driver.TestRequest();
@@ -19,6 +18,7 @@ public class FirstStageLogic : MonoBehaviour {
         if (driver.isDone() && driver.text().Length>0)
         {
             Debug.Log(driver.text());
+            prefs.setIsStageComplete(true);
             SceneManager.LoadScene("Game");
         }
 	}
@@ -37,7 +37,6 @@ public class FirstStageLogic : MonoBehaviour {
             JSONObject json = new JSONObject();
             json.AddField("card", cardNum);
             json.AddField("text", field.text);
-
             driver.UpdateRoomStatus(prefs.getToken(), json);
 
         }

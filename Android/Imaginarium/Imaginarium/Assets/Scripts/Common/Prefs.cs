@@ -135,4 +135,19 @@ public class Prefs {
             return false;
         return true;
     }
+
+    public void setIsStageComplete(bool complete)
+    {
+        if(complete)
+            PlayerPrefs.SetInt("isStageComplete", 1);
+        else
+            PlayerPrefs.SetInt("isStageComplete", 0);
+    }
+
+    public bool getIsStageComplete()
+    {
+        if (PlayerPrefs.GetInt("isStageComplete", 0) == 0)
+            return false;
+        return true;
+    }
 }

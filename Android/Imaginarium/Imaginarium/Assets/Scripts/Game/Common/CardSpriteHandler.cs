@@ -13,7 +13,8 @@ public class CardSpriteHandler : MonoBehaviour {
         gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(texturePath + id);
     }
 
-    public int getCard() {
+    public int getCard()
+    {
         return cardID;
     }
 }

@@ -41,11 +41,18 @@ public class ServerDriver {
 
     public void UpdateRoomStatus(string token, JSONObject data) {
         data.AddField("token", token);
-        sendRequest(ServerAPI.RequestType.UpdateRoomStatus, data);
+        sendRequest(ServerAPI.RequestType.ChangeGameStatus, data);
     }
 
     public void TestRequest() {
         www = new WWW(url + "/Test");
+    }
+
+    public void TestRequest(JSONObject data)
+    {
+        Prefs prefs = new Prefs();
+        data.AddField("token", prefs.getToken());
+        sendRequest(ServerAPI.RequestType.Test, data);
     }
 
     private void sendRequest(ServerAPI.RequestType type, JSONObject dataObject) 
@@ -53,6 +60,6 @@ public class ServerDriver {
         Debug.Log(dataObject.ToString());
         byte[] data = System.Text.Encoding.UTF8.GetBytes(dataObject.ToString());
         Debug.Log(url + '/' + type.ToString());
-        www = new WWW(url+'/'+type.ToString(), data);
+        www = new WWW(url+'/' +type.ToString(), data);
     }
 }

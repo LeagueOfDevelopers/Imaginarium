@@ -7,12 +7,12 @@ public class GeneralGameScript : MonoBehaviour {
 
     public float cooldownResetValue = 5;
     float cooldown = 0;
-    bool isRequestHasReaden = false; 
+    bool isRequestHasReaden = true; 
     ServerDriver driver = new ServerDriver();
     Prefs prefs = new Prefs();
     // Use this for initialization
 	void Start () {
-        driver.GetRoomStatus(prefs.getToken());
+        driver.TestRequest();
 
 	}
 	
@@ -90,13 +90,11 @@ public class GeneralGameScript : MonoBehaviour {
                     prefs.setHeadCard(Convert.ToInt32(response["cardOfHead"]));
                     SceneManager.LoadSceneAsync("FourthStage");
                     break;
-                    
-
                 }
 
         }
 
-        if (response["status"] == "SAME")
+        if (response["status"] == "SAME"&&!prefs.getIsStageComplete())
         {
             SameStatusRedirect();
         }
