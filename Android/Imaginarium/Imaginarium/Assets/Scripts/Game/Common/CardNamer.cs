@@ -5,13 +5,13 @@ public class CardNamer : MonoBehaviour {
 
     public void SetCards(int[] cardsInHand)
     {
-        if (cardsInHand.Length != 6) return;
-
-        for (int i = 0; i < 6; i++)
+        int i = 0;
+        foreach(int card in cardsInHand)
         {
-            Debug.Log(cardsInHand[i]);
+            Debug.Log(card);
             GameObject child = transform.FindChild("Card" + i).gameObject;
-            child.GetComponent<CardSpriteHandler>().setCard(cardsInHand[i]);
+            child.GetComponent<CardSpriteHandler>().setCard(card);
+            i++;
         }
     }
 }

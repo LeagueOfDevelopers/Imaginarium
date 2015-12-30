@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>Android:13</UnityBuildTarget>
     <UnityVersion>5.3.0f4</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -66,11 +68,14 @@
     <Compile Include="Assets\JSON\JSONTemplates.cs" />
     <Compile Include="Assets\JSON\VectorTemplates.cs" />
     <Compile Include="Assets\Scripts\Common\Prefs.cs" />
+    <Compile Include="Assets\Scripts\Common\TextBoxHandler.cs" />
     <Compile Include="Assets\Scripts\Game\Common\CardMove.cs" />
     <Compile Include="Assets\Scripts\Game\Common\CardNamer.cs" />
     <Compile Include="Assets\Scripts\Game\Common\CardSpriteHandler.cs" />
     <Compile Include="Assets\Scripts\Game\GeneralGameScript.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\FirstStageLogic.cs" />
+    <Compile Include="Assets\Scripts\Game\StageLogic\SecondStageLogic.cs" />
+    <Compile Include="Assets\Scripts\Game\StageLogic\ThirdStageLogic.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuElement.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuListener.cs" />

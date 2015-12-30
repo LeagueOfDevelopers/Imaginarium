@@ -4,6 +4,7 @@ using System.Collections;
 public class CardMove : MonoBehaviour {
 
     public GameObject Cards;
+    public int CountOfCards = 6;
 
     Vector3 destination;
     float deltaCardMove = 0;
@@ -47,7 +48,7 @@ public class CardMove : MonoBehaviour {
     private bool alowedMovement(float delta, float current) {
         float destination = delta + current;
         return (destination < startPosition.x) &&
-            (destination > startPosition.x + deltaCardMove * 5);
+            (destination > startPosition.x + deltaCardMove * (CountOfCards-1));
     }
 
     public int GetCurrentCard() {
