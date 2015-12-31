@@ -19,7 +19,10 @@ public class Room {
         }
         game = new CardPart(players);
     }
-    public ResponseForGameUpdate UpdateGame(UUID token){ return game.GetGameStatus(token);}
+    public ResponseForGameUpdate UpdateGame(UUID token){
+        ResponseForGameUpdate response = game.GetGameStatus(token);
+        return response;
+    }
     public ResponseForAChange ChangeGame(UUID token,
                                          RequestForAChange requestForAChange)
     {

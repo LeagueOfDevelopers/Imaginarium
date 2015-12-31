@@ -16,10 +16,17 @@ public class CardPart {
     public CardPart(HashSet<UUID> players) {
         clientRequests = new ArrayList<UUID>();
         cardsInADeck = new ArrayList<Card>();
-        cardBind = new HashMap<UUID, HashSet<Card>>();
+        ReInit();
+        scoresMap = new HashMap<UUID, Integer>();
+        for (UUID player:
+                playersList) {
+            scoresMap.put(player, 0);
+            cardBind.put(player, new HashSet<Card>());
+        }
         gameStage = 0;
         playersList = players;
         InitCards();
+
         rand = new Random();
         iteratorForHead = playersList.iterator();
         currentHead = iteratorForHead.next();
@@ -29,13 +36,17 @@ public class CardPart {
         if(gameStage == 0){
             if(!clientRequests.contains(token)){
                 clientRequests.add(token);
-                HashSet<Card> cardsForPlayer = FirstStage(token);
+                ReInit();
+                HashSet<Card> cardsForPlayer = FirstStage(token, gameCircle == 0);
+                if(cardsForPlayer.size() == 0){
+                    return new ResponseForGameUpdate("GAME_OVER");
+                }
                 ResponseForGameUpdate response = new ResponseForGameUpdate("OK");
                 response.SetStage(gameStage + 1);
-                response.SetFirstStage(cardsForPlayer, token.equals(currentHead));
+                response.SetFirstStage(cardsForPlayer, token.equals(currentHead), scoresMap.get(token));
                 return response;
             } else{
-                if(token.equals(currentHead) && clientRequests.size() > 5 && headsCard != null){
+                if(clientRequests.size() > 5 && headsCard != null){
                     gameStage = 1;
                     clientRequests.clear();
                 }
@@ -49,7 +60,7 @@ public class CardPart {
                 response.SetSecondStage(headsText);
                 return response;
             } else{
-                if(currentCards.size()>5){
+                if(chosenCards.size()>5){
                     gameStage = 2;
                     clientRequests.clear();
                 }
@@ -60,15 +71,40 @@ public class CardPart {
                 clientRequests.add(token);
                 ResponseForGameUpdate response = new ResponseForGameUpdate("OK");
                 response.SetStage(gameStage + 1);
-                response.SetThirdStage(currentCards);
+                HashSet<Card> cards = new HashSet<Card>(chosenCards.values());
+                response.SetThirdStage(cards);
                 return response;
             } else {
+                if(votedCards.size()>5){
+                    CalculateScore();
+                    gameStage = 3;
+                    clientRequests.clear();
+                }
                 return new ResponseForGameUpdate("SAME");
             }
-        }else{
+        }else if(gameStage == 3){
+            if(!clientRequests.contains(token)){
+                clientRequests.add(token);
+                ResponseForGameUpdate response = new ResponseForGameUpdate("OK");
+                response.SetStage(gameStage + 1);
+                response.SetFourthStage(scorePerCard);
+                return response;
+            } else {
+                if(clientRequests.size() > 5){
+                    gameStage = 0;
+                    clientRequests.clear();
+                    currentHead = iteratorForHead.next();
+                    ReInit();
+                }
+                return new ResponseForGameUpdate("SAME");
+            }
+        } else{
             return new ResponseForGameUpdate("ERROR");
         }
     }
+
+
+
     public ResponseForAChange UpdateGameSituation(UUID token, RequestForAChange request){
         if(gameStage == 0){
             if(token.equals(currentHead)){
@@ -76,7 +112,7 @@ public class CardPart {
                 Card cardId = new Card(jsonRequest.get("card").getAsInt());
                 String text = jsonRequest.get("text").getAsString();
                 headsCard = cardId;
-                currentCards.put(headsCard, 0);
+                chosenCards.put(token, cardId);
                 headsText = text;
                 return new ResponseForAChange("OK");
             } else{
@@ -85,8 +121,9 @@ public class CardPart {
         } else if(gameStage == 1){
             if(!token.equals(currentHead)){
                 Card chosenCard = new Card(request.GetJson().get("card").getAsInt());
-                //cardBind.get(token).remove(chosenCard);
-                currentCards.put(chosenCard, 0);
+                cardBind.get(token).remove(chosenCard);
+                chosenCards.put(token, chosenCard);
+                scorePerCard.put(chosenCard, 0);
                 return new ResponseForAChange("OK");
             }else {
                 return new ResponseForAChange("YOU_ARE_HEAD");
@@ -94,7 +131,11 @@ public class CardPart {
         } else if(gameStage == 2){
             if(!token.equals(currentHead)){
                 Card chosenCard = new Card(request.GetJson().get("card").getAsInt());
-                currentCards.put(chosenCard, currentCards.get(chosenCard) + 1);
+                votedCards.put(token, chosenCard);
+                scorePerCard.put(chosenCard, scorePerCard.get(chosenCard) + 1);
+                if(chosenCard.equals(headsCard)){
+                    likeHead++;
+                }
                 return new ResponseForAChange("OK");
             }else{
                 return new ResponseForAChange("YOU_ARE_HEAD");
@@ -109,13 +150,24 @@ public class CardPart {
             cardsInADeck.add(new Card(i));
         }
     }
-    private HashSet<Card> FirstStage(UUID token){
-        HashSet<Card> newSetOfCards = GiveCards(6);
+    private HashSet<Card> FirstStage(UUID token, boolean howMuchCards){
+        HashSet<Card> newSetOfCards;
+        if(howMuchCards) {
+             newSetOfCards = GiveCards(6);
+        }else{
+            newSetOfCards = GiveCards(1);
+        }
+        ArrayList<Card> temp = new ArrayList<Card>(cardBind.get(token));
+        temp.addAll(newSetOfCards);
+        newSetOfCards = new HashSet<Card>(temp);
         cardBind.put(token, newSetOfCards);
         return newSetOfCards;
     }
     private HashSet<Card> GiveCards(Integer howMuch){
         HashSet<Card> setOfCards = new HashSet<Card>(howMuch);
+        if(cardsInADeck.size() == 0){
+            return new HashSet<Card>();
+        }
         for(int i = 0; i < howMuch; i++){
             Card card = cardsInADeck.get(Math.abs(rand.nextInt()%cardsInADeck.size()));
             setOfCards.add(card);
@@ -123,13 +175,52 @@ public class CardPart {
         }
         return setOfCards;
     }
+    private void ReInit(){
+        chosenCards = new HashMap<UUID, Card>();
+        votedCards = new HashMap<UUID, Card>();
+        cardBind = new HashMap<UUID, HashSet<Card>>();
+        scorePerCard = new HashMap<Card, Integer>();
+        likeHead = 0;
+
+    }
+    private void CalculateScore() {
+        for(UUID player : playersList){
+            ArrayList<Card> cards = new ArrayList<Card>(votedCards.values());
+            Integer count = 0;
+            Card chosenCard = chosenCards.get(player);
+            for(Card card: cards){
+                if(card.equals(chosenCard)){
+                    count++;
+                }
+            }
+            if(player.equals(currentHead)){
+                if(count > 0 && count !=5){
+                    scoresMap.put(player, scoresMap.get(player) + count + 3);
+                } else if(count == 0){
+                    scoresMap.put(player, scoresMap.get(player) - 2);
+                } else{
+                    scoresMap.put(player, scoresMap.get(player) - 3);
+                }
+            } else{
+                if(votedCards.get(player) == headsCard && likeHead != 5){
+                    scoresMap.put(player, scoresMap.get(player) + 3);
+                }
+                scoresMap.put(player, scoresMap.get(player) + count);
+            }
+        }
+    }
     private Integer gameStage;
     private Random rand;
     private UUID currentHead;
+    private Integer gameCircle = 0;
+    private Integer likeHead;
     private ArrayList<UUID> clientRequests;
     private Iterator<UUID> iteratorForHead;
     private HashSet<UUID> playersList;
-    private HashMap<Card, Integer> currentCards;
+    private HashMap<UUID, Integer> scoresMap;
+    private HashMap<Card, Integer> scorePerCard;
+    private HashMap<UUID, Card> chosenCards;
+    private HashMap<UUID, Card> votedCards;
     private HashMap<UUID, HashSet<Card>> cardBind;
     private ArrayList<Card> cardsInADeck;
     private Card headsCard = null;

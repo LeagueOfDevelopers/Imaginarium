@@ -18,6 +18,7 @@ import java.util.UUID;
 public class RoomHandler implements IRoomHandler {
     public RoomHandler() {
         roomBind = new HashMap<UUID, Room>();
+        gameOverBind = new HashMap<Room, HashSet<UUID>>();
     }
 
     public void CreateRoom(HashSet<UUID> playersBind) {
@@ -26,7 +27,15 @@ public class RoomHandler implements IRoomHandler {
 
     public ResponseForGameUpdate RoomStatus(UUID token) {
         Room room = roomBind.get(token);
-        return room.UpdateGame(token);
+        ResponseForGameUpdate response = room.UpdateGame(token);
+        if(response.GetAsJSON().get("stage").getAsString() == "GAME_OVER"){
+            gameOverBind.get(room).add(token);
+            if(gameOverBind.get(room).size() > 5){
+                roomBind.remove(room);
+                gameOverBind.remove(room);
+            }
+        }
+        return response;
     }
 
     public ResponseForAChange ChangeRoomStatus(UUID token, RequestForAChange request) {
@@ -34,4 +43,5 @@ public class RoomHandler implements IRoomHandler {
         return room.ChangeGame(token, request);
     }
     private HashMap<UUID, Room> roomBind;
+    private HashMap<Room, HashSet<UUID>> gameOverBind;
 }

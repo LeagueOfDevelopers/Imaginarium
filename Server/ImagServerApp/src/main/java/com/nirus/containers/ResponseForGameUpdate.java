@@ -14,16 +14,20 @@ public class ResponseForGameUpdate {
         _status = status;
         cards = new HashSet<Card>();
     }
-    public void SetFirstStage(HashSet<Card> cards, Boolean head){
+    public void SetFirstStage(HashSet<Card> cards, Boolean head, Integer score){
         this.cards = cards;
         _head = head;
+        this.score = score;
     }
     public void SetStage(Integer stage){ this.stage = stage;}
     public void SetSecondStage(String text){
         this.text = text;
     }
-    public void SetThirdStage(HashMap<Card, Integer> cards){
-        this.cards = new HashSet<Card>(cards.keySet());
+    public void SetThirdStage(HashSet<Card> cards){
+        this.cards = cards;
+    }
+    public void SetFourthStage(HashMap<Card, Integer> cardScores){
+        this.cardScores = cardScores;
     }
     public JsonObject GetAsJSON(){
         JsonObject response = new JsonObject();
@@ -49,6 +53,16 @@ public class ResponseForGameUpdate {
                     response.addProperty("card#"+i.toString(), iterator.next().GetId());
                 }
             }
+            if(stage == 4){
+                response.addProperty("stage", stage);
+                HashSet<Card> cards = new HashSet<Card>(cardScores.keySet());
+                Integer i = 0;
+                for(Card card : cards){
+                    response.addProperty("card#" + i.toString(), card.GetId());
+                    response.addProperty("vote#" + i.toString(), cardScores.get(card));
+                    i++;
+                }
+            }
         }
         return response;
     }
@@ -57,5 +71,6 @@ public class ResponseForGameUpdate {
     private Boolean _head;
     private String _status;
     private HashSet<Card> cards;
+    private HashMap<Card, Integer> cardScores;
     private String text;
 }

@@ -16,5 +16,9 @@ public class Card {
         return id.hashCode();
     }
 
+    public boolean equals(Card obj) {
+        return id.equals(obj.GetId());
+    }
+
     private Integer id;
 }
