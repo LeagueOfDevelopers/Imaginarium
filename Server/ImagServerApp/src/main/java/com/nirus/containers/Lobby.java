@@ -9,9 +9,10 @@ import java.util.UUID;
  * Created by ndiezel on 29.11.2015.
  */
 public class Lobby {
-    public Lobby(HashMap<UUID, Lobby> playersBind){
+    public Lobby(HashMap<UUID, Lobby> playersBind, Integer baseCount){
         _playersBind = playersBind;
         _playersSet = new HashSet<UUID>();
+        this.baseCount = baseCount;
     }
     public void AddPlayer(UUID newPlayer){
         _playersBind.put(newPlayer, this);
@@ -23,6 +24,8 @@ public class Lobby {
     public HashSet<UUID> GetPlayersSet(){
         return _playersSet;
     }
+    public Integer GetBaseCount(){ return baseCount;}
     private HashMap<UUID, Lobby> _playersBind;
     private HashSet<UUID> _playersSet;
+    private Integer baseCount;
 }

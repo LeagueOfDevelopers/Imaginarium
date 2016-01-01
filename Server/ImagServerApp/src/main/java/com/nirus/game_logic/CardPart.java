@@ -30,13 +30,26 @@ public class CardPart {
         rand = new Random();
         iteratorForHead = playersList.iterator();
         currentHead = iteratorForHead.next();
+        switch (players.size()){
+            case 4:
+                ammountOfCards = 96;
+                break;
+            case 5:
+                ammountOfCards = 75;
+                break;
+            case 6:
+                ammountOfCards = 72;
+                break;
+            case 7:
+                ammountOfCards = 98;
+                break;
+        }
     }
 
     public ResponseForGameUpdate GetGameStatus(UUID token){
         if(gameStage == 0){
             if(!clientRequests.contains(token)){
                 clientRequests.add(token);
-                ReInit();
                 HashSet<Card> cardsForPlayer = FirstStage(token, gameCircle == 0);
                 if(cardsForPlayer.size() == 0){
                     return new ResponseForGameUpdate("GAME_OVER");
@@ -46,7 +59,7 @@ public class CardPart {
                 response.SetFirstStage(cardsForPlayer, token.equals(currentHead), scoresMap.get(token));
                 return response;
             } else{
-                if(clientRequests.size() > 5 && headsCard != null){
+                if(clientRequests.size() > (playersList.size() - 1) && headsCard != null){
                     gameStage = 1;
                     clientRequests.clear();
                 }
@@ -60,7 +73,7 @@ public class CardPart {
                 response.SetSecondStage(headsText);
                 return response;
             } else{
-                if(chosenCards.size()>5){
+                if(chosenCards.size()>(playersList.size() - 1)){
                     gameStage = 2;
                     clientRequests.clear();
                 }
@@ -75,7 +88,7 @@ public class CardPart {
                 response.SetThirdStage(cards);
                 return response;
             } else {
-                if(votedCards.size()>5){
+                if(votedCards.size()>(playersList.size() - 1)){
                     CalculateScore();
                     gameStage = 3;
                     clientRequests.clear();
@@ -90,7 +103,7 @@ public class CardPart {
                 response.SetFourthStage(scorePerCard);
                 return response;
             } else {
-                if(clientRequests.size() > 5){
+                if(clientRequests.size() > (playersList.size() - 1)){
                     gameStage = 0;
                     clientRequests.clear();
                     currentHead = iteratorForHead.next();
@@ -145,8 +158,8 @@ public class CardPart {
         }
     }
     private void InitCards(){
-        cardsInADeck = new ArrayList<Card>(72);
-        for (int i = 0; i < 72; i++) {
+        cardsInADeck = new ArrayList<Card>(ammountOfCards);
+        for (int i = 0; i < ammountOfCards; i++) {
             cardsInADeck.add(new Card(i));
         }
     }
@@ -194,7 +207,7 @@ public class CardPart {
                 }
             }
             if(player.equals(currentHead)){
-                if(count > 0 && count !=5){
+                if(count > 0 && count !=(playersList.size() - 1)){
                     scoresMap.put(player, scoresMap.get(player) + count + 3);
                 } else if(count == 0){
                     scoresMap.put(player, scoresMap.get(player) - 2);
@@ -202,7 +215,7 @@ public class CardPart {
                     scoresMap.put(player, scoresMap.get(player) - 3);
                 }
             } else{
-                if(votedCards.get(player) == headsCard && likeHead != 5){
+                if(votedCards.get(player) == headsCard && likeHead != (playersList.size() - 1)){
                     scoresMap.put(player, scoresMap.get(player) + 3);
                 }
                 scoresMap.put(player, scoresMap.get(player) + count);
@@ -223,6 +236,7 @@ public class CardPart {
     private HashMap<UUID, Card> votedCards;
     private HashMap<UUID, HashSet<Card>> cardBind;
     private ArrayList<Card> cardsInADeck;
+    private Integer ammountOfCards;
     private Card headsCard = null;
     private String headsText = null;
 }

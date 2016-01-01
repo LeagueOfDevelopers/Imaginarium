@@ -19,16 +19,48 @@ public class LobbyManager implements ILobbyManager {
     @Inject
     public LobbyManager(IRoomHandler roomHandler) {
         playersBind = new HashMap<UUID, Lobby>();
-        lobby = new Lobby(playersBind);
         _roomHandler = roomHandler;
     }
 
-    public ResponseForLobby JoinLobby() {
+    public ResponseForLobby JoinLobby(Integer size) {
         UUID newPlayerUUID = UUID.randomUUID();
-        lobby.AddPlayer(newPlayerUUID);
-        if(lobby.GetCurrentPlayersCount() >= 6){
-            ChangingLobby();
+        if(size == 4){
+            if(lobbyFor4 == null){
+                lobbyFor4 = new Lobby(playersBind, size);
+            }
+            lobbyFor4.AddPlayer(newPlayerUUID);
+            if(lobbyFor4.GetCurrentPlayersCount() >= 4){
+                ChangingLobby(size);
+            }
         }
+        if(size == 5){
+            if(lobbyFor5 == null){
+                lobbyFor5 = new Lobby(playersBind, size);
+            }
+            lobbyFor5.AddPlayer(newPlayerUUID);
+            if(lobbyFor5.GetCurrentPlayersCount() >= 5){
+                ChangingLobby(size);
+            }
+        }
+        if(size == 6){
+            if(lobbyFor6 == null){
+                lobbyFor6 = new Lobby(playersBind, size);
+            }
+            lobbyFor6.AddPlayer(newPlayerUUID);
+            if(lobbyFor6.GetCurrentPlayersCount() >= 6){
+                ChangingLobby(size);
+            }
+        }
+        if(size == 7){
+            if(lobbyFor7 == null){
+                lobbyFor7 = new Lobby(playersBind, size);
+            }
+            lobbyFor7.AddPlayer(newPlayerUUID);
+            if(lobbyFor7.GetCurrentPlayersCount() >= 7){
+                ChangingLobby(size);
+            }
+        }
+
         return new ResponseForLobby("WAITING", newPlayerUUID);
     }
 
@@ -45,13 +77,33 @@ public class LobbyManager implements ILobbyManager {
             return new ResponseForLobby("ERROR_IN_UPDATE", token);
         }
     }
-    private void ChangingLobby(){
-        Lobby oldLobby = lobby;
-        lobby = new Lobby(playersBind);
+    private void ChangingLobby(Integer size){
+        Lobby oldLobby = new Lobby(playersBind, 0);
+        switch (size){
+            case 4:
+                oldLobby = lobbyFor4;
+                lobbyFor4 = new Lobby(playersBind, 4);
+                break;
+            case 5:
+                oldLobby = lobbyFor5;
+                lobbyFor5 = new Lobby(playersBind, 5);
+                break;
+            case 6:
+                oldLobby = lobbyFor6;
+                lobbyFor6 = new Lobby(playersBind, 6);
+                break;
+            case 7:
+                oldLobby = lobbyFor7;
+                lobbyFor7 = new Lobby(playersBind, 7);
+                break;
+        }
         HashSet<UUID> setOfPlayers = oldLobby.GetPlayersSet();
         _roomHandler.CreateRoom(setOfPlayers);
     }
     private IRoomHandler _roomHandler;
     private HashMap<UUID, Lobby> playersBind;
-    private Lobby lobby;
+    private Lobby lobbyFor4;
+    private Lobby lobbyFor5;
+    private Lobby lobbyFor6;
+    private Lobby lobbyFor7;
 }

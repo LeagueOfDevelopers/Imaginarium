@@ -30,7 +30,12 @@ public class JoinLobby extends HttpServlet {
         JSONRequestParser parser = new JSONRequestParser(request);
         logger.debug(request.getReader());
         PrintWriter out = response.getWriter();
-        ResponseForLobby responseForLobby = _lobby.JoinLobby();
+        Integer size = 6;
+        try {
+            size = parser.GetJSONObject().get("size").getAsInt();
+        }
+        catch (Exception e){}
+        ResponseForLobby responseForLobby = _lobby.JoinLobby(size);
         out.append(responseForLobby.GetAsJSON().toString());
     }
 

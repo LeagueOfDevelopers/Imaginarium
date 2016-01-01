@@ -8,6 +8,6 @@ import java.util.UUID;
  * Created by ndiezel on 28.11.2015.
  */
 public interface ILobbyManager {
-    ResponseForLobby JoinLobby();
+    ResponseForLobby JoinLobby(Integer size);
     ResponseForLobby UpdateLobby(UUID token);
 }
