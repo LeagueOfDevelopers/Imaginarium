@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-/**
+ /**
  * Created by ndiezel on 28.11.2015.
  */
 @WebServlet(name = "JoinLobby")
@@ -28,7 +28,7 @@ public class JoinLobby extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JSONRequestParser parser = new JSONRequestParser(request);
-        logger.debug(request.getReader());
+        logger.debug(parser.GetStringBuffer().toString() + "\nsession id:"+ request.getSession().getId());
         PrintWriter out = response.getWriter();
         Integer size = 6;
         try {
@@ -37,12 +37,12 @@ public class JoinLobby extends HttpServlet {
         catch (Exception e){}
         ResponseForLobby responseForLobby = _lobby.JoinLobby(size);
         out.append(responseForLobby.GetAsJSON().toString());
+        logger.debug(responseForLobby.GetAsJSON().toString() + "\nsession id:"+ request.getSession().getId());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
     private ILobbyManager _lobby;
-    private Logger logger = LogManager.getFormatterLogger();
-
+    private Logger logger = LogManager.getLogger(JoinLobby.class);
 }

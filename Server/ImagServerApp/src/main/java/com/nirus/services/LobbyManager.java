@@ -6,6 +6,7 @@ import com.nirus.containers.Lobby;
 import com.nirus.containers.ResponseForLobby;
 import com.nirus.interfaces.ILobbyManager;
 import com.nirus.interfaces.IRoomHandler;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ public class LobbyManager implements ILobbyManager {
             if(lobbyFor4.GetCurrentPlayersCount() >= 4){
                 ChangingLobby(size);
             }
+            return new ResponseForLobby("WAITING", newPlayerUUID, lobbyFor4.GetCurrentPlayersCount());
         }
         if(size == 5){
             if(lobbyFor5 == null){
@@ -41,6 +43,7 @@ public class LobbyManager implements ILobbyManager {
             if(lobbyFor5.GetCurrentPlayersCount() >= 5){
                 ChangingLobby(size);
             }
+            return new ResponseForLobby("WAITING", newPlayerUUID, lobbyFor5.GetCurrentPlayersCount());
         }
         if(size == 6){
             if(lobbyFor6 == null){
@@ -50,6 +53,7 @@ public class LobbyManager implements ILobbyManager {
             if(lobbyFor6.GetCurrentPlayersCount() >= 6){
                 ChangingLobby(size);
             }
+            return new ResponseForLobby("WAITING", newPlayerUUID, lobbyFor6.GetCurrentPlayersCount());
         }
         if(size == 7){
             if(lobbyFor7 == null){
@@ -59,45 +63,51 @@ public class LobbyManager implements ILobbyManager {
             if(lobbyFor7.GetCurrentPlayersCount() >= 7){
                 ChangingLobby(size);
             }
+            return new ResponseForLobby("WAITING", newPlayerUUID, lobbyFor7.GetCurrentPlayersCount());
+        }else {
+            return new ResponseForLobby("ERROR_ON_JOIN", newPlayerUUID, 0);
         }
-
-        return new ResponseForLobby("WAITING", newPlayerUUID);
     }
 
     public ResponseForLobby UpdateLobby(UUID token) {
         if(playersBind.containsKey(token)){
-            if(playersBind.get(token).GetCurrentPlayersCount() < 6){
-                return new ResponseForLobby("WAITING", token);
+            Lobby currentRoom = playersBind.get(token);
+            if(currentRoom.GetCurrentPlayersCount() < currentRoom.GetBaseCount()){
+                return new ResponseForLobby("WAITING", token, currentRoom.GetCurrentPlayersCount());
             }
             else{
-                return new ResponseForLobby("READY_FOR_GAME", token);
+                return new ResponseForLobby("READY_FOR_GAME", token, currentRoom.GetCurrentPlayersCount());
             }
         }
         else {
-            return new ResponseForLobby("ERROR_IN_UPDATE", token);
+            return new ResponseForLobby("ERROR_IN_UPDATE", token, 0);
         }
     }
     private void ChangingLobby(Integer size){
-        Lobby oldLobby = new Lobby(playersBind, 0);
+        HashSet<UUID> setOfPlayers;
         switch (size){
             case 4:
-                oldLobby = lobbyFor4;
+                setOfPlayers = lobbyFor4.GetPlayersSet();
                 lobbyFor4 = new Lobby(playersBind, 4);
+
                 break;
             case 5:
-                oldLobby = lobbyFor5;
+
+                setOfPlayers = lobbyFor5.GetPlayersSet();
                 lobbyFor5 = new Lobby(playersBind, 5);
                 break;
             case 6:
-                oldLobby = lobbyFor6;
+
+                setOfPlayers = lobbyFor6.GetPlayersSet();
                 lobbyFor6 = new Lobby(playersBind, 6);
                 break;
             case 7:
-                oldLobby = lobbyFor7;
+                setOfPlayers = lobbyFor7.GetPlayersSet();
                 lobbyFor7 = new Lobby(playersBind, 7);
                 break;
+            default:
+                setOfPlayers = new HashSet<UUID>();
         }
-        HashSet<UUID> setOfPlayers = oldLobby.GetPlayersSet();
         _roomHandler.CreateRoom(setOfPlayers);
     }
     private IRoomHandler _roomHandler;

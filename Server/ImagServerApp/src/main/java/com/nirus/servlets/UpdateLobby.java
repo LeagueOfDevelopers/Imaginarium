@@ -32,10 +32,12 @@ public class UpdateLobby extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         JSONRequestParser parser = new JSONRequestParser(request);
-        logger.debug(request.getReader());
+
+        logger.debug(parser.GetJSONObject() + "\nsession id: " + request.getSession().getId());
         UUID token = UUID.fromString(parser.GetStringByKey("token"));
         ResponseForLobby responseForLobby = _lobby.UpdateLobby(token);
         out.append(responseForLobby.GetAsJSON().toString());
+        logger.debug(responseForLobby.GetAsJSON() + "\nsession id: " + request.getSession().getId());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,5 +45,5 @@ public class UpdateLobby extends HttpServlet {
     }
 
     private ILobbyManager _lobby;
-    private Logger logger = LogManager.getFormatterLogger();
+    private Logger logger = LogManager.getLogger(UpdateLobby.class);
 }

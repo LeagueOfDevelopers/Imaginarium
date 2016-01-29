@@ -6,6 +6,8 @@ import com.nirus.containers.ResponseForAChange;
 import com.nirus.containers.ResponseForGameUpdate;
 import com.nirus.game_logic.Room;
 import com.nirus.interfaces.IRoomHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,13 +24,16 @@ public class RoomHandler implements IRoomHandler {
     }
 
     public void CreateRoom(HashSet<UUID> playersBind) {
+        for (UUID player:   playersBind) {
+            logger.debug(player.toString());
+        }
         Room newRoom = new Room(playersBind, roomBind);
     }
 
     public ResponseForGameUpdate RoomStatus(UUID token) {
         Room room = roomBind.get(token);
         ResponseForGameUpdate response = room.UpdateGame(token);
-        if(response.GetAsJSON().get("stage").getAsString() == "GAME_OVER"){
+        if(response.GetAsJSON().get("status").getAsString().equals("GAME_OVER")){
             gameOverBind.get(room).add(token);
             if(gameOverBind.get(room).size() > 5){
                 roomBind.remove(room);
@@ -44,4 +49,5 @@ public class RoomHandler implements IRoomHandler {
     }
     private HashMap<UUID, Room> roomBind;
     private HashMap<Room, HashSet<UUID>> gameOverBind;
+    private Logger logger = LogManager.getLogger(RoomHandler.class);
 }

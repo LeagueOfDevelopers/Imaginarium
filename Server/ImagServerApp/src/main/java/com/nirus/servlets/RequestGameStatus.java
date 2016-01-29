@@ -30,16 +30,18 @@ public class RequestGameStatus extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JSONRequestParser parser = new JSONRequestParser(request);
-        logger.debug(request.getReader());
+
+        logger.debug(parser.GetStringBuffer() + "\nsession id: " + request.getSession().getId());
         PrintWriter out = response.getWriter();
         UUID token = UUID.fromString(parser.GetStringByKey("token"));
         ResponseForGameUpdate responseForGameUpdate = _roomHandler.RoomStatus(token);
         out.append(responseForGameUpdate.GetAsJSON().toString());
+        logger.debug(responseForGameUpdate.GetAsJSON() + "\nsession id: " + request.getSession().getId());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
     IRoomHandler _roomHandler;
-    private Logger logger = LogManager.getFormatterLogger();
+    private Logger logger = LogManager.getLogger(RequestGameStatus.class);
 }

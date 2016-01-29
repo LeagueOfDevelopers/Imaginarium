@@ -26,7 +26,8 @@ public class ResponseForGameUpdate {
     public void SetThirdStage(HashSet<Card> cards){
         this.cards = cards;
     }
-    public void SetFourthStage(HashMap<Card, Integer> cardScores){
+    public void SetFourthStage(HashMap<Card, Integer> cardScores, Card card){
+        cardHead = card;
         this.cardScores = cardScores;
     }
     public JsonObject GetAsJSON(){
@@ -57,6 +58,7 @@ public class ResponseForGameUpdate {
                 response.addProperty("stage", stage);
                 HashSet<Card> cards = new HashSet<Card>(cardScores.keySet());
                 Integer i = 0;
+                response.addProperty("cardOfHead", cardHead.GetId());
                 for(Card card : cards){
                     response.addProperty("card#" + i.toString(), card.GetId());
                     response.addProperty("vote#" + i.toString(), cardScores.get(card));
@@ -71,6 +73,7 @@ public class ResponseForGameUpdate {
     private Boolean _head;
     private String _status;
     private HashSet<Card> cards;
+    private Card cardHead;
     private HashMap<Card, Integer> cardScores;
     private String text;
 }
