@@ -13,14 +13,17 @@ public class Prefs {
         return PlayerPrefs.GetString("token", string.Empty);
     }
 
-    public void setHead(bool isHead)
+    public void setHead(int isHead)
     {
-        PlayerPrefs.SetString("isHead",isHead.ToString());
+        PlayerPrefs.SetInt("isHeadInt", isHead);
     }
 
     public bool getHead()
     {
-        return Convert.ToBoolean(PlayerPrefs.GetString("isHead")); 
+        int isHead = PlayerPrefs.GetInt("isHeadInt",0);
+        if (isHead == 0)
+            return false;
+        return true; 
     }
 
     public void setText(string text)
@@ -149,5 +152,27 @@ public class Prefs {
         if (PlayerPrefs.GetInt("isStageComplete", 0) == 0)
             return false;
         return true;
+    }
+
+    public void setCardsForVote(int[] cards)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            PlayerPrefs.SetInt("cardsForVote" + i.ToString(), cards[i]);
+        }
+    }
+
+    public int[] getCardsForVote()
+    {
+        int[] cards = new int[6];
+        for (int i = 0; i < 6; i++)
+        {
+            cards[i] = PlayerPrefs.GetInt("cardsForVote" + i.ToString(), 0);
+        }
+        return cards;
+    }
+
+    public void deleteAll() {
+        PlayerPrefs.DeleteAll();
     }
 }

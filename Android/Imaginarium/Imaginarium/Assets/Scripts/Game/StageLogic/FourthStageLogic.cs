@@ -15,7 +15,7 @@ public class FourthStageLogic : MonoBehaviour {
 
     private void SetCards()
     {
-        Cards.GetComponent<CardNamer>().SetCards(prefs.getChosenCards());
+        Cards.GetComponent<CardNamer>().SetCards(prefs.getCardsForVote());
     }
 
     public void OKButtonClickEventHandler()

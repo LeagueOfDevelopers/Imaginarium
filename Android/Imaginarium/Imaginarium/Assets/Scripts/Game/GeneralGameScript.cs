@@ -84,9 +84,14 @@ public class GeneralGameScript : MonoBehaviour {
                     break;
                 case 4:
                     int[] VoteForCards = new int[6];
+                    int[] CardsForVote = new int[6];
                     for (int i = 0; i < 6; i++)
                         VoteForCards[i] = Convert.ToInt32(response[("vote#" + i)]);
+                    for (int i = 0; i < 6; i++)
+                        CardsForVote[i] = Convert.ToInt32(response[("card#" + i)]);
+
                     prefs.setVoteForCards(VoteForCards);
+                    prefs.setCardsForVote(CardsForVote);
                     prefs.setHeadCard(Convert.ToInt32(response["cardOfHead"]));
                     SceneManager.LoadSceneAsync("FourthStage");
                     break;
@@ -97,6 +102,12 @@ public class GeneralGameScript : MonoBehaviour {
         if (response["status"] == "SAME"&&!prefs.getIsStageComplete())
         {
             SameStatusRedirect();
+        }
+
+        if (response["status"] == "GAME_OVER")
+        {
+            prefs.deleteAll();
+            SceneManager.LoadSceneAsync("Menu");
         }
     }
 

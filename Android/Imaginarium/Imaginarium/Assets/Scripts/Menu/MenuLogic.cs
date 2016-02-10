@@ -10,6 +10,8 @@ public class MenuLogic : MonoBehaviour
     ServerDriver driver = new ServerDriver();
     Prefs prefs = new Prefs();
     string token = "";
+    float calldown = 3;
+    float basic_calldown = 3;
     private bool requesting = false;
 
     void Start()
@@ -20,41 +22,49 @@ public class MenuLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (requesting)
+        if (calldown <= 0)
         {
-            if (driver.isDone())
+            calldown = basic_calldown;
+            if (requesting)
             {
-                switch (currentStage)
+                if (driver.isDone())
                 {
+                    switch (currentStage)
+                    {
 
-                    case Stage.JoinLobby:
-                        Debug.Log("JoinLobby");
-                        prefs.setToken(driver.getResponse()["token"].ToString());
-                        TryToken();
-                        break;
-
-                    case Stage.SearchingGame:
-                        Debug.Log("SearchingGame" + token);
-                        Debug.Log(driver.text().ToString());
-                        if (!driver.getResponse()["token"].ToString().Equals(token)
-                            || driver.getResponse()["status"].Equals("ERROR"))
-                        {
-                            JoinLobby();
+                        case Stage.JoinLobby:
+                            Debug.Log("JoinLobby");
+                            prefs.setToken(driver.getResponse()["token"].ToString());
+                            TryToken();
                             break;
-                        }
+
+                        case Stage.SearchingGame:
+                            Debug.Log("SearchingGame" + token);
+                            Debug.Log(driver.text().ToString());
+                            if (!driver.getResponse()["token"].ToString().Equals(token)
+                                || driver.getResponse()["status"].Equals("ERROR"))
+                            {
+                                JoinLobby();
+                                break;
+                            }
 
 
-                        if (driver.getResponse()["status"].Equals("READY_FOR_GAME"))
-                        {
-                            GameStart();
+                            if (driver.getResponse()["status"].Equals("READY_FOR_GAME"))
+                            {
+                                GameStart();
+                                break;
+                            }
+
+                            SearchingGame();
+
                             break;
-                        }
-
-                        SearchingGame();
-
-                        break;
+                    }
                 }
             }
+        }
+        else
+        {
+            calldown -= Time.deltaTime;
         }
     }
 
