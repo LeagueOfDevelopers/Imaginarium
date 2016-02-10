@@ -18,11 +18,13 @@ public class Player {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        Long a = id.getLeastSignificantBits();
+        Long b = id.getMostSignificantBits();
+        return a.intValue() + b.intValue();
     }
 
-    public boolean equals(Player obj) {
-        return this.getId().equals(obj.getId());
+    public Boolean equals(Player obj) {
+        return this.getId().toString().equals(obj.getId().toString());
     }
 
     private UUID id;

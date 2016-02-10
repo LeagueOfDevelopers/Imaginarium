@@ -15,8 +15,8 @@ public class RoomManager implements IRoomManager {
         rooms = new RoomsContainer();
 
     }
-    public void createRoom(PlayersContainer players) {
-        rooms.addRoom(new Room(players));
+    public void createRoom(PlayersContainer players, Integer size) {
+        rooms.addRoom(new Room(players, size));
     }
 
     public ResponseGame getGameStatus(GameParams params) {

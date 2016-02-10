@@ -18,7 +18,12 @@ public class PlayersContainer {
         return players.remove(player);
     }
     public boolean contains(Player player){
-        return players.contains(player);
+        for(Player player1: players){
+            if(player1.equals(player)){
+                return true;
+            }
+        }
+        return false;
     }
     public Integer size(){
         return players.size();

@@ -13,7 +13,7 @@ public class ResponseLobby {
         response.addProperty(name, value);
     }
     public String getResponse(){
-        return response.getAsString();
+        return response.toString();
     }
     private JsonObject response;
 }

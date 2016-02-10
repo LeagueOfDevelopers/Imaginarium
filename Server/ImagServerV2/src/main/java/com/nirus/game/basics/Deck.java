@@ -8,6 +8,7 @@ import java.util.Random;
  */
 public class Deck {
     public Deck(Integer size){
+        cards = new ArrayList<Card>();
         standardInit(size);
         rand = new Random();
     }
@@ -15,7 +16,7 @@ public class Deck {
         if(cards.size() == 0){
             return null;
         }
-        Card card = cards.get(rand.nextInt()%cards.size());
+        Card card = cards.get(Math.abs(rand.nextInt()%cards.size()));
         cards.remove(card);
         return card;
     }

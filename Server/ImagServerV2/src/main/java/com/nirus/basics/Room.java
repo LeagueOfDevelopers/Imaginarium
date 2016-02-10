@@ -9,9 +9,9 @@ import com.nirus.responses.ResponseGame;
  * Created by ndiezel on 28.01.2016.
  */
 public class Room {
-    public Room(PlayersContainer players){
+    public Room(PlayersContainer players, Integer size){
         this.players = players;
-        game = new CardGame();
+        game = new CardGame(size, players);
     }
     public boolean contains(Player player){
         return players.contains(player);

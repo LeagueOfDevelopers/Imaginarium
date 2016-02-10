@@ -18,6 +18,7 @@ public class Lobby {
     public boolean removePlayer(Player player){
         return players.removePlayer(player);
     }
+    public PlayersContainer getPlayers(){ return players;}
     public boolean contains(Player player){
         return players.contains(player);
     }

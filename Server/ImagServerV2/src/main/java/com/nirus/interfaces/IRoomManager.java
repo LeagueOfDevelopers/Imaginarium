@@ -8,7 +8,7 @@ import com.nirus.responses.ResponseGame;
  * Created by ndiezel on 28.01.2016.
  */
 public interface IRoomManager {
-    public void createRoom(PlayersContainer players);
-    public ResponseGame getGameStatus(GameParams params);
-    public ResponseGame updateGameStatus(GameParams params);
+    void createRoom(PlayersContainer players, Integer size);
+    ResponseGame getGameStatus(GameParams params);
+    ResponseGame updateGameStatus(GameParams params);
 }

@@ -1,22 +1,32 @@
 package com.nirus.services;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.nirus.api_params.LobbyParams;
+import com.nirus.basics.Lobby;
 import com.nirus.basics.Player;
 import com.nirus.containers.LobbiesContainer;
 import com.nirus.interfaces.ILobbyManager;
+import com.nirus.interfaces.IRoomManager;
 import com.nirus.responses.ResponseLobby;
 
 /**
  * Created by ndiezel on 27.01.2016.
  */
+@Singleton
 public class LobbyManager implements ILobbyManager {
-    public LobbyManager(){
+    @Inject
+    public LobbyManager(IRoomManager roomManager){
         lobbies = new LobbiesContainer();
+        this.roomManager = roomManager;
     }
     public ResponseLobby JoinLobby(LobbyParams params) {
         Player newPlayer = params.getPlayer();
-        lobbies.getLobbyBySizeForNewPlayer(params.getLobbyMaxSize())
-                .addPlayer(newPlayer);
+        Lobby lobby = lobbies.getLobbyBySizeForNewPlayer(params.getLobbyMaxSize());
+        lobby.addPlayer(newPlayer);
+        if(lobby.isItFull()){
+            roomManager.createRoom(lobby.getPlayers(), lobby.size());
+        }
         ResponseLobby response = new ResponseLobby();
         response.addField("token", newPlayer.getId().toString());
         response.addField("countOfPlayers", lobbies.getLobbyByPlayer(newPlayer)
@@ -53,4 +63,5 @@ public class LobbyManager implements ILobbyManager {
         return null;
     }
     private LobbiesContainer lobbies;
+    private IRoomManager roomManager;
 }
