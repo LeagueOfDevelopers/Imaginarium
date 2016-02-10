@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 
 public class GeneralGameScript : MonoBehaviour {
-
+    
     public float cooldownResetValue = 5;
+
+    private int countOfDonePlayers = 0;
     float cooldown = 0;
     bool isRequestHasReaden = true; 
     ServerDriver driver = new ServerDriver();
@@ -30,7 +32,7 @@ public class GeneralGameScript : MonoBehaviour {
                 {
                     cooldown = cooldownResetValue;
                     isRequestHasReaden = false;
-                    driver.GetRoomStatus(prefs.getToken());
+                    driver.GetRoomStatus();
                 }
             }
             else
@@ -46,10 +48,10 @@ public class GeneralGameScript : MonoBehaviour {
 
     private void redirectHandler(Dictionary<string, string> response)
     {
-        if (response["status"] == "OK")
+        if (response["isDone"] == "false")
         {
             int stage = Convert.ToInt32(response["stage"]);
-
+            countOfDonePlayers = Convert.ToInt32(response["countOfPlayers"]);
             switch (stage)
                 {
                 case 1:
@@ -95,44 +97,19 @@ public class GeneralGameScript : MonoBehaviour {
                     prefs.setHeadCard(Convert.ToInt32(response["cardOfHead"]));
                     SceneManager.LoadSceneAsync("FourthStage");
                     break;
+                case 0:
+                    prefs.deleteAll();
+                    SceneManager.LoadSceneAsync("Menu");
+                    break;
                 }
 
         }
 
-        if (response["status"] == "SAME"&&!prefs.getIsStageComplete())
-        {
-            SameStatusRedirect();
-        }
-
-        if (response["status"] == "GAME_OVER")
-        {
-            prefs.deleteAll();
-            SceneManager.LoadSceneAsync("Menu");
-        }
     }
 
-    private void SameStatusRedirect() {
-
-        switch (prefs.getStage())
-        {
-            case 1:
-                if(prefs.getIsHead())
-                    SceneManager.LoadSceneAsync("FirstStage");
-                break;
-            case 2:
-                if (!prefs.getIsHead())
-                    SceneManager.LoadSceneAsync("SecondStage");
-                break;
-            case 3:
-                if (!prefs.getIsHead())
-                    SceneManager.LoadSceneAsync("ThirdStage");
-                break;
-            case 4:
-                SceneManager.LoadSceneAsync("FourthStage");
-                break;
-        }
+    public int getCountOfPlayers() {
+        return countOfDonePlayers;
     }
-
     public void Exit() {
         Debug.Log("exit");
         SceneManager.LoadSceneAsync("Menu");

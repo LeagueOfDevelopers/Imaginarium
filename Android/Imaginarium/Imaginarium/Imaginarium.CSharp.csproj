@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Server\ServerAPI.cs" />
     <Compile Include="Assets\Scripts\Server\ServerDriver.cs" />
     <Compile Include="Assets\Scripts\Tests.cs" />
+    <Compile Include="Assets\countOfPlayersLabelHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JSON\readme.txt" />

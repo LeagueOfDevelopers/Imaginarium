@@ -19,7 +19,6 @@ public class SecondStageLogic : MonoBehaviour {
         if (driver.isDone() && driver.text().Length > 0)
         {
             Debug.Log(driver.text());
-            prefs.setIsStageComplete(true);
             SceneManager.LoadScene("Game");
         }
     }
@@ -37,6 +36,6 @@ public class SecondStageLogic : MonoBehaviour {
 
             JSONObject json = new JSONObject();
             json.AddField("card", cardNum);
-            driver.UpdateRoomStatus(prefs.getToken(), json);
+            driver.UpdateRoomStatus(json);
     }
 }

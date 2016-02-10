@@ -92,7 +92,7 @@ public class MenuLogic : MonoBehaviour
 
     private void SearchingGame()
     {
-        driver.UpdateLobby(token);
+        driver.UpdateLobby();
         currentStage = Stage.SearchingGame;
     }
 

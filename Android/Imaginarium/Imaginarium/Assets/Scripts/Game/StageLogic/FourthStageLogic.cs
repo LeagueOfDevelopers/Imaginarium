@@ -20,7 +20,6 @@ public class FourthStageLogic : MonoBehaviour {
 
     public void OKButtonClickEventHandler()
     {
-        prefs.setIsStageComplete(true);
         SceneManager.LoadScene("Game");
     }
 

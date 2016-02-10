@@ -25,23 +25,27 @@ public class ServerDriver {
         sendRequest(ServerAPI.RequestType.JoinLobby, new JSONObject());
     }
 
-    public void UpdateLobby(string token) {
+    public void UpdateLobby() {
         JSONObject data = new JSONObject();
-        data.AddField("token", token);
+        Prefs pref = new Prefs();
+        data.AddField("token", pref.getToken());
         Debug.Log(data.ToString());
         sendRequest(ServerAPI.RequestType.UpdateLobby, data);
     }
 
 
-    public void GetRoomStatus(string token) {
+    public void GetRoomStatus() {
         JSONObject data = new JSONObject();
-        data.AddField("token", token);
-        sendRequest(ServerAPI.RequestType.GameStatus, data);
+        Prefs pref = new Prefs();
+        data.AddField("token", pref.getToken());
+        sendRequest(ServerAPI.RequestType.GetGameStatus, data);
     }
 
-    public void UpdateRoomStatus(string token, JSONObject data) {
-        data.AddField("token", token);
-        sendRequest(ServerAPI.RequestType.ChangeGameStatus, data);
+    public void UpdateRoomStatus(JSONObject data) {
+        Prefs pref = new Prefs();
+        data.AddField("token", pref.getToken());
+        data.AddField("stage", pref.getStage());
+        sendRequest(ServerAPI.RequestType.SetGameStatus, data);
     }
 
     public void TestRequest() {
