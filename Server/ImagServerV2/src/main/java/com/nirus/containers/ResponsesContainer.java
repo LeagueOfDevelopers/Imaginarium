@@ -25,11 +25,32 @@ public class ResponsesContainer {
         return requestsFromPlayers.size();
     }
     public ResponseGame getResponseByPlayer(Player player){
-        requestsFromPlayers.add(player);
-        return responses.get(player);
+
+        for(Player player1: responses.keySet()){
+            if(player.getId().equals(player1.getId())){
+                if(!hasItSendRequests(player)){
+                    requestsFromPlayers.add(player);
+                }
+                return responses.get(player1);
+            }
+        }
+        return null;
     }
     public ResponseGame getResponseByPlayerSafe(Player player){
-        return responses.get(player);
+        for(Player player1: responses.keySet()){
+            if(player.getId().equals(player1.getId())){
+                return responses.get(player1);
+            }
+        }
+        return null;
+    }
+    private boolean hasItSendRequests(Player player){
+        for(Player player1: requestsFromPlayers){
+            if(player1.getId().equals(player.getId())){
+                return true;
+            }
+        }
+        return false;
     }
     private HashSet<Player> requestsFromPlayers;
     private HashMap<Player, ResponseGame> responses;

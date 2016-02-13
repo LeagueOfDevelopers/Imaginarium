@@ -14,9 +14,21 @@ public class PlayedCards {
         votedCard = new HashMap<Player, Card>();
     }
     public void chooseCard(Player player, Card card){
+        for(Player player1: chosenCard.keySet()){
+            if(player.getId().equals(player1.getId())){
+                chosenCard.put(player1, card);
+                return;
+            }
+        }
         chosenCard.put(player, card);
     }
     public void voteCard(Player player, Card card){
+        for(Player player1: votedCard.keySet()){
+            if(player.getId().equals(player1.getId())){
+                votedCard.put(player1, card);
+                return;
+            }
+        }
         votedCard.put(player, card);
     }
     public Integer howMuchChosen(){
@@ -26,22 +38,42 @@ public class PlayedCards {
         return votedCard.size();
     }
     public Card getChosenCardByPlayer(Player player){
-        return chosenCard.get(player);
+        for(Player player1: chosenCard.keySet()){
+            if(player.getId().equals(player1.getId())){
+                return chosenCard.get(player1);
+            }
+        }
+        return null;
     }
     public Card getVotedCardByPlayer(Player player){
-        return votedCard.get(player);
+        for(Player player1: votedCard.keySet()){
+            if(player.getId().equals(player1.getId())){
+                return votedCard.get(player1);
+            }
+        }
+        return null;
     }
     public HashSet<Card> getChosenCards(){
         return new HashSet<Card>(chosenCard.values());
     }
-    public HashSet<Card> getVotedCards(){
-        return new HashSet<Card>(votedCard.values());
+    public HashSet<Player> getVotedPlayers(){
+        return new HashSet<Player>(votedCard.keySet());
     }
     public Boolean containsChosenCard(Player player){
-        return chosenCard.containsKey(player);
+        for(Player player1: chosenCard.keySet()){
+            if(player.getId().equals(player1.getId())){
+                return true;
+            }
+        }
+        return false;
     }
     public  Boolean containsVotedCard(Player player){
-        return votedCard.containsKey(player);
+        for(Player player1: votedCard.keySet()){
+            if(player.getId().equals(player1.getId())){
+                return true;
+            }
+        }
+        return false;
     }
     public Integer haveWeLost(Player headPlayer){
         Card card = getChosenCardByPlayer(headPlayer);

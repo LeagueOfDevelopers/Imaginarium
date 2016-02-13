@@ -16,7 +16,11 @@ public class PlayersScores {
         }
     }
     public void changePlayerScore(Player player, Integer value){
-        scores.get(player).setScore(scores.get(player).getScore() + value);
+        for(Player player1: scores.keySet()){
+            if(player.getId().equals(player1.getId())){
+                scores.get(player1).setScore(scores.get(player1).getScore() + value);
+            }
+        }
     }
     public Score getScoreByPlayer(Player player){
         return scores.get(player);

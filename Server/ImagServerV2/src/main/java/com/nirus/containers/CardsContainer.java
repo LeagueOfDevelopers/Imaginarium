@@ -14,6 +14,14 @@ public class CardsContainer {
     public boolean addCard(Card card){
         return cards.add(card);
     }
+    public boolean removeCard(Card card){
+        for(Card card1: cards){
+            if(card.getId().equals(card1.getId())){
+                return cards.remove(card1);
+            }
+        }
+        return false;
+    }
     public HashSet<Card> getHashSet(){
         return cards;
     }

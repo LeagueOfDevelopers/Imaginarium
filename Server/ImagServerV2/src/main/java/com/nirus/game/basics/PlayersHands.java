@@ -24,6 +24,11 @@ public class PlayersHands {
         hands.put(player, cards);
     }
     public CardsContainer getHandByPlayer(Player player){
+        for(Player player1: hands.keySet()){
+            if(player.getId().equals(player1.getId())){
+                return hands.get(player1);
+            }
+        }
         return hands.get(player);
     }
     private HashMap<Player, CardsContainer> hands;

@@ -1,5 +1,6 @@
 package com.nirus.services;
 
+import com.google.inject.Singleton;
 import com.nirus.api_params.GameParams;
 import com.nirus.basics.Room;
 import com.nirus.containers.PlayersContainer;
@@ -10,6 +11,7 @@ import com.nirus.responses.ResponseGame;
 /**
  * Created by ndiezel on 28.01.2016.
  */
+@Singleton
 public class RoomManager implements IRoomManager {
     public RoomManager(){
         rooms = new RoomsContainer();

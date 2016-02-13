@@ -13,7 +13,7 @@ public class Card {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return id;
     }
 
     public boolean equals(Card obj) {

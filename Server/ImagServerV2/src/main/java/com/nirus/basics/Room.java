@@ -17,10 +17,10 @@ public class Room {
         return players.contains(player);
     }
     public ResponseGame gameStatus(GameParams params){
-        return null;
+        return game.getStatus(params);
     }
     public ResponseGame gameUpdate(GameParams params){
-        return null;
+        return game.setUpdate(params);
     }
     private CardGame game;
     private PlayersContainer players;

@@ -12,9 +12,19 @@ public class PlayersContainer {
         players = new HashSet<Player>();
     }
     public boolean addPlayer(Player player){
+        for(Player player1: players){
+            if(player1.getId().equals(player.getId())){
+                return false;
+            }
+        }
         return players.add(player);
     }
     public boolean removePlayer(Player player){
+        for(Player player1: players){
+            if(player.getId().equals(player1.getId())){
+                return players.remove(player1);
+            }
+        }
         return players.remove(player);
     }
     public boolean contains(Player player){
@@ -30,6 +40,9 @@ public class PlayersContainer {
     }
     public HashSet<Player> getHashSet(){
         return players;
+    }
+    public void clear(){
+        players.clear();
     }
     private HashSet<Player> players;
 }

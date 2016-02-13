@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" build-on-make="true" name="ImagServerApp:war">
-    <output-path>$PROJECT_DIR$</output-path>
-    <root id="archive" name="ImagServerApp_war.war">
-      <element id="artifact" artifact-name="ImagServerApp:war exploded" />
-    </root>
-  </artifact>
-</component>

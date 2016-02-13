@@ -23,8 +23,8 @@ public class Player {
         return a.intValue() + b.intValue();
     }
 
-    public Boolean equals(Player obj) {
-        return this.getId().toString().equals(obj.getId().toString());
+    public boolean equals(Player obj) {
+        return this.getId().equals(obj.getId());
     }
 
     private UUID id;

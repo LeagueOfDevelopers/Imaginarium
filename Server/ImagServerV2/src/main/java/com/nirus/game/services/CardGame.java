@@ -23,6 +23,11 @@ public class CardGame {
         scores = new PlayersScores(players);
         gameStage = new Stage();
         playedCards = new PlayedCards();
+        fourthStagePlayers = new PlayersContainer();
+
+        for(Player player: players.getHashSet()){
+            hands.addHand(player, new CardsContainer());
+        }
 
         this.players = players;
         headIterator = this.players.getHashSet().iterator();
@@ -49,6 +54,7 @@ public class CardGame {
         if(gameStage.getStage() == 0){
             if(params.getPlayer().equals(currentHead)){
                 headsText = params.getText();
+                hands.getHandByPlayer(params.getPlayer()).removeCard(params.getCard());
                 playedCards.chooseCard(params.getPlayer(), params.getCard());
                 return true;
             } else{
@@ -57,6 +63,7 @@ public class CardGame {
         }
         if(gameStage.getStage() == 1){
             if(!params.getPlayer().equals(currentHead)){
+                hands.getHandByPlayer(params.getPlayer()).removeCard(params.getCard());
                 playedCards.chooseCard(params.getPlayer(), params.getCard());
                 return true;
             } else{
@@ -71,6 +78,10 @@ public class CardGame {
                 return false;
             }
         }
+        if(gameStage.getStage() == 3){
+            fourthStagePlayers.addPlayer(params.getPlayer());
+            return true;
+        }
         return false;
     }
     private void updateForNextStage(){
@@ -80,22 +91,22 @@ public class CardGame {
                     gameStage.nextStage();
                     initSecondStage();
                 }
-            }
-            if(gameStage.getStage() == 1){
+            }else if(gameStage.getStage() == 1){
                 if(playedCards.howMuchChosen().equals(players.size())){
                     gameStage.nextStage();
                     initThirdStage();
                 }
-            }
-            if(gameStage.getStage() == 2){
+            }else if(gameStage.getStage() == 2){
                 if(playedCards.howMuchVoted() == players.size() - 1){
                     gameStage.nextStage();
                     initFourthStage();
                 }
-            }
-            if(gameStage.getStage() == 3){
-                gameStage.nextStage();
-                initFirstTurn();
+            }else if(gameStage.getStage() == 3){
+                if(fourthStagePlayers.size().equals(players.size())) {
+                    gameStage.nextStage();
+                    fourthStagePlayers.clear();
+                    initFirstTurn();
+                }
             }
         }
     }
@@ -114,6 +125,14 @@ public class CardGame {
         if(gameStage.getStage() == 2){
             responseGame.updateField("countOfPlayers", playedCards.howMuchVoted().toString());
             Boolean isDone = playedCards.containsVotedCard(player);
+            if(player.getId().equals(currentHead.getId())){
+                isDone = true;
+            }
+            responseGame.updateField("isDone", isDone.toString());
+        }
+        if(gameStage.getStage() == 3){
+            responseGame.updateField("countOfPlayers", fourthStagePlayers.size().toString());
+            Boolean isDone = fourthStagePlayers.contains(player);
             responseGame.updateField("isDone", isDone.toString());
         }
     }
@@ -164,7 +183,7 @@ public class CardGame {
         responses.clear();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
-            Boolean isDone = playedCards.containsVotedCard(player);
+            Boolean isDone = currentHead.equals(player);
             response.addField("isDone", isDone.toString());
             response.addField("countOfPlayers", "1");
             response.addField("stage", "3");
@@ -183,10 +202,11 @@ public class CardGame {
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
             response.addField("isDone", "true");
-            response.addField("countOfPlayers", "1");
-            response.addField("stage", "3");
+            response.addField("countOfPlayers", players.size().toString());
+            response.addField("stage", "4");
+            response.addField("cardOfHead", playedCards.getChosenCardByPlayer(currentHead).getId().toString());
             Integer i = 0;
-            for(Card card: playedCards.getChosenCards()){
+            for(Card card: points.keySet()){
                 response.addField("card#" + i.toString(), card.getId().toString());
                 response.addField("vote#" + i.toString(), points.get(card).toString());
                 i++;
@@ -200,8 +220,8 @@ public class CardGame {
         for(Player player: players.getHashSet()){
             Card chosenCard = playedCards.getChosenCardByPlayer(player);
             Integer result = 0;
-            for(Player player1: players.getHashSet()){
-                if(playedCards.getVotedCardByPlayer(player1).equals(chosenCard)){
+            for(Player player1: playedCards.getVotedPlayers()){
+                if(playedCards.getVotedCardByPlayer(player1).getId().equals(chosenCard.getId())){
                     result++;
                 }
             }
@@ -227,7 +247,7 @@ public class CardGame {
             }
             points.put(chosenCard, result);
         }
-        for(Player player: players.getHashSet()){
+        for(Player player: playedCards.getVotedPlayers()){
             Card votedCard = playedCards.getVotedCardByPlayer(player);
             Card headCard = playedCards.getChosenCardByPlayer(currentHead);
             if(votedCard.equals(headCard)){
@@ -239,6 +259,8 @@ public class CardGame {
         }
         return points;
     }
+
+    private PlayersContainer fourthStagePlayers;
 
     private String headsText;
     private PlayedCards playedCards;

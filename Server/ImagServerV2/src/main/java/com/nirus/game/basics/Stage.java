@@ -8,11 +8,9 @@ public class Stage {
         stage = 0;
     }
     public void nextStage(){
+        stage++;
         if(stage == 4){
             stage = 0;
-        }
-        else{
-            stage++;
         }
     }
     public Integer getStage(){
