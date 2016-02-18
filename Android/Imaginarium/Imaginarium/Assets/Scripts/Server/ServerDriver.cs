@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ServerDriver {
 
-    private string url = "http://185.87.49.245:8080/ImagServerApp_war";         ///TODO ВЫНЕСТИ В КОНФИГ!
+    private string url = "http://185.87.49.245:8080/ImagServerV2_war";         ///TODO ВЫНЕСТИ В КОНФИГ!
     private WWW www;
 
     public bool isDone() {

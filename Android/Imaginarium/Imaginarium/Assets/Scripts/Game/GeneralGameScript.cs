@@ -56,7 +56,7 @@ public class GeneralGameScript : MonoBehaviour {
                 {
                 case 1:
                     prefs.setStage(1);
-                    if (response["is_head"] == "false")
+                    if (response["isHead"] == "false")
                         prefs.setIsHead(0);
                     else
                         prefs.setIsHead(1);
@@ -68,7 +68,7 @@ public class GeneralGameScript : MonoBehaviour {
 
                     prefs.setScore(Convert.ToInt32(response["score"]));
                     
-                    if (Convert.ToBoolean(response["is_head"]))
+                    if (Convert.ToBoolean(response["isHead"]))
                         SceneManager.LoadSceneAsync("FirstStage");
                     break;
                 case 2:

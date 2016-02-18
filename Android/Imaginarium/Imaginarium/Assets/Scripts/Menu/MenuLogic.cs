@@ -49,7 +49,7 @@ public class MenuLogic : MonoBehaviour
                             }
 
 
-                            if (driver.getResponse()["status"].Equals("READY_FOR_GAME"))
+                            if (driver.getResponse()["status"].Equals("READY"))
                             {
                                 GameStart();
                                 break;

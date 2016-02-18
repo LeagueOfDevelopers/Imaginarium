@@ -4,13 +4,23 @@ using UnityEngine.SceneManagement;
 
 public class FourthStageLogic : MonoBehaviour {
 
+    private ServerDriver driver = new ServerDriver();
     public GameObject Cards;
     Prefs prefs = new Prefs();
 
     // Use this for initialization
     void Start () {
+        driver.TestRequest();
         SetCards();
         ShowVoteForCards();
+    }
+
+    void Update() {
+        if (driver.isDone() && driver.text().Length > 0)
+        {
+            Debug.Log(driver.text());
+            SceneManager.LoadScene("Game");
+        }
     }
 
     private void SetCards()
@@ -20,6 +30,8 @@ public class FourthStageLogic : MonoBehaviour {
 
     public void OKButtonClickEventHandler()
     {
+        JSONObject json = new JSONObject();
+        driver.UpdateRoomStatus(json);
         SceneManager.LoadScene("Game");
     }
 
