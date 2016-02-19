@@ -158,6 +158,11 @@ public class CardGame {
         currentHead = headIterator.next();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
+            if(hands.getHandByPlayer(player).size() == 0 && standartDeck.size() == 0){
+                response.addField("stage", "0");
+                responses.addResponse(response, player);
+                continue;
+            }
             Boolean isHead = currentHead.equals(player);
             isHead = !isHead;
             response.addField("isDone", isHead.toString());

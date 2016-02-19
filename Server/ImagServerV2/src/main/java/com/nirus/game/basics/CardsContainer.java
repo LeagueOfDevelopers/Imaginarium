@@ -33,5 +33,8 @@ public class CardsContainer {
     public HashSet<Card> getHashSet(){
         return cards;
     }
+    public Integer size(){
+        return cards.size();
+    }
     private HashSet<Card> cards;
 }

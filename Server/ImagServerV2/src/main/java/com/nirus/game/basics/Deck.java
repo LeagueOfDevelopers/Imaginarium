@@ -20,6 +20,9 @@ public class Deck {
         cards.remove(card);
         return card;
     }
+    public Integer size(){
+        return cards.size();
+    }
 
     private void standardInit(Integer size){
         for(Integer i = 0; i < size; i++){

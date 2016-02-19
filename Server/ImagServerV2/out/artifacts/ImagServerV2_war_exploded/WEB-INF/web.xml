@@ -14,7 +14,7 @@
     </filter-mapping>
     <context-param>
         <param-name>log4jConfiguration</param-name>
-        <param-value>file://C:\Users\ndiezel\Documents\Imaginarium\Server\ImagServerV2\log4j2.xml</param-value>
+        <param-value>file:///opt/tomcat/webapps/log4j2.xml</param-value>
     </context-param>
     <listener>
         <listener-class>com.nirus.configs.MyGuiceConfig</listener-class>
