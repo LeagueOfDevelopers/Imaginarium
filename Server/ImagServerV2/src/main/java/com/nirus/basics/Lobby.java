@@ -14,7 +14,7 @@ public class Lobby {
     }
     public boolean addPlayer(Player player){
         return players.addPlayer(player);
-    }
+}
     public boolean removePlayer(Player player){
         return players.removePlayer(player);
     }

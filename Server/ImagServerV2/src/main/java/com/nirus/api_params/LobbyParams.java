@@ -2,13 +2,20 @@ package com.nirus.api_params;
 
 import com.nirus.basics.Player;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalTime;
+
 /**
  * Created by ndiezel on 27.01.2016.
  */
 public class LobbyParams {
-    public LobbyParams(Player player){
+    public LobbyParams(Player player)
+    {
         this.player = player;
+        instant = Instant.now();
     }
+    public Instant getInstant(){ return instant;}
     public Player getPlayer(){
         return player;
     }
@@ -20,4 +27,5 @@ public class LobbyParams {
     }
     private Integer lobbyMaxSize;
     private Player player;
+    private Instant instant;
 }

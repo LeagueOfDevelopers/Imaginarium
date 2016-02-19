@@ -1,4 +1,4 @@
-package com.nirus.containers;
+package com.nirus.game.basics;
 
 import com.nirus.game.basics.Card;
 
@@ -18,6 +18,14 @@ public class CardsContainer {
         for(Card card1: cards){
             if(card.getId().equals(card1.getId())){
                 return cards.remove(card1);
+            }
+        }
+        return false;
+    }
+    public boolean contains(Card card){
+        for(Card card1: cards){
+            if(card.getId().equals(card1.getId())){
+                return true;
             }
         }
         return false;

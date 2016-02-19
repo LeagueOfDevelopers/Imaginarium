@@ -26,7 +26,7 @@ public class JoinLobby extends javax.servlet.http.HttpServlet {
         JSONRequestParser parser = new JSONRequestParser(request);
         LobbyParams params = new LobbyParams(new Player(UUID.randomUUID()));
         try {
-            params.setLobbyMaxSize(Integer.getInteger(parser.GetStringByKey("size")));
+            params.setLobbyMaxSize(Integer.parseInt(parser.GetStringByKey("size")));
         }
         catch (Exception e){
             params.setLobbyMaxSize(6);

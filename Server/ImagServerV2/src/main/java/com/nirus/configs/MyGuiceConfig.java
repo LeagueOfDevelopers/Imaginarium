@@ -21,6 +21,7 @@ public class MyGuiceConfig extends GuiceServletContextListener{
             protected void configureServlets(){
                 serve("/JoinLobby").with(JoinLobby.class);
                 serve("/UpdateLobby").with(UpdateLobby.class);
+                serve("/LeaveLobby").with(LeaveLobby.class);
                 serve("/GetGameStatus").with(GetStatus.class);
                 serve("/SetGameStatus").with(UpdateStatus.class);
                 serve("/Test").with(Test.class);

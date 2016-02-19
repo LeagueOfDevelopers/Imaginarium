@@ -2,11 +2,13 @@ package com.nirus.game.services;
 
 import com.nirus.api_params.GameParams;
 import com.nirus.basics.Player;
-import com.nirus.containers.CardsContainer;
+import com.nirus.game.basics.CardsContainer;
 import com.nirus.containers.PlayersContainer;
 import com.nirus.containers.ResponsesContainer;
 import com.nirus.game.basics.*;
 import com.nirus.responses.ResponseGame;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,6 +34,7 @@ public class CardGame {
         this.players = players;
         headIterator = this.players.getHashSet().iterator();
         initFirstTurn();
+        logCurrentState();
     }
 
     public ResponseGame getStatus(GameParams params){
@@ -53,27 +56,36 @@ public class CardGame {
     private boolean updateGameSituation(GameParams params){
         if(gameStage.getStage() == 0){
             if(params.getPlayer().equals(currentHead)){
-                headsText = params.getText();
-                hands.getHandByPlayer(params.getPlayer()).removeCard(params.getCard());
-                playedCards.chooseCard(params.getPlayer(), params.getCard());
-                return true;
+                if(hands.getHandByPlayer(params.getPlayer()).contains(params.getCard())){
+                    headsText = params.getText();
+                    hands.getHandByPlayer(params.getPlayer()).removeCard(params.getCard());
+                    playedCards.chooseCard(params.getPlayer(), params.getCard());
+                    return true;
+                }
+                return false;
             } else{
                 return false;
             }
         }
         if(gameStage.getStage() == 1){
             if(!params.getPlayer().equals(currentHead)){
-                hands.getHandByPlayer(params.getPlayer()).removeCard(params.getCard());
-                playedCards.chooseCard(params.getPlayer(), params.getCard());
-                return true;
+                    if(hands.getHandByPlayer(params.getPlayer()).contains(params.getCard())){
+                    hands.getHandByPlayer(params.getPlayer()).removeCard(params.getCard());
+                    playedCards.chooseCard(params.getPlayer(), params.getCard());
+                    return true;
+                }
+                return false;
             } else{
                 return false;
             }
         }
         if(gameStage.getStage() == 2){
             if(!params.getPlayer().equals(currentHead)){
-                playedCards.voteCard(params.getPlayer(), params.getCard());
-                return true;
+                if(playedCards.containsChosenCard(params.getCard())){
+                    playedCards.voteCard(params.getPlayer(), params.getCard());
+                    return true;
+                }
+                return false;
             } else{
                 return false;
             }
@@ -90,22 +102,26 @@ public class CardGame {
                 if(playedCards.howMuchChosen() == 1){
                     gameStage.nextStage();
                     initSecondStage();
+                    logCurrentState();
                 }
             }else if(gameStage.getStage() == 1){
                 if(playedCards.howMuchChosen().equals(players.size())){
                     gameStage.nextStage();
                     initThirdStage();
+                    logCurrentState();
                 }
             }else if(gameStage.getStage() == 2){
                 if(playedCards.howMuchVoted() == players.size() - 1){
                     gameStage.nextStage();
                     initFourthStage();
+                    logCurrentState();
                 }
             }else if(gameStage.getStage() == 3){
                 if(fourthStagePlayers.size().equals(players.size())) {
                     gameStage.nextStage();
                     fourthStagePlayers.clear();
                     initFirstTurn();
+                    logCurrentState();
                 }
             }
         }
@@ -119,7 +135,7 @@ public class CardGame {
         }
         if(gameStage.getStage() == 1){
             responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
-            Boolean isDone = playedCards.containsChosenCard(player);
+            Boolean isDone = playedCards.containsChosenCardByPlayer(player);
             responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() == 2){
@@ -171,7 +187,7 @@ public class CardGame {
         responses.clear();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
-            Boolean isDone = playedCards.containsChosenCard(player);
+            Boolean isDone = playedCards.containsChosenCardByPlayer(player);
             response.addField("isDone", isDone.toString());
             response.addField("countOfPlayers", "1");
             response.addField("stage", "2");
@@ -259,8 +275,32 @@ public class CardGame {
         }
         return points;
     }
+    private void logCurrentState(){
+        logger.debug("===========================================================================");
+        logger.debug("Stage: " + gameStage.getStage().toString());
+        logger.debug("Current head: " + currentHead.getId().toString());
+        for(Player player: players.getHashSet()){
+            logger.debug("Player: " + player.getId().toString());
+            String cardsInHand = "";
+            for(Card card: hands.getHandByPlayer(player).getHashSet()){
+                cardsInHand += card.getId().toString() + " ";
+            }
+            logger.debug("Cards in hand: " + cardsInHand);
+            if(!(playedCards.getChosenCardByPlayer(player) == null)) {
+                logger.debug("Chosen Card: " + playedCards.getChosenCardByPlayer(player).getId().toString());
+            }
+            if(!(playedCards.getVotedCardByPlayer(player) == null)) {
+                logger.debug("Voted Card: " + playedCards.getVotedCardByPlayer(player).getId().toString());
+            }
+            logger.debug("Score: " + scores.getScoreByPlayer(player).getScore().toString());
+            logger.debug("Response: " + responses.getResponseByPlayerSafe(player).getResponse());
+        }
+
+    }
 
     private PlayersContainer fourthStagePlayers;
+
+    private Logger logger = LogManager.getLogger(CardGame.class);
 
     private String headsText;
     private PlayedCards playedCards;

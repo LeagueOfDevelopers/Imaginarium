@@ -56,12 +56,22 @@ public class PlayedCards {
     public HashSet<Card> getChosenCards(){
         return new HashSet<Card>(chosenCard.values());
     }
+    public HashMap<Player, Card> getChosenMap(){ return chosenCard; }
     public HashSet<Player> getVotedPlayers(){
         return new HashSet<Player>(votedCard.keySet());
     }
-    public Boolean containsChosenCard(Player player){
+    public HashMap<Player, Card> getVotedMap(){ return votedCard; }
+    public Boolean containsChosenCardByPlayer(Player player){
         for(Player player1: chosenCard.keySet()){
             if(player.getId().equals(player1.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
+    public Boolean containsChosenCard(Card card){
+        for(Card card1: chosenCard.values()){
+            if(card.getId().equals(card1.getId())){
                 return true;
             }
         }

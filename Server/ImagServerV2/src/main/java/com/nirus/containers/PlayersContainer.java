@@ -2,6 +2,8 @@ package com.nirus.containers;
 
 import com.nirus.basics.Player;
 
+import java.time.Instant;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -9,6 +11,7 @@ import java.util.HashSet;
  */
 public class PlayersContainer {
     public PlayersContainer(){
+        playersTime = new HashMap<Player, Instant>();
         players = new HashSet<Player>();
     }
     public boolean addPlayer(Player player){
@@ -35,6 +38,22 @@ public class PlayersContainer {
         }
         return false;
     }
+    public void updatePlayerInstant(Player player,Instant instant){
+        for(Player player1: players){
+            if(player1.equals(player)){
+                playersTime.put(player1, instant);
+            }
+        }
+    }
+    public Instant getPlayerInstant(Player player){
+        for(Player player1: players){
+            if(player1.equals(player)){
+                return playersTime.get(player1);
+            }
+        }
+        return null;
+    }
+    public HashMap<Player, Instant> playersTime;
     public Integer size(){
         return players.size();
     }

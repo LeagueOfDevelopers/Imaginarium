@@ -1,7 +1,6 @@
 package com.nirus.game.basics;
 
 import com.nirus.basics.Player;
-import com.nirus.containers.CardsContainer;
 
 import java.util.HashMap;
 
