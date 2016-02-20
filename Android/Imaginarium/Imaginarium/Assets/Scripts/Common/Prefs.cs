@@ -13,6 +13,16 @@ public class Prefs {
         return PlayerPrefs.GetString("token", string.Empty);
     }
 
+    public void setSize(int size)
+    {
+        PlayerPrefs.SetInt("size", size);
+    }
+
+    public int getSize()
+    {
+        return PlayerPrefs.GetInt("size", 6);
+    }
+
     public void setHead(int isHead)
     {
         PlayerPrefs.SetInt("isHeadInt", isHead);

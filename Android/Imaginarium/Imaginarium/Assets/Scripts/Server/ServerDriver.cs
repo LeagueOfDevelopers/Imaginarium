@@ -21,8 +21,11 @@ public class ServerDriver {
         return www.text.ToString();
     }
 
-    public void JoinLobby() {
-        sendRequest(ServerAPI.RequestType.JoinLobby, new JSONObject());
+    public void JoinLobby(int size) {
+        JSONObject data = new JSONObject();
+        data.AddField("size", size);
+        Debug.Log("Join Lobby " + data.ToString());
+        sendRequest(ServerAPI.RequestType.JoinLobby, data);
     }
 
     public void LeaveLobby()

@@ -12,7 +12,7 @@ public class Tests : MonoBehaviour {
 
     }
 
-
+    /*
     public void AddMOOOOOOREPlayers() {
         driver = new ServerDriver();
         for (int i = 0; i < 6; i++)
@@ -21,7 +21,7 @@ public class Tests : MonoBehaviour {
             Debug.Log("Player №" + (i + 1) + " Connected");
         }
     }
-
+    */
     public void resetToken() {
         Prefs prefs = new Prefs();
         prefs.setToken("");

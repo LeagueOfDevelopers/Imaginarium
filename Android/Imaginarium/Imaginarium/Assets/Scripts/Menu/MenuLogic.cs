@@ -9,6 +9,7 @@ public class MenuLogic : MonoBehaviour
 
     private enum Stage { Idle, JoinLobby, SearchingGame }
     private int countOfPlayers = 0;
+    private int sizeOfLobby = 6;
     private Stage currentStage = Stage.Idle;
     ServerDriver driver = new ServerDriver();
     Prefs prefs = new Prefs();
@@ -117,7 +118,8 @@ public class MenuLogic : MonoBehaviour
 
     private void JoinLobby()
     {
-        driver.JoinLobby();
+        prefs.setSize(sizeOfLobby);
+        driver.JoinLobby(sizeOfLobby);
         currentStage = Stage.JoinLobby;
     }
 
@@ -127,5 +129,22 @@ public class MenuLogic : MonoBehaviour
     }
     public int GetCountOfPlayers() {
         return countOfPlayers;
+    }
+
+    public void ChangeSizeOfLobby(int value) {
+        switch (value)
+        {
+            case 0: sizeOfLobby = 4;
+                break;
+            case 1: sizeOfLobby = 5;
+                break;
+            case 2: sizeOfLobby = 6;
+                break;
+            case 3: sizeOfLobby = 7;
+                break;
+            default: sizeOfLobby = 6;
+                break;
+
+        }
     }
 }
