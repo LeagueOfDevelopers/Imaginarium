@@ -48,10 +48,10 @@ public class GeneralGameScript : MonoBehaviour {
 
     private void redirectHandler(Dictionary<string, string> response)
     {
+        countOfDonePlayers = Convert.ToInt32(response["countOfPlayers"]);   //Изменение кол-ва игроков для лэйбла.
         if (response["isDone"] == "false")
         {
             int stage = Convert.ToInt32(response["stage"]);
-            countOfDonePlayers = Convert.ToInt32(response["countOfPlayers"]);
             switch (stage)
                 {
                 case 1:
