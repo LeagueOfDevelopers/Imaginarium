@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 using System.Collections;
 
 public class MenuLogic : MonoBehaviour
 {
 
     private enum Stage { Idle, JoinLobby, SearchingGame }
+    private int countOfPlayers = 0;
     private Stage currentStage = Stage.Idle;
     ServerDriver driver = new ServerDriver();
     Prefs prefs = new Prefs();
@@ -22,51 +25,67 @@ public class MenuLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (calldown <= 0)
+        try
         {
-            calldown = basic_calldown;
-            if (requesting)
+            if (calldown <= 0)
             {
-                if (driver.isDone())
+                calldown = basic_calldown;
+                if (requesting)
                 {
-                    switch (currentStage)
+                    if (driver.isDone())
                     {
+                        Debug.Log(driver.getResponse()["countOfPlayers"]);
+                        countOfPlayers = Convert.ToInt32(driver.getResponse()["countOfPlayers"]);
+                        switch (currentStage)
+                        {
 
-                        case Stage.JoinLobby:
-                            Debug.Log("JoinLobby");
-                            prefs.setToken(driver.getResponse()["token"].ToString());
-                            TryToken();
-                            break;
-
-                        case Stage.SearchingGame:
-                            Debug.Log("SearchingGame" + token);
-                            Debug.Log(driver.text().ToString());
-                            if (!driver.getResponse()["token"].ToString().Equals(token)
-                                || driver.getResponse()["status"].Equals("ERROR"))
-                            {
-                                JoinLobby();
+                            case Stage.JoinLobby:
+                                Debug.Log("JoinLobby");
+                                prefs.setToken(driver.getResponse()["token"].ToString());
+                                TryToken();
                                 break;
-                            }
+
+                            case Stage.SearchingGame:
+                                Debug.Log("SearchingGame" + token);
+                                Debug.Log(driver.text().ToString());
+                                if (!driver.getResponse()["token"].ToString().Equals(token)
+                                    || driver.getResponse()["status"].Equals("ERROR"))
+                                {
+                                    JoinLobby();
+                                    break;
+                                }
 
 
-                            if (driver.getResponse()["status"].Equals("READY"))
-                            {
-                                GameStart();
+                                if (driver.getResponse()["status"].Equals("READY"))
+                                {
+                                    GameStart();
+                                    break;
+                                }
+
+                                SearchingGame();
+
                                 break;
-                            }
-
-                            SearchingGame();
-
-                            break;
+                        }
                     }
                 }
             }
+            else
+            {
+                calldown -= Time.deltaTime;
+            }
         }
-        else
+        catch (System.Exception e)
         {
-            calldown -= Time.deltaTime;
+            GameObject errorMessage = new GameObject("errorMessage");
+            errorMessage.AddComponent<ErrorHandler>();
+            Destroy(errorMessage, 3);
+            Debug.LogError(e.Message);
+
+            MenuIdle();
+            FindObjectOfType<Canvas>().GetComponent<MenuListener>().SearchButtonClickListener();
         }
     }
+
 
     public void LobbyJoining()
     {
@@ -105,5 +124,8 @@ public class MenuLogic : MonoBehaviour
     private void GameStart() {
         prefs.setToken(token);
         SceneManager.LoadScene("Game");  
+    }
+    public int GetCountOfPlayers() {
+        return countOfPlayers;
     }
 }

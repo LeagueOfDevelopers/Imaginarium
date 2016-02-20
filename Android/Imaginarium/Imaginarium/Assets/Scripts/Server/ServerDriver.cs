@@ -12,9 +12,9 @@ public class ServerDriver {
     }
 
     public Dictionary<string,string> getResponse() {
-        JSONObject json = new JSONObject(www.text);
-        Debug.Log(www.text);
-        return json.ToDictionary();
+            JSONObject json = new JSONObject(www.text);
+            Debug.Log(www.text);
+            return json.ToDictionary();
     }
 
     public string text() {
@@ -25,11 +25,20 @@ public class ServerDriver {
         sendRequest(ServerAPI.RequestType.JoinLobby, new JSONObject());
     }
 
+    public void LeaveLobby()
+    {
+        JSONObject data = new JSONObject();
+        Prefs pref = new Prefs();
+        data.AddField("token", pref.getToken());
+        Debug.Log("Leave Lobby " + data.ToString());
+        sendRequest(ServerAPI.RequestType.LeaveLobby, data);
+    }
+
     public void UpdateLobby() {
         JSONObject data = new JSONObject();
         Prefs pref = new Prefs();
         data.AddField("token", pref.getToken());
-        Debug.Log(data.ToString());
+        Debug.Log("Update Lobby" + data.ToString());
         sendRequest(ServerAPI.RequestType.UpdateLobby, data);
     }
 
@@ -38,6 +47,7 @@ public class ServerDriver {
         JSONObject data = new JSONObject();
         Prefs pref = new Prefs();
         data.AddField("token", pref.getToken());
+        Debug.Log("GetRoomStatus" + data.ToString());
         sendRequest(ServerAPI.RequestType.GetGameStatus, data);
     }
 
@@ -45,6 +55,7 @@ public class ServerDriver {
         Prefs pref = new Prefs();
         data.AddField("token", pref.getToken());
         data.AddField("stage", pref.getStage());
+        Debug.Log("UpdateRoomStatus" + data.ToString());
         sendRequest(ServerAPI.RequestType.SetGameStatus, data);
     }
 

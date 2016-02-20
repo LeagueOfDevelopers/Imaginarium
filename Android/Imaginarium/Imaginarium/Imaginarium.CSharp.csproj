@@ -65,16 +65,19 @@
     <Compile Include="Assets\JSON\JSONObject.cs" />
     <Compile Include="Assets\JSON\JSONTemplates.cs" />
     <Compile Include="Assets\JSON\VectorTemplates.cs" />
+    <Compile Include="Assets\Scripts\Common\ErrorHandler.cs" />
     <Compile Include="Assets\Scripts\Common\Prefs.cs" />
     <Compile Include="Assets\Scripts\Common\TextBoxHandler.cs" />
     <Compile Include="Assets\Scripts\Game\Common\CardMove.cs" />
     <Compile Include="Assets\Scripts\Game\Common\CardNamer.cs" />
     <Compile Include="Assets\Scripts\Game\Common\CardSpriteHandler.cs" />
+    <Compile Include="Assets\Scripts\Game\Common\countOfPlayersLabelHandler.cs" />
     <Compile Include="Assets\Scripts\Game\GeneralGameScript.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\FirstStageLogic.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\FourthStageLogic.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\SecondStageLogic.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\ThirdStageLogic.cs" />
+    <Compile Include="Assets\Scripts\Menu\CountOfPlayerInRoom.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuElement.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\Menu\MenuListener.cs" />
@@ -82,7 +85,6 @@
     <Compile Include="Assets\Scripts\Server\ServerAPI.cs" />
     <Compile Include="Assets\Scripts\Server\ServerDriver.cs" />
     <Compile Include="Assets\Scripts\Tests.cs" />
-    <Compile Include="Assets\countOfPlayersLabelHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JSON\readme.txt" />

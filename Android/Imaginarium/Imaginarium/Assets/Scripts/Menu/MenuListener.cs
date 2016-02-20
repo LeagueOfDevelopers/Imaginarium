@@ -25,6 +25,8 @@ public class MenuListener : MenuHandler
     }
     public void SearchButtonClickListener()
     {
+        ServerDriver driver = new ServerDriver();
+        driver.LeaveLobby();
         OpenTitleScreen();
     }
 }

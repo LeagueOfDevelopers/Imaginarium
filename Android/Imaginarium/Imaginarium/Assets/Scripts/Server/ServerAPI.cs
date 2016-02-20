@@ -3,6 +3,6 @@
 
 public class ServerAPI
 {
-    public enum RequestType {JoinLobby, UpdateLobby, GetGameStatus, SetGameStatus, Test}
+    public enum RequestType {JoinLobby, UpdateLobby, GetGameStatus, SetGameStatus,LeaveLobby, Test}
 }
 

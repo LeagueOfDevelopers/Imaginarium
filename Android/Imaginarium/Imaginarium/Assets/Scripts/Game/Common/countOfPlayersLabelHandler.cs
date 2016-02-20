@@ -10,6 +10,6 @@ public class countOfPlayersLabelHandler : MonoBehaviour {
         gameScript = gameScriptObject.GetComponent<GeneralGameScript>();
     }
 	void Update () {
-        GetComponent<Text>().text = "Игроков сделавших свой ход: " + gameScript.getCountOfPlayers().ToString();
+        GetComponent<Text>().text = gameScript.getCountOfPlayers().ToString();
 	}
 }

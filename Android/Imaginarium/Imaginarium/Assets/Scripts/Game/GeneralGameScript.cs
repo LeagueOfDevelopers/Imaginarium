@@ -20,28 +20,38 @@ public class GeneralGameScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Exit();
-        if (driver.isDone())
+        try
         {
-            if (isRequestHasReaden)
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Exit();
+            if (driver.isDone())
             {
-                //Отправка реквеста
-                cooldown -= Time.deltaTime;
-                if (cooldown < 0)
+                if (isRequestHasReaden)
                 {
-                    cooldown = cooldownResetValue;
-                    isRequestHasReaden = false;
-                    driver.GetRoomStatus();
+                    //Отправка реквеста
+                    cooldown -= Time.deltaTime;
+                    if (cooldown < 0)
+                    {
+                        cooldown = cooldownResetValue;
+                        isRequestHasReaden = false;
+                        driver.GetRoomStatus();
+                    }
+                }
+                else
+                {
+                    //Обработка реквеста
+                    isRequestHasReaden = true;
+                    redirectHandler(driver.getResponse());
+
                 }
             }
-            else
-            {
-                //Обработка реквеста
-                isRequestHasReaden = true;
-                redirectHandler(driver.getResponse());
-
-            }
+        }
+        catch (System.Exception e)
+        {
+            GameObject errorMessage = new GameObject("errorMessage");
+            errorMessage.AddComponent<ErrorHandler>();
+            Destroy(errorMessage, 3);
+            Debug.LogError(e.Message);
         }
 	}
 
