@@ -18,7 +18,6 @@ public class FourthStageLogic : MonoBehaviour {
     void Update() {
         if (driver.isDone() && driver.text().Length > 0)
         {
-            Debug.Log(driver.text());
             SceneManager.LoadScene("Game");
         }
     }
@@ -45,11 +44,14 @@ public class FourthStageLogic : MonoBehaviour {
             GameObject child = Cards.transform.FindChild("Card" + i).gameObject;
             GameObject text = child.transform.GetChild(0).gameObject;
             text.GetComponent<Text>().text = vote.ToString();
-            if (vote == prefs.getHeadCard())
-                text.GetComponent<Text>().color = Color.red;
-            if(vote == prefs.getOwnCard())
+
+            if (child.GetComponent<CardSpriteHandler>().getCard() == prefs.getOwnCard())
                 text.GetComponent<Text>().color = Color.green;
+            if (child.GetComponent<CardSpriteHandler>().getCard() == prefs.getHeadCard())
+                text.GetComponent<Text>().color = Color.red;
+
             i++;
         }
+
     }
 }

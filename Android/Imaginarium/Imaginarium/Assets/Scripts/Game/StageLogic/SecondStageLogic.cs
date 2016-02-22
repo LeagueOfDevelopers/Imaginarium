@@ -18,7 +18,6 @@ public class SecondStageLogic : MonoBehaviour {
 	void Update () {
         if (driver.isDone() && driver.text().Length > 0)
         {
-            Debug.Log(driver.text());
             SceneManager.LoadScene("Game");
         }
     }
