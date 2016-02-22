@@ -73,9 +73,10 @@ public class ServerDriver {
 
     private void sendRequest(ServerAPI.RequestType type, JSONObject dataObject) 
     {
+        Debug.Log(url + '/' + type.ToString());
         Debug.Log(dataObject.ToString());
         byte[] data = System.Text.Encoding.UTF8.GetBytes(dataObject.ToString());
-        Debug.Log(url + '/' + type.ToString());
+        
         www = new WWW(url+'/' +type.ToString(), data);
     }
 }

@@ -35,7 +35,7 @@ public class GeneralGameScript : MonoBehaviour {
                         cooldown = cooldownResetValue;
                         isRequestHasReaden = false;
                         //driver.GetRoomStatus(); //Для тестов вырубаем стандартную отправку.
-
+                        driver.TestRequest(GetComponent<UnitTestButton>().StartTest()); //Тестовый запрос
                     }
                 }
                 else

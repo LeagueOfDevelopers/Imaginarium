@@ -21,7 +21,7 @@ public class UnitTestButton : MonoBehaviour {
     public int[] VoteFouthStage = { 5, 10, 15, 20, 25, 30 };
 
 
-    public void StartTest() {
+    public JSONObject StartTest() {
         JSONObject data;
          switch (stage)
         {
@@ -42,17 +42,17 @@ public class UnitTestButton : MonoBehaviour {
                 break;
         }
 
-        sendTestReqest(data);
+        return sendTestReqest(data);
     }
 
 
-    private void sendTestReqest(JSONObject data)
+    private JSONObject sendTestReqest(JSONObject data)
     {
         data.AddField("stage", stage);
         data.AddField("isDone", isDone);
         data.AddField("countOfPlayers", countOfPlayers);
-        ServerDriver driver = new ServerDriver();
-        driver.TestRequest(data);
+
+        return data;
     }
 
     private JSONObject FirstStage()

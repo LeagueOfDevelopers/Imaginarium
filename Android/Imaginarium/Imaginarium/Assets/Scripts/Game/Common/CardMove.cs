@@ -8,7 +8,6 @@ public class CardMove : MonoBehaviour {
 
     Vector3 destination;
     float deltaCardMove = 0;
-    float limitMove;
     Vector3 startPosition;
     int currentCard = 0;
 
@@ -17,7 +16,6 @@ public class CardMove : MonoBehaviour {
         startPosition = Cards.transform.position;
         destination = startPosition;
         deltaCardMove = Cards.transform.GetChild(0).position.x - Cards.transform.GetChild(1).position.x;
-        limitMove = Mathf.Abs(deltaCardMove / 2);
     }
 	
 	// Update is called once per frame
