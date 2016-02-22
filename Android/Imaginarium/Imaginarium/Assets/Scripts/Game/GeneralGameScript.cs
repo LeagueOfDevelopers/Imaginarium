@@ -42,6 +42,7 @@ public class GeneralGameScript : MonoBehaviour {
                 {
                     //Обработка реквеста
                     isRequestHasReaden = true;
+                    Debug.Log("POINT");
                     redirectHandler(driver.getResponse());
 
                 }
@@ -59,13 +60,14 @@ public class GeneralGameScript : MonoBehaviour {
 
     private void redirectHandler(Dictionary<string, string> response)
     {
-
-        if (response["isDone"] == "false")
+        Debug.Log(response["isDone"]);
+        if (response["isDone"] == "False")  //Изменить!!!!!!!
         {
             int stage = Convert.ToInt32(response["stage"]);
             switch (stage)
             {
                 case 1:
+                    
                     prefs.setStage(1);
                     if (response["isHead"] == "false")
                         prefs.setIsHead(0);
