@@ -1,12 +1,14 @@
 package com.nirus.game.basics;
 
+import com.nirus.game.interfaces.IDeck;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by ndiezel on 28.01.2016.
  */
-public class Deck {
+public class Deck implements IDeck {
     public Deck(Integer size){
         cards = new ArrayList<Card>();
         standardInit(size);
@@ -25,7 +27,7 @@ public class Deck {
     }
 
     private void standardInit(Integer size){
-        for(Integer i = 0; i < size; i++){
+        for(Integer i = 1; i < size + 1; i++){
             cards.add(new Card(i));
         }
     }

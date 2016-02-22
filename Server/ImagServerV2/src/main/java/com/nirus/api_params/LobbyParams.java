@@ -2,9 +2,7 @@ package com.nirus.api_params;
 
 import com.nirus.basics.Player;
 
-import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalTime;
 
 /**
  * Created by ndiezel on 27.01.2016.

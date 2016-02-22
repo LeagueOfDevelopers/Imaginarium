@@ -155,6 +155,9 @@ public class CardGame {
     private void initFirstTurn(){
         responses.clear();
         playedCards.clear();
+        if(!headIterator.hasNext()){
+            headIterator = players.getHashSet().iterator();
+        }
         currentHead = headIterator.next();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
@@ -210,6 +213,9 @@ public class CardGame {
             response.addField("stage", "3");
             Integer i = 0;
             for(Card card: playedCards.getChosenCards()){
+                if(card.getId().equals(playedCards.getChosenCardByPlayer(player).getId())){
+                    continue;
+                }
                 response.addField("card#" + i.toString(), card.getId().toString());
                 i++;
             }
@@ -222,7 +228,7 @@ public class CardGame {
         responses.clear();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
-            response.addField("isDone", "true");
+            response.addField("isDone", "false");
             response.addField("countOfPlayers", players.size().toString());
             response.addField("stage", "4");
             response.addField("cardOfHead", playedCards.getChosenCardByPlayer(currentHead).getId().toString());
