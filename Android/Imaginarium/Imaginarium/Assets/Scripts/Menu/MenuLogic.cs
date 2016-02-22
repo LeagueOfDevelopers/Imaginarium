@@ -14,8 +14,8 @@ public class MenuLogic : MonoBehaviour
     ServerDriver driver = new ServerDriver();
     Prefs prefs = new Prefs();
     string token = "";
-    float calldown = 3;
-    float basic_calldown = 3;
+    float calldown = 1;
+    float basic_calldown = 1;
     private bool requesting = false;
 
     void Start()
@@ -35,8 +35,6 @@ public class MenuLogic : MonoBehaviour
                 {
                     if (driver.isDone())
                     {
-                        Debug.Log(driver.getResponse()["countOfPlayers"]);
-                        countOfPlayers = Convert.ToInt32(driver.getResponse()["countOfPlayers"]);
                         switch (currentStage)
                         {
 
@@ -54,6 +52,10 @@ public class MenuLogic : MonoBehaviour
                                 {
                                     JoinLobby();
                                     break;
+                                }
+                                else
+                                {
+                                    countOfPlayers = Convert.ToInt32(driver.getResponse()["countOfPlayers"]);
                                 }
 
 
@@ -96,6 +98,7 @@ public class MenuLogic : MonoBehaviour
 
     public void MenuIdle()
     {
+        countOfPlayers = 0;
         requesting = false;
         currentStage = Stage.Idle;
     }

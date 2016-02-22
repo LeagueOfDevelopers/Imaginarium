@@ -34,7 +34,8 @@ public class GeneralGameScript : MonoBehaviour {
                     {
                         cooldown = cooldownResetValue;
                         isRequestHasReaden = false;
-                        driver.GetRoomStatus();
+                        //driver.GetRoomStatus(); //Для тестов вырубаем стандартную отправку.
+
                     }
                 }
                 else
@@ -58,12 +59,12 @@ public class GeneralGameScript : MonoBehaviour {
 
     private void redirectHandler(Dictionary<string, string> response)
     {
-        countOfDonePlayers = Convert.ToInt32(response["countOfPlayers"]);   //Изменение кол-ва игроков для лэйбла.
+
         if (response["isDone"] == "false")
         {
             int stage = Convert.ToInt32(response["stage"]);
             switch (stage)
-                {
+            {
                 case 1:
                     prefs.setStage(1);
                     if (response["isHead"] == "false")
@@ -77,7 +78,7 @@ public class GeneralGameScript : MonoBehaviour {
                     prefs.setCards(cards);
 
                     prefs.setScore(Convert.ToInt32(response["score"]));
-                    
+
                     if (Convert.ToBoolean(response["isHead"]))
                         SceneManager.LoadSceneAsync("FirstStage");
                     break;
@@ -113,9 +114,13 @@ public class GeneralGameScript : MonoBehaviour {
                     break;
                 }
 
-        }
+            }
+            else
+            {
+                countOfDonePlayers = Convert.ToInt32(response["countOfPlayers"]);   //Изменение кол-ва игроков для лэйбла.
+            }
 
-    }
+        }
 
     public int getCountOfPlayers() {
         return countOfDonePlayers;

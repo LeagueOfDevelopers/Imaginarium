@@ -68,8 +68,6 @@ public class ServerDriver {
 
     public void TestRequest(JSONObject data)
     {
-        Prefs prefs = new Prefs();
-        data.AddField("token", prefs.getToken());
         sendRequest(ServerAPI.RequestType.Test, data);
     }
 
