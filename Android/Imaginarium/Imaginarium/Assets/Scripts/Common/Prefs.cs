@@ -66,7 +66,7 @@ public class Prefs {
 
     public void setChosenCards(int[] cards)
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
         {
             PlayerPrefs.SetInt("chosenCard" + i.ToString(), cards[i]);
         }
@@ -74,8 +74,8 @@ public class Prefs {
 
     public int[] getChosenCards()
     {
-        int[] cards = new int[6];
-        for (int i = 0; i < 6; i++)
+        int[] cards = new int[5];
+        for (int i = 0; i < 5; i++)
         {
             cards[i] = PlayerPrefs.GetInt("chosenCard" + i.ToString(), -1);
         }

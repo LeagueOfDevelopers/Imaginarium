@@ -34,15 +34,14 @@ public class GeneralGameScript : MonoBehaviour {
                     {
                         cooldown = cooldownResetValue;
                         isRequestHasReaden = false;
-                        //driver.GetRoomStatus(); //Для тестов вырубаем стандартную отправку.
-                        driver.TestRequest(GetComponent<UnitTestButton>().StartTest()); //Тестовый запрос
+                        driver.GetRoomStatus(); //Для тестов вырубаем стандартную отправку.
+                        //driver.TestRequest(GetComponent<UnitTestButton>().StartTest()); //Тестовый запрос
                     }
                 }
                 else
                 {
                     //Обработка реквеста
                     isRequestHasReaden = true;
-                    Debug.Log("POINT");
                     redirectHandler(driver.getResponse());
 
                 }
@@ -60,9 +59,7 @@ public class GeneralGameScript : MonoBehaviour {
 
     private void redirectHandler(Dictionary<string, string> response)
     {
-        Debug.Log(response["isDone"]);
-        if (response["isDone"] == "False")  //Изменить!!!!!!!
-        {
+        
             int stage = Convert.ToInt32(response["stage"]);
             switch (stage)
             {
@@ -81,20 +78,20 @@ public class GeneralGameScript : MonoBehaviour {
 
                     prefs.setScore(Convert.ToInt32(response["score"]));
 
-                    if (Convert.ToBoolean(response["isHead"]))
+                    if (Convert.ToBoolean(response["isHead"]) && response["isDone"] == "false")
                         SceneManager.LoadSceneAsync("FirstStage");
                     break;
                 case 2:
                     prefs.setText(response["text"]);
-                    if (!prefs.getHead())
+                    if (!prefs.getHead() && response["isDone"] == "false")
                         SceneManager.LoadSceneAsync("SecondStage");
                     break;
                 case 3:
-                    int[] chosenCards = new int[6];
-                    for (int i = 0; i < 6; i++)
+                    int[] chosenCards = new int[5];
+                    for (int i = 0; i < 5; i++)
                         chosenCards[i] = Convert.ToInt32(response[("card#" + i)]);
                     prefs.setChosenCards(chosenCards);
-                    if (!prefs.getHead())
+                    if (!prefs.getHead() && response["isDone"] == "false")
                         SceneManager.LoadSceneAsync("ThirdStage");
                     break;
                 case 4:
@@ -108,7 +105,10 @@ public class GeneralGameScript : MonoBehaviour {
                     prefs.setVoteForCards(VoteForCards);
                     prefs.setCardsForVote(CardsForVote);
                     prefs.setHeadCard(Convert.ToInt32(response["cardOfHead"]));
+
+                if (response["isDone"] == "false")
                     SceneManager.LoadSceneAsync("FourthStage");
+
                     break;
                 case 0:
                     prefs.deleteAll();
@@ -116,11 +116,9 @@ public class GeneralGameScript : MonoBehaviour {
                     break;
                 }
 
-            }
-            else
-            {
+            
                 countOfDonePlayers = Convert.ToInt32(response["countOfPlayers"]);   //Изменение кол-ва игроков для лэйбла.
-            }
+            
 
         }
 

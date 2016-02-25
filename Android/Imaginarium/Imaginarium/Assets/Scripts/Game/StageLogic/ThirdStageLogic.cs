@@ -29,11 +29,8 @@ public class ThirdStageLogic : MonoBehaviour {
         int k = 0;
         foreach (int card in allCards)
         {
-            if (card != ownCard)
-            {
                 cardsForVote[k] = card;
                 k++;
-            }
         }
         Cards.GetComponent<CardNamer>().SetCards(cardsForVote);
     }
@@ -41,7 +38,8 @@ public class ThirdStageLogic : MonoBehaviour {
     public void OKButtonClickEventHandler()
     {
         int currentCard = gameObject.GetComponent<CardMove>().GetCurrentCard();
-        int cardNum = prefs.getCards()[currentCard];
+        int cardNum = prefs.getChosenCards()[currentCard];
+        
 
         JSONObject json = new JSONObject();
         json.AddField("card", cardNum);
