@@ -18,6 +18,10 @@ obj/
 *.user
 *.unityproj
 *.booproj
+<<<<<<< HEAD
+=======
+*.jpg
+>>>>>>> fa1b279e8feeda96ae49f9b5ce127344555d3a75
 
 # ============ #
 # OS generated #
