@@ -11,4 +11,5 @@ public interface IRoomManager {
     void createRoom(PlayersContainer players, Integer size);
     ResponseGame getGameStatus(GameParams params);
     ResponseGame updateGameStatus(GameParams params);
+    ResponseGame getGameScore(GameParams params);
 }

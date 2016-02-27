@@ -25,6 +25,7 @@ public class MyGuiceConfig extends GuiceServletContextListener{
                 serve("/GetGameStatus").with(GetStatus.class);
                 serve("/SetGameStatus").with(UpdateStatus.class);
                 serve("/Test").with(Test.class);
+                serve("/GetGameScore").with(GameScore.class);
                 bind(ILobbyManager.class).to(LobbyManager.class);
                 bind(IRoomManager.class).to(RoomManager.class);
             }
