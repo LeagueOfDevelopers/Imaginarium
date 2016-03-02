@@ -100,11 +100,15 @@ public class GeneralGameScript : MonoBehaviour {
                     prefs.setStage(4);
                     int[] VoteForCards = new int[6];
                     int[] CardsForVote = new int[6];
-                    for (int i = 0; i < 6; i++)
-                        VoteForCards[i] = Convert.ToInt32(response[("vote#" + i)]);
-                    for (int i = 0; i < 6; i++)
-                        CardsForVote[i] = Convert.ToInt32(response[("card#" + i)]);
+                    string[] PlayersForVote = new string[6];
+                for (int i = 0; i < 6; i++)
+                {
+                    PlayersForVote[i] = response[("player#" + i)];
+                    VoteForCards[i] = Convert.ToInt32(response[("vote#" + i)]);
+                    CardsForVote[i] = Convert.ToInt32(response[("card#" + i)]);
+                }
 
+                    prefs.setPlayersForVote(PlayersForVote);
                     prefs.setVoteForCards(VoteForCards);
                     prefs.setCardsForVote(CardsForVote);
                     prefs.setHeadCard(Convert.ToInt32(response["cardOfHead"]));

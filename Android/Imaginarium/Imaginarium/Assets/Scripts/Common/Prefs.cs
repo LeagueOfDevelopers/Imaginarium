@@ -182,6 +182,24 @@ public class Prefs {
         return cards;
     }
 
+    public void setPlayersForVote(string[] players)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            PlayerPrefs.SetString("playersForVote" + i.ToString(), players[i]);
+        }
+    }
+
+    public string[] getPlayersForVote()
+    {
+        string[] players = new string[6];
+        for (int i = 0; i < 6; i++)
+        {
+            players[i] = PlayerPrefs.GetString("playersForVote" + i.ToString(), "NONAME");
+        }
+        return players;
+    }
+
     public void deleteAll() {
         PlayerPrefs.DeleteAll();
     }
