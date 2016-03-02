@@ -66,7 +66,7 @@ public class GeneralGameScript : MonoBehaviour {
                 case 1:
                     
                     prefs.setStage(1);
-                    if (response["isHead"] == "false")
+                    if (response["curentHead"] == prefs.getToken())
                         prefs.setIsHead(0);
                     else
                         prefs.setIsHead(1);
@@ -82,11 +82,13 @@ public class GeneralGameScript : MonoBehaviour {
                         SceneManager.LoadSceneAsync("FirstStage");
                     break;
                 case 2:
+                    prefs.setStage(2);
                     prefs.setText(response["text"]);
                     if (!prefs.getHead() && response["isDone"] == "false")
                         SceneManager.LoadSceneAsync("SecondStage");
                     break;
                 case 3:
+                    prefs.setStage(3);
                     int[] chosenCards = new int[5];
                     for (int i = 0; i < 5; i++)
                         chosenCards[i] = Convert.ToInt32(response[("card#" + i)]);
@@ -95,6 +97,7 @@ public class GeneralGameScript : MonoBehaviour {
                         SceneManager.LoadSceneAsync("ThirdStage");
                     break;
                 case 4:
+                    prefs.setStage(4);
                     int[] VoteForCards = new int[6];
                     int[] CardsForVote = new int[6];
                     for (int i = 0; i < 6; i++)
@@ -125,6 +128,8 @@ public class GeneralGameScript : MonoBehaviour {
     public int getCountOfPlayers() {
         return countOfDonePlayers;
     }
+
+
     public void Exit() {
         Debug.Log("exit");
         SceneManager.LoadSceneAsync("Menu");

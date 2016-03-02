@@ -24,7 +24,6 @@ public class ThirdStageLogic : MonoBehaviour {
     private void SetCards()
     {
         int[] allCards = prefs.getChosenCards();
-        int ownCard = prefs.getOwnCard();
         int[] cardsForVote = new int[5];
         int k = 0;
         foreach (int card in allCards)

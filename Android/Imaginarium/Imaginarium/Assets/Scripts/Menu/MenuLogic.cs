@@ -7,7 +7,7 @@ using System.Collections;
 public class MenuLogic : MonoBehaviour
 {
 
-    private enum Stage { Idle, JoinLobby, SearchingGame }
+    private enum Stage { Idle, JoinLobby, SearchingGame, SetName }
     private int countOfPlayers = 0;
     private int sizeOfLobby = 6;
     private Stage currentStage = Stage.Idle;
@@ -61,12 +61,22 @@ public class MenuLogic : MonoBehaviour
 
                                 if (driver.getResponse()["status"].Equals("READY"))
                                 {
-                                    GameStart();
+                                    driver.GetGameScore();
+                                    currentStage = Stage.SetName;
                                     break;
                                 }
 
                                 SearchingGame();
 
+                                break;
+
+                            case Stage.SetName:
+                                string[] tokens = new string[prefs.getSize()];
+                                for (int i = 0; i < prefs.getSize(); i++)
+                                    tokens[i] = driver.getResponse()["player#" + i];
+                                PlayerNamer namer = new PlayerNamer();
+                                namer.SetNames(tokens);
+                                GameStart();
                                 break;
                         }
                     }

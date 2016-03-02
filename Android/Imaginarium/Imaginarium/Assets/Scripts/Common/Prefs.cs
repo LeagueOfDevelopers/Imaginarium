@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Prefs {
 
@@ -185,4 +185,37 @@ public class Prefs {
     public void deleteAll() {
         PlayerPrefs.DeleteAll();
     }
+
+    public void SetPlayerName(string token, string name)
+    {
+        PlayerPrefs.SetString("playerName" + token, name);
+    }
+
+    public string GetPlayerName(string token)
+    {
+        return PlayerPrefs.GetString("playerName" + token, "NoNameHere!");
+    }
+
+    public string GetOwnName()
+    {
+        Prefs pref = new Prefs();
+        return PlayerPrefs.GetString("playerName" + pref.getToken() , "NoNameHere!");
+    }
+
+    public void SetHeadToken(string token)
+    {
+        PlayerPrefs.SetString("headToken", token);
+    }
+
+    public string GetHeadToken()
+    {
+        return PlayerPrefs.GetString("headToken", "NoTokenHere!!!!!!!");
+    }
+
+    public string GetHeadName()
+    {
+        Prefs pref = new Prefs();
+        return pref.GetPlayerName(pref.GetHeadToken());
+    }
+
 }
