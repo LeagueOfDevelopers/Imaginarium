@@ -134,5 +134,10 @@ public class GeneralGameScript : MonoBehaviour {
         Debug.Log("exit");
         SceneManager.LoadSceneAsync("Menu");
     }
+
+    public void Scoreboard()
+    {
+        SceneManager.LoadSceneAsync("Scoreboard");
+    }
 }
 

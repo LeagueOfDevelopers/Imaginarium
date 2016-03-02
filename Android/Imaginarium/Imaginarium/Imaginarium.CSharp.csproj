@@ -74,9 +74,11 @@
     <Compile Include="Assets\Scripts\Game\Common\countOfPlayersLabelHandler.cs" />
     <Compile Include="Assets\Scripts\Game\Common\curentStageLabel.cs" />
     <Compile Include="Assets\Scripts\Game\Common\headNameLabel.cs" />
+    <Compile Include="Assets\Scripts\Game\Common\playerNameLabel.cs" />
     <Compile Include="Assets\Scripts\Game\GeneralGameScript.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\FirstStageLogic.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\FourthStageLogic.cs" />
+    <Compile Include="Assets\Scripts\Game\StageLogic\Scoreboard.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\SecondStageLogic.cs" />
     <Compile Include="Assets\Scripts\Game\StageLogic\ThirdStageLogic.cs" />
     <Compile Include="Assets\Scripts\Menu\CountOfPlayerInRoom.cs" />

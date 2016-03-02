@@ -31,7 +31,7 @@ public class FourthStageLogic : MonoBehaviour {
     {
         JSONObject json = new JSONObject();
         driver.UpdateRoomStatus(json);
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Scoreboard");
     }
 
     private void ShowVoteForCards()
