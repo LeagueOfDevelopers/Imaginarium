@@ -10,7 +10,7 @@ public class FirstStageLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         driver.TestRequest();
-        gameObject.GetComponent<CardMove>().SetCountOfCards(prefs.getSize()); //Задаём кол-во используемых карт
+        gameObject.GetComponent<CardMove>().SetCountOfCards(6); //Задаём кол-во используемых карт
         SetCards();
 	}
 	

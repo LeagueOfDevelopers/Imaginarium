@@ -72,8 +72,8 @@ public class GeneralGameScript : MonoBehaviour {
                         prefs.setIsHead(1);
 
                 prefs.SetHeadToken(response["currentHead"]);
-                    int[] cards = new int[prefs.getSize()];
-                    for (int i = 0; i < prefs.getSize(); i++)
+                    int[] cards = new int[6];
+                    for (int i = 0; i < 6; i++)
                         cards[i] = Convert.ToInt32(response[("card#" + i)]);
                     prefs.setCards(cards);
 

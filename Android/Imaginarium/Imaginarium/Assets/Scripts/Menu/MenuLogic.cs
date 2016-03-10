@@ -6,6 +6,7 @@ using System.Collections;
 
 public class MenuLogic : MonoBehaviour
 {
+    public GameObject SizeOfLobbyObject;
 
     private enum Stage { Idle, JoinLobby, SearchingGame, SetName }
     private int countOfPlayers = 0;
@@ -17,10 +18,12 @@ public class MenuLogic : MonoBehaviour
     float calldown = 1;
     float basic_calldown = 1;
     private bool requesting = false;
+    private Dropdown SizeOfLobbyDropdown;
 
     void Start()
     {
         driver.TestRequest();
+        SizeOfLobbyDropdown = SizeOfLobbyObject.GetComponent<Dropdown>();
     }
 
     // Update is called once per frame
@@ -131,6 +134,7 @@ public class MenuLogic : MonoBehaviour
 
     private void JoinLobby()
     {
+        ChangeSizeOfLobby(SizeOfLobbyDropdown.value);
         prefs.setSize(sizeOfLobby);
         driver.JoinLobby(sizeOfLobby);
         currentStage = Stage.JoinLobby;
@@ -159,5 +163,6 @@ public class MenuLogic : MonoBehaviour
                 break;
 
         }
+        Debug.Log(sizeOfLobby);
     }
 }
