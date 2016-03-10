@@ -22,6 +22,7 @@ public class Room {
     public ResponseGame gameUpdate(GameParams params){
         return game.setUpdate(params);
     }
+    public ResponseGame gameScore(GameParams params){ return game.getScore(params); }
     private CardGame game;
     private PlayersContainer players;
 }

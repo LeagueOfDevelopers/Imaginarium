@@ -45,6 +45,14 @@ public class PlayedCards {
         }
         return null;
     }
+    public Player getPlayerByChosenCard(Card card){
+        for(Player player1: chosenCard.keySet()){
+            if(card.getId().equals(getChosenCardByPlayer(player1).getId())){
+                return player1;
+            }
+        }
+        return null;
+    }
     public Card getVotedCardByPlayer(Player player){
         for(Player player1: votedCard.keySet()){
             if(player.getId().equals(player1.getId())){

@@ -34,5 +34,13 @@ public class RoomManager implements IRoomManager {
                 .gameUpdate(params);
         return response;
     }
+
+    public ResponseGame getGameScore(GameParams params) {
+        ResponseGame response = rooms
+                .getRoomByPlayer(params.getPlayer())
+                .gameScore(params);
+        return response;
+    }
+
     private RoomsContainer rooms;
 }

@@ -19,7 +19,7 @@ import java.util.Iterator;
 public class CardGame {
     public CardGame(Integer size, PlayersContainer players){
         Integer[] a = new Integer[]{0,0,0,96,75,72,98};
-        standartDeck = new Deck(a[size - 1]);
+        standardDeck = new Deck(a[size - 1]);
         responses = new ResponsesContainer();
         hands = new PlayersHands();
         scores = new PlayersScores(players);
@@ -52,6 +52,17 @@ public class CardGame {
             response.addField("status", "ERROR");
         }
         return response;
+    }
+
+    public ResponseGame getScore(GameParams params){
+        ResponseGame responseGame = new ResponseGame();
+        Integer i = 0;
+        for (Player player : players.getHashSet()){
+            responseGame.addField("player#" + i.toString(), player.getId().toString());
+            responseGame.addField("score#" + i.toString(), scores.getScoreByPlayer(player).getScore().toString());
+            i++;
+        }
+        return responseGame;
     }
     private boolean updateGameSituation(GameParams params){
         if(gameStage.getStage() == 0){
@@ -161,7 +172,7 @@ public class CardGame {
         currentHead = headIterator.next();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
-            if(hands.getHandByPlayer(player).size() == 0 && standartDeck.size() == 0){
+            if(hands.getHandByPlayer(player).size() == 0 && standardDeck.size() == 0){
                 response.addField("stage", "0");
                 responses.addResponse(response, player);
                 continue;
@@ -171,8 +182,7 @@ public class CardGame {
             response.addField("isDone", isHead.toString());
             response.addField("countOfPlayers", "0");
             response.addField("stage", "1");
-            isHead = !isHead;
-            response.addField("isHead",  isHead.toString());
+            response.addField("currentHead",  currentHead.getId().toString());
             response.addField("score", scores.getScoreByPlayer(player).getScore().toString());
 
             CardsContainer cards = hands.getHandByPlayer(player);
@@ -181,7 +191,10 @@ public class CardGame {
             }
             Integer handSize = cards.getHashSet().size();
             for(int i = 0; i < 6 - handSize; i++){
-                cards.addCard(standartDeck.getRandomCard());
+                Card card = standardDeck.getRandomCard();
+                if(card != null){
+                    cards.addCard(card);
+                }
             }
             Integer i = 0;
             for(Card card : cards.getHashSet()){
@@ -231,9 +244,10 @@ public class CardGame {
             response.addField("isDone", "false");
             response.addField("countOfPlayers", players.size().toString());
             response.addField("stage", "4");
-            response.addField("cardOfHead", playedCards.getChosenCardByPlayer(currentHead).getId().toString());
             Integer i = 0;
             for(Card card: points.keySet()){
+                Player player1 = playedCards.getPlayerByChosenCard(card);
+                response.addField("player#" + i.toString(), player1.getId().toString());
                 response.addField("card#" + i.toString(), card.getId().toString());
                 response.addField("vote#" + i.toString(), points.get(card).toString());
                 i++;
@@ -286,6 +300,9 @@ public class CardGame {
         }
         return points;
     }
+    private void checkPlayersTiming(){
+        
+    }
     private void logCurrentState(){
         logger.debug("===========================================================================");
         logger.debug("Stage: " + gameStage.getStage().toString());
@@ -321,6 +338,6 @@ public class CardGame {
     private PlayersScores scores;
     private PlayersHands hands;
     private ResponsesContainer responses;
-    private Deck standartDeck;
+    private Deck standardDeck;
     private PlayersContainer players;
 }
