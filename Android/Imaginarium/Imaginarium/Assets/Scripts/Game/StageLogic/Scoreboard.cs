@@ -23,7 +23,7 @@ public class Scoreboard : MonoBehaviour {
             string output = "";
             for (int i = 0; i < prefs.getSize(); i++)
             {
-                string name = prefs.GetPlayerName(driver.getResponse()["player#"] + i);
+                string name = prefs.GetPlayerName(driver.getResponse()["player#" + i]);
                 string score = driver.getResponse()["score#" + i];
                 output += name + " - " + score + "\n";
             }

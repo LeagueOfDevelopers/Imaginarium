@@ -49,6 +49,11 @@ public class CardMove : MonoBehaviour {
             (destination > startPosition.x + deltaCardMove * (CountOfCards-1));
     }
 
+    public void SetCountOfCards(int count)
+    {
+        CountOfCards = count;
+    }
+
     public int GetCurrentCard() {
         return currentCard;
     }

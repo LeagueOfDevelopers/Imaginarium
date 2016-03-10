@@ -11,6 +11,7 @@ public class SecondStageLogic : MonoBehaviour {
     // Use this for initialization
     void Start () {
         driver.TestRequest();
+        gameObject.GetComponent<CardMove>().SetCountOfCards(prefs.getSize()); //Задаём кол-во используемых карт
         SetCards();
     }
 	

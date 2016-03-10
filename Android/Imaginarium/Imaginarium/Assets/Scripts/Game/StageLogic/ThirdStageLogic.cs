@@ -10,6 +10,7 @@ public class ThirdStageLogic : MonoBehaviour {
     // Use this for initialization
     void Start () {
         driver.TestRequest();
+        gameObject.GetComponent<CardMove>().SetCountOfCards(prefs.getSize()-1); //Задаём кол-во используемых карт
         SetCards();
     }
 	
@@ -23,15 +24,8 @@ public class ThirdStageLogic : MonoBehaviour {
 
     private void SetCards()
     {
-        int[] allCards = prefs.getChosenCards();
-        int[] cardsForVote = new int[5];
-        int k = 0;
-        foreach (int card in allCards)
-        {
-                cardsForVote[k] = card;
-                k++;
-        }
-        Cards.GetComponent<CardNamer>().SetCards(cardsForVote);
+        
+        Cards.GetComponent<CardNamer>().SetCards(prefs.getChosenCards());
     }
 
     public void OKButtonClickEventHandler()
