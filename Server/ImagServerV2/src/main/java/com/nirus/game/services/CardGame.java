@@ -60,6 +60,7 @@ public class CardGame {
         for (Player player : players.getHashSet()){
             responseGame.addField("player#" + i.toString(), player.getId().toString());
             responseGame.addField("score#" + i.toString(), scores.getScoreByPlayer(player).getScore().toString());
+            i++;
         }
         return responseGame;
     }
@@ -243,7 +244,6 @@ public class CardGame {
             response.addField("isDone", "false");
             response.addField("countOfPlayers", players.size().toString());
             response.addField("stage", "4");
-            response.addField("cardOfHead", playedCards.getChosenCardByPlayer(currentHead).getId().toString());
             Integer i = 0;
             for(Card card: points.keySet()){
                 Player player1 = playedCards.getPlayerByChosenCard(card);
@@ -299,6 +299,9 @@ public class CardGame {
             scores.changePlayerScore(currentHead, playedCards.haveWeLost(currentHead)*3);
         }
         return points;
+    }
+    private void checkPlayersTiming(){
+        
     }
     private void logCurrentState(){
         logger.debug("===========================================================================");
