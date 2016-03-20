@@ -16,6 +16,7 @@ public class ResponseGame {
         response.remove(name);
         response.addProperty(name, value);
     }
+    public String getField(String key){ return response.get(key).getAsString();}
     public String getResponse(){
         return response.toString();
     }

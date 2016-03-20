@@ -16,5 +16,8 @@ public class Stage {
     public Integer getStage(){
         return stage;
     }
+    public void endGame(Integer i){
+        stage = i;
+    }
     Integer stage;
 }

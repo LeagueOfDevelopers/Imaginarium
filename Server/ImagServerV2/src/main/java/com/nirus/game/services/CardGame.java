@@ -10,6 +10,8 @@ import com.nirus.responses.ResponseGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -29,6 +31,7 @@ public class CardGame {
 
         for(Player player: players.getHashSet()){
             hands.addHand(player, new CardsContainer());
+            players.updatePlayerInstant(player, Instant.now());
         }
 
         this.players = players;
@@ -39,6 +42,8 @@ public class CardGame {
 
     public ResponseGame getStatus(GameParams params){
         updateResponseForPlayer(params.getPlayer());
+        players.updatePlayerInstant(params.getPlayer(), Instant.now());
+        checkPlayersTiming();
         ResponseGame response = responses.getResponseByPlayer(params.getPlayer());
         updateForNextStage();
         return response;
@@ -80,7 +85,7 @@ public class CardGame {
         }
         if(gameStage.getStage() == 1){
             if(!params.getPlayer().equals(currentHead)){
-                    if(hands.getHandByPlayer(params.getPlayer()).contains(params.getCard())){
+                if(hands.getHandByPlayer(params.getPlayer()).contains(params.getCard())){
                     hands.getHandByPlayer(params.getPlayer()).removeCard(params.getCard());
                     playedCards.chooseCard(params.getPlayer(), params.getCard());
                     return true;
@@ -162,6 +167,9 @@ public class CardGame {
             Boolean isDone = fourthStagePlayers.contains(player);
             responseGame.updateField("isDone", isDone.toString());
         }
+        if(gameStage.getStage() < 0){
+            responseGame.updateField("stage", "0");
+        }
     }
     private void initFirstTurn(){
         responses.clear();
@@ -175,6 +183,7 @@ public class CardGame {
             if(hands.getHandByPlayer(player).size() == 0 && standardDeck.size() == 0){
                 response.addField("stage", "0");
                 responses.addResponse(response, player);
+                gameStage.endGame(-1);
                 continue;
             }
             Boolean isHead = currentHead.equals(player);
@@ -277,13 +286,18 @@ public class CardGame {
                     scores.changePlayerScore(player, result);
                 }
             }
-            if(playedCards.haveWeLost(currentHead) == players.size() - 1){
+            else if(playedCards.haveWeLost(currentHead) == players.size() - 1){
                 if(player.equals(currentHead)){
                     if(scores.getScoreByPlayer(player).getScore() > 3){
                         scores.changePlayerScore(player, -3);
                     } else{
                         scores.changePlayerScore(player, -(scores.getScoreByPlayer(player).getScore()));
                     }
+                }
+            }
+            else{
+                if(!player.getId().equals(currentHead.getId())){
+                    scores.changePlayerScore(player, result);
                 }
             }
             points.put(chosenCard, result);
@@ -301,7 +315,12 @@ public class CardGame {
         return points;
     }
     private void checkPlayersTiming(){
-        
+        for(Player player: players.getHashSet()){
+            if(players.getPlayerInstant(player).isBefore(Instant.now().minus(12, ChronoUnit.HOURS))){
+                gameStage.endGame(-2);
+                break;
+            }
+        }
     }
     private void logCurrentState(){
         logger.debug("===========================================================================");
