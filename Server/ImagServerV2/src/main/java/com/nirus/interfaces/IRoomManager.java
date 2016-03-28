@@ -12,4 +12,5 @@ public interface IRoomManager {
     ResponseGame getGameStatus(GameParams params);
     ResponseGame updateGameStatus(GameParams params);
     ResponseGame getGameScore(GameParams params);
+    ResponseGame leaveGame(GameParams params);
 }

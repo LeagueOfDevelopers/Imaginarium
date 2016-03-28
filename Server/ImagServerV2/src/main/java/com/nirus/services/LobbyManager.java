@@ -37,6 +37,11 @@ public class LobbyManager implements ILobbyManager {
         response.addField("countOfPlayers", lobbies.getLobbyByPlayer(newPlayer)
                 .size()
                 .toString());
+        Integer i = 0;
+        for(Player player: lobbies.getLobbyByPlayer(newPlayer).getPlayers().getHashSet()){
+            response.addField("player#" + i.toString(), player.getId().toString());
+            i++;
+        }
         return response;
     }
 
@@ -49,6 +54,11 @@ public class LobbyManager implements ILobbyManager {
                 response.addField("token", player.getId().toString());
                 response.addField("status", "READY");
                 response.addField("countOfPlayers", lobbies.getLobbyByPlayer(player).size().toString());
+                Integer i = 0;
+                for(Player player1: lobbies.getLobbyByPlayer(player).getPlayers().getHashSet()){
+                    response.addField("player#" + i.toString(), player1.getId().toString());
+                    i++;
+                }
                 return response;
             } else {
                 lobbies.getLobbyByPlayer(player).getPlayers().updatePlayerInstant(player, params.getInstant());
@@ -56,6 +66,11 @@ public class LobbyManager implements ILobbyManager {
                 response.addField("token", player.getId().toString());
                 response.addField("status", "WAITING");
                 response.addField("countOfPlayers", lobbies.getLobbyByPlayer(player).size().toString());
+                Integer i = 0;
+                for(Player player1: lobbies.getLobbyByPlayer(player).getPlayers().getHashSet()){
+                    response.addField("player#" + i.toString(), player1.getId().toString());
+                    i++;
+                }
                 return response;
             }
         } else{

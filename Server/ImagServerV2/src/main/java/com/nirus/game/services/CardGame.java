@@ -69,6 +69,14 @@ public class CardGame {
         }
         return responseGame;
     }
+
+    public ResponseGame leaveGame(GameParams params){
+        gameStage.endGame(-3);
+        ResponseGame response = new ResponseGame();
+        response.addField("status", "OK");
+        return response;
+    }
+
     private boolean updateGameSituation(GameParams params){
         if(gameStage.getStage() == 0){
             if(params.getPlayer().equals(currentHead)){
@@ -192,8 +200,8 @@ public class CardGame {
             response.addField("countOfPlayers", "0");
             response.addField("stage", "1");
             response.addField("currentHead",  currentHead.getId().toString());
-            response.addField("score", scores.getScoreByPlayer(player).getScore().toString());
-
+            //response.addField("score", scores.getScoreByPlayer(player).getScore().toString());
+            response.addField("amountOfCards", standardDeck.size().toString());
             CardsContainer cards = hands.getHandByPlayer(player);
             if(cards == null){
                 cards = new CardsContainer();

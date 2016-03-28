@@ -35,6 +35,13 @@ public class RoomManager implements IRoomManager {
         return response;
     }
 
+    public ResponseGame leaveGame(GameParams params) {
+        ResponseGame response = rooms
+                .getRoomByPlayer(params.getPlayer())
+                .leaveGame(params);
+        return response;
+    }
+
     public ResponseGame getGameScore(GameParams params) {
         ResponseGame response = rooms
                 .getRoomByPlayer(params.getPlayer())
