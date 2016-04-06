@@ -283,42 +283,30 @@ public class CardGame {
                     result++;
                 }
             }
-            if(playedCards.haveWeLost(currentHead) == 0){
-                if(player.equals(currentHead)){
-                    if(scores.getScoreByPlayer(player).getScore() > 2){
-                        scores.changePlayerScore(player, -2);
-                    } else{
-                        scores.changePlayerScore(player, -(scores.getScoreByPlayer(player).getScore()));
-                    }
-                } else{
-                    scores.changePlayerScore(player, result);
-                }
-            }
-            else if(playedCards.haveWeLost(currentHead) == players.size() - 1){
-                if(player.equals(currentHead)){
-                    if(scores.getScoreByPlayer(player).getScore() > 3){
-                        scores.changePlayerScore(player, -3);
-                    } else{
-                        scores.changePlayerScore(player, -(scores.getScoreByPlayer(player).getScore()));
-                    }
-                }
-            }
-            else{
-                if(!player.getId().equals(currentHead.getId())){
-                    scores.changePlayerScore(player, result);
-                }
-            }
             points.put(chosenCard, result);
         }
-        for(Player player: playedCards.getVotedPlayers()){
-            Card votedCard = playedCards.getVotedCardByPlayer(player);
-            Card headCard = playedCards.getChosenCardByPlayer(currentHead);
-            if(votedCard.equals(headCard)){
-                scores.changePlayerScore(player, 3);
+        for(Player player: players.getHashSet()){
+            Card playerCard = playedCards.getChosenCardByPlayer(player);
+            if(player.getId().equals(currentHead.getId())){
+                if(points.get(playerCard) == 0){
+                    scores.changePlayerScore(currentHead, -2);
+                } else if(points.get(playerCard) == players.size() - 1){
+                    scores.changePlayerScore(currentHead, -3);
+                } else{
+                    scores.changePlayerScore(currentHead,
+                            points.get(playerCard) * 3);
+                }
+            } else{
+                if(points.get(playedCards.getChosenCardByPlayer(currentHead)) != players.size() - 1){
+                    if(playedCards
+                            .getVotedCardByPlayer(player)
+                            .getId()
+                            .equals(playedCards.getChosenCardByPlayer(currentHead).getId())){
+                        scores.changePlayerScore(player, 3);
+                    }
+                    scores.changePlayerScore(player, points.get(playerCard));
+                }
             }
-        }
-        if(playedCards.haveWeLost(currentHead) != 0 && playedCards.haveWeLost(currentHead) != players.size() - 1){
-            scores.changePlayerScore(currentHead, playedCards.haveWeLost(currentHead)*3);
         }
         return points;
     }

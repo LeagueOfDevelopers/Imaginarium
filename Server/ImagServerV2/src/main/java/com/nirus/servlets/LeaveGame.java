@@ -1,6 +1,7 @@
 package com.nirus.servlets;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.nirus.api_params.GameParams;
 import com.nirus.api_params.LobbyParams;
 import com.nirus.basics.JSONRequestParser;
@@ -20,6 +21,7 @@ import java.util.UUID;
 /**
  * Created by ndiezel on 24.03.2016.
  */
+@Singleton
 public class LeaveGame extends HttpServlet {
     @Inject
     public LeaveGame(IRoomManager roomManager){

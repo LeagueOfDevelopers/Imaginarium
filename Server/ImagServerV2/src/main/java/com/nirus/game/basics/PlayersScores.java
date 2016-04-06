@@ -18,6 +18,9 @@ public class PlayersScores {
     public void changePlayerScore(Player player, Integer value){
         for(Player player1: scores.keySet()){
             if(player.getId().equals(player1.getId())){
+                if(scores.get(player1).getScore() + value < 0){
+                    value = value + Math.abs(scores.get(player1).getScore() + value);
+                }
                 scores.get(player1).setScore(scores.get(player1).getScore() + value);
             }
         }
