@@ -1,5 +1,7 @@
 package com.nirus.game.services;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.nirus.api_params.GameParams;
 import com.nirus.basics.Player;
 import com.nirus.game.basics.CardsContainer;
@@ -201,7 +203,7 @@ public class CardGame {
             response.addField("stage", "1");
             response.addField("currentHead",  currentHead.getId().toString());
             //response.addField("score", scores.getScoreByPlayer(player).getScore().toString());
-            response.addField("amountOfCards", standardDeck.size().toString());
+            //response.addField("amountOfCards", standardDeck.size().toString());
             CardsContainer cards = hands.getHandByPlayer(player);
             if(cards == null){
                 cards = new CardsContainer();
@@ -219,6 +221,9 @@ public class CardGame {
                 i++;
             }
             responses.addResponse(response, player);
+        }
+        for(Player player: players.getHashSet()){
+            responses.getResponseByPlayerSafe(player).addField("amountOfCards", standardDeck.size().toString());
         }
     }
     private void initSecondStage(){

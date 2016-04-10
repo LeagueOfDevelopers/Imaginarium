@@ -20,5 +20,6 @@ public class ResponseGame {
     public String getResponse(){
         return response.toString();
     }
+    public JsonObject getJson(){ return response; }
     private JsonObject response;
 }
