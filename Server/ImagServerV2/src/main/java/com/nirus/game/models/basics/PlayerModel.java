@@ -5,5 +5,5 @@ package com.nirus.game.models.basics;
  */
 public class PlayerModel {
     public String player;
-    public int score;
+    public Integer score = null;
 }

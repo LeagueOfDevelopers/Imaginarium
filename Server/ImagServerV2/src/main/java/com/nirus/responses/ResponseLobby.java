@@ -13,7 +13,9 @@ public class ResponseLobby {
         response.addProperty(name, value);
     }
     public String getResponse(){
-        return response.toString();
+        return result;
     }
+    public void setResult(String json){ result = json;}
     private JsonObject response;
+    private String result;
 }

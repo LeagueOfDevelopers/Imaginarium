@@ -23,9 +23,11 @@ public class Room {
         return game.setUpdate(params);
     }
     public ResponseGame gameScore(GameParams params){
-        return game.getScore(params); }
+        return game.getScore(params);
+    }
     public ResponseGame leaveGame(GameParams params){
-        return game.leaveGame(params);}
+        return game.leaveGame(params);
+    }
     private CardGame game;
     private PlayersContainer players;
 }

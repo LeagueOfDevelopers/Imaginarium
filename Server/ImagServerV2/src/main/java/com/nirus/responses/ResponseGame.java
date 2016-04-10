@@ -18,8 +18,10 @@ public class ResponseGame {
     }
     public String getField(String key){ return response.get(key).getAsString();}
     public String getResponse(){
-        return response.toString();
+        return result;
     }
     public JsonObject getJson(){ return response; }
+    public void setResult(String json){ result = json;}
     private JsonObject response;
+    private String result;
 }

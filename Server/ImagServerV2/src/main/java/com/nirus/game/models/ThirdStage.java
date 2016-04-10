@@ -1,5 +1,6 @@
 package com.nirus.game.models;
 
+import com.nirus.game.models.basics.CardModel;
 import com.nirus.game.models.basics.PlayerModel;
 
 /**
@@ -8,4 +9,5 @@ import com.nirus.game.models.basics.PlayerModel;
 public class ThirdStage {
     public int stage;
     public PlayerModel[] donePlayers;
+    public CardModel[] cardModels;
 }

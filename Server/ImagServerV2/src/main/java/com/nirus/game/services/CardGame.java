@@ -1,5 +1,7 @@
 package com.nirus.game.services;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.nirus.api_params.GameParams;
@@ -8,12 +10,17 @@ import com.nirus.game.basics.CardsContainer;
 import com.nirus.containers.PlayersContainer;
 import com.nirus.containers.ResponsesContainer;
 import com.nirus.game.basics.*;
+import com.nirus.game.models.FirstStage;
+import com.nirus.game.models.ScoreModel;
+import com.nirus.game.models.basics.CardModel;
+import com.nirus.game.models.basics.PlayerModel;
 import com.nirus.responses.ResponseGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -30,6 +37,8 @@ public class CardGame {
         gameStage = new Stage();
         playedCards = new PlayedCards();
         fourthStagePlayers = new PlayersContainer();
+
+        builder.setPrettyPrinting();
 
         for(Player player: players.getHashSet()){
             hands.addHand(player, new CardsContainer());
@@ -63,12 +72,20 @@ public class CardGame {
 
     public ResponseGame getScore(GameParams params){
         ResponseGame responseGame = new ResponseGame();
-        Integer i = 0;
+        ScoreModel scoreModel = new ScoreModel();
+        ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
+        //Integer i = 0;
         for (Player player : players.getHashSet()){
-            responseGame.addField("player#" + i.toString(), player.getId().toString());
-            responseGame.addField("score#" + i.toString(), scores.getScoreByPlayer(player).getScore().toString());
-            i++;
+            PlayerModel playerModel = new PlayerModel();
+            playerModel.player = player.getId().toString();
+            playerModel.score = scores.getScoreByPlayer(player).getScore();
+            playerModels.add(playerModel);
+            //responseGame.addField("player#" + i.toString(), player.getId().toString());
+            //responseGame.addField("score#" + i.toString(), scores.getScoreByPlayer(player).getScore().toString());
+            //i++;
         }
+        scoreModel.players = playerModels.toArray(new PlayerModel[]{});
+        responseGame.setResult(gson.toJson(scoreModel));
         return responseGame;
     }
 
@@ -155,9 +172,19 @@ public class CardGame {
     private void updateResponseForPlayer(Player player){
         ResponseGame responseGame = responses.getResponseByPlayerSafe(player);
         if(gameStage.getStage() == 0){
-            responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
-            Boolean isDone = !currentHead.equals(player) || playedCards.howMuchChosen() > 0;
-            responseGame.updateField("isDone", isDone.toString());
+            FirstStage firstStage;
+            firstStage = gson.fromJson(responses.getResponseByPlayerSafe(player).getResponse(), FirstStage.class);
+            ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
+            for(Player player1: playedCards.getChosenMap().keySet()){
+                PlayerModel playerModel = new PlayerModel();
+                playerModel.player = player1.getId().toString();
+                playerModels.add(playerModel);
+            }
+            firstStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
+            //responseGame.setResult(gson.toJson(firstStage));
+            //responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
+            //Boolean isDone = !currentHead.equals(player) || playedCards.howMuchChosen() > 0;
+            //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() == 1){
             responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
@@ -190,18 +217,21 @@ public class CardGame {
         currentHead = headIterator.next();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
+            FirstStage firstStage = new FirstStage();
             if(hands.getHandByPlayer(player).size() == 0 && standardDeck.size() == 0){
-                response.addField("stage", "0");
+                firstStage.stage = 0;
+                response.setResult(gson.toJson(firstStage));
+                //response.addField("stage", "0");
                 responses.addResponse(response, player);
                 gameStage.endGame(-1);
                 continue;
             }
-            Boolean isHead = currentHead.equals(player);
-            isHead = !isHead;
-            response.addField("isDone", isHead.toString());
-            response.addField("countOfPlayers", "0");
-            response.addField("stage", "1");
-            response.addField("currentHead",  currentHead.getId().toString());
+            //Boolean isHead = currentHead.equals(player);
+            //isHead = !isHead;
+            //response.addField("isDone", isHead.toString());
+            //response.addField("countOfPlayers", "0");
+            //response.addField("stage", "1");
+            //response.addField("currentHead",  currentHead.getId().toString());
             //response.addField("score", scores.getScoreByPlayer(player).getScore().toString());
             //response.addField("amountOfCards", standardDeck.size().toString());
             CardsContainer cards = hands.getHandByPlayer(player);
@@ -209,21 +239,35 @@ public class CardGame {
                 cards = new CardsContainer();
             }
             Integer handSize = cards.getHashSet().size();
+            ArrayList<CardModel> cardModels = new ArrayList<CardModel>();
             for(int i = 0; i < 6 - handSize; i++){
                 Card card = standardDeck.getRandomCard();
                 if(card != null){
+                    CardModel cardModel = new CardModel();
+                    cardModel.id = card.getId();
+                    PlayerModel playerModel = new PlayerModel();
+                    playerModel.player = player.getId().toString();
+                    cardModel.owner = playerModel;
+                    cardModels.add(cardModel);
                     cards.addCard(card);
                 }
             }
-            Integer i = 0;
-            for(Card card : cards.getHashSet()){
-                response.addField("card#" + i.toString(), card.getId().toString());
-                i++;
-            }
+            firstStage.cards = cardModels.toArray(new CardModel[]{});
+            response.setResult(gson.toJson(firstStage));
+            //Integer i = 0;
+            //for(Card card : cards.getHashSet()){
+            //    response.addField("card#" + i.toString(), card.getId().toString());
+            //    i++;
+            //}
             responses.addResponse(response, player);
         }
         for(Player player: players.getHashSet()){
-            responses.getResponseByPlayerSafe(player).addField("amountOfCards", standardDeck.size().toString());
+            FirstStage firstStage;
+            firstStage = gson.fromJson(responses.getResponseByPlayerSafe(player).getResponse(), FirstStage.class);
+            firstStage.amountOfCards = standardDeck.size();
+            ResponseGame responseGame = new ResponseGame();
+            responseGame.setResult(gson.toJson(firstStage));
+            responses.addResponse(responseGame, player);
         }
     }
     private void initSecondStage(){
@@ -360,4 +404,6 @@ public class CardGame {
     private ResponsesContainer responses;
     private Deck standardDeck;
     private PlayersContainer players;
+    private GsonBuilder builder = new GsonBuilder();
+    private Gson gson = builder.create();
 }
