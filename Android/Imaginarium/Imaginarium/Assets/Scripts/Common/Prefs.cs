@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Prefs {
 
@@ -66,7 +66,7 @@ public class Prefs {
 
     public void setChosenCards(int[] cards)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < (getSize()-1); i++)
         {
             PlayerPrefs.SetInt("chosenCard" + i.ToString(), cards[i]);
         }
@@ -74,8 +74,8 @@ public class Prefs {
 
     public int[] getChosenCards()
     {
-        int[] cards = new int[5];
-        for (int i = 0; i < 5; i++)
+        int[] cards = new int[(getSize()-1)];
+        for (int i = 0; i < (getSize()-1); i++)
         {
             cards[i] = PlayerPrefs.GetInt("chosenCard" + i.ToString(), -1);
         }
@@ -84,7 +84,7 @@ public class Prefs {
 
     public void setVoteForCards(int[] cards)
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < getSize(); i++)
         {
             PlayerPrefs.SetInt("resultForCards" + i.ToString(), cards[i]);
         }
@@ -92,8 +92,8 @@ public class Prefs {
 
     public int[] getVoteForCards()
     {
-        int[] cards = new int[6];
-        for (int i = 0; i < 6; i++)
+        int[] cards = new int[getSize()];
+        for (int i = 0; i < getSize(); i++)
         {
             cards[i] = PlayerPrefs.GetInt("resultForCards" + i.ToString(), 0);
         }
@@ -119,14 +119,18 @@ public class Prefs {
         return PlayerPrefs.GetInt("ownCard", -1);
     }
 
-    public void setHeadCard(int card)
+    public int getHeadCard()        //Для вызова на этапе подведения итогов
     {
-        PlayerPrefs.SetInt("headCard", card);
-    }
+        string[] players = getPlayersForVote();
+        int i = 0;
+        foreach (string player in players)
+        {
+            if (player == GetHeadToken())
+                return getCardsForVote()[i];
+            i++;
+        }
 
-    public int getHeadCard()
-    {
-        return PlayerPrefs.GetInt("headCard", -1);
+        return 0;   //Ну нивазможный исход, дя? Если так, то всё полетело вписду
     }
 
     public void setStage(int stage) {
@@ -166,7 +170,7 @@ public class Prefs {
 
     public void setCardsForVote(int[] cards)
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < getSize(); i++)
         {
             PlayerPrefs.SetInt("cardsForVote" + i.ToString(), cards[i]);
         }
@@ -174,15 +178,66 @@ public class Prefs {
 
     public int[] getCardsForVote()
     {
-        int[] cards = new int[6];
-        for (int i = 0; i < 6; i++)
+        int[] cards = new int[getSize()];
+        for (int i = 0; i < getSize(); i++)
         {
             cards[i] = PlayerPrefs.GetInt("cardsForVote" + i.ToString(), 0);
         }
         return cards;
     }
 
+    public void setPlayersForVote(string[] players)
+    {
+        for (int i = 0; i < getSize(); i++)
+        {
+            PlayerPrefs.SetString("playersForVote" + i.ToString(), players[i]);
+        }
+    }
+
+    public string[] getPlayersForVote()
+    {
+        string[] players = new string[getSize()];
+        for (int i = 0; i < getSize(); i++)
+        {
+            players[i] = PlayerPrefs.GetString("playersForVote" + i.ToString(), "NONAME");
+        }
+        return players;
+    }
+
     public void deleteAll() {
         PlayerPrefs.DeleteAll();
     }
+
+    public void SetPlayerName(string token, string name)
+    {
+        PlayerPrefs.SetString("playerName" + token, name);
+    }
+
+    public string GetPlayerName(string token)
+    {
+        return PlayerPrefs.GetString("playerName" + token, "NoNameHere!");
+    }
+
+    public string GetOwnName()
+    {
+        Prefs pref = new Prefs();
+        return PlayerPrefs.GetString("playerName" + pref.getToken() , "NoNameHere!");
+    }
+
+    public void SetHeadToken(string token)
+    {
+        PlayerPrefs.SetString("headToken", token);
+    }
+
+    public string GetHeadToken()
+    {
+        return PlayerPrefs.GetString("headToken", "NoTokenHere!!!!!!!");
+    }
+
+    public string GetHeadName()
+    {
+        Prefs pref = new Prefs();
+        return pref.GetPlayerName(pref.GetHeadToken());
+    }
+
 }

@@ -62,6 +62,15 @@ public class ServerDriver {
         sendRequest(ServerAPI.RequestType.SetGameStatus, data);
     }
 
+    public void GetGameScore()
+    {
+        Prefs pref = new Prefs();
+        JSONObject data = new JSONObject();
+        data.AddField("token", pref.getToken());
+        Debug.Log("GetGameScore" + data.ToString());
+        sendRequest(ServerAPI.RequestType.GetGameScore, data);
+    }
+
     public void TestRequest() {
         www = new WWW(url + "/Test");
     }

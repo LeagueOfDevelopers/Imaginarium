@@ -6,8 +6,9 @@ using System.Collections;
 
 public class MenuLogic : MonoBehaviour
 {
+    public GameObject SizeOfLobbyObject;
 
-    private enum Stage { Idle, JoinLobby, SearchingGame }
+    private enum Stage { Idle, JoinLobby, SearchingGame, SetName }
     private int countOfPlayers = 0;
     private int sizeOfLobby = 6;
     private Stage currentStage = Stage.Idle;
@@ -17,10 +18,12 @@ public class MenuLogic : MonoBehaviour
     float calldown = 1;
     float basic_calldown = 1;
     private bool requesting = false;
+    private Dropdown SizeOfLobbyDropdown;
 
     void Start()
     {
         driver.TestRequest();
+        SizeOfLobbyDropdown = SizeOfLobbyObject.GetComponent<Dropdown>();
     }
 
     // Update is called once per frame
@@ -61,12 +64,22 @@ public class MenuLogic : MonoBehaviour
 
                                 if (driver.getResponse()["status"].Equals("READY"))
                                 {
-                                    GameStart();
+                                    driver.GetGameScore();
+                                    currentStage = Stage.SetName;
                                     break;
                                 }
 
                                 SearchingGame();
 
+                                break;
+
+                            case Stage.SetName:
+                                string[] tokens = new string[prefs.getSize()];
+                                for (int i = 0; i < prefs.getSize(); i++)
+                                    tokens[i] = driver.getResponse()["player#" + i];
+                                PlayerNamer namer = new PlayerNamer();
+                                namer.SetNames(tokens);
+                                GameStart();
                                 break;
                         }
                     }
@@ -121,6 +134,7 @@ public class MenuLogic : MonoBehaviour
 
     private void JoinLobby()
     {
+        ChangeSizeOfLobby(SizeOfLobbyDropdown.value);
         prefs.setSize(sizeOfLobby);
         driver.JoinLobby(sizeOfLobby);
         currentStage = Stage.JoinLobby;
@@ -149,5 +163,6 @@ public class MenuLogic : MonoBehaviour
                 break;
 
         }
+        Debug.Log(sizeOfLobby);
     }
 }

@@ -12,7 +12,7 @@ public class FourthStageLogic : MonoBehaviour {
     void Start () {
         driver.TestRequest();
         SetCards();
-        ShowVoteForCards();
+        ShowInfoForCards();
     }
 
     void Update() {
@@ -31,27 +31,38 @@ public class FourthStageLogic : MonoBehaviour {
     {
         JSONObject json = new JSONObject();
         driver.UpdateRoomStatus(json);
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Scoreboard");
     }
 
-    private void ShowVoteForCards()
+    private void ShowInfoForCards()
     {
         int[] votes = prefs.getVoteForCards();
+        string[] players = prefs.getPlayersForVote();
 
-        int i = 0;
-        foreach (int vote in votes)
+
+        for(int i = 0; i< prefs.getSize(); i++)
         {
             GameObject child = Cards.transform.FindChild("Card" + i).gameObject;
-            GameObject text = child.transform.GetChild(0).gameObject;
-            text.GetComponent<Text>().text = vote.ToString();
+
+            GameObject voteLabel = child.transform.FindChild("ScoreBG").FindChild("vote").gameObject;
+            GameObject nameLabel = child.transform.FindChild("NameBG").FindChild("Name").gameObject;
+
+            voteLabel.GetComponent<Text>().text = votes[i].ToString();
+            nameLabel.GetComponent<Text>().text = prefs.GetPlayerName(players[i]);
 
             if (child.GetComponent<CardSpriteHandler>().getCard() == prefs.getOwnCard())
-                text.GetComponent<Text>().color = Color.green;
+            {
+                child.transform.FindChild("ScoreBG").GetComponent<Image>().color = Color.green;
+                child.transform.FindChild("NameBG").GetComponent<Image>().color = Color.green;
+            }
             if (child.GetComponent<CardSpriteHandler>().getCard() == prefs.getHeadCard())
-                text.GetComponent<Text>().color = Color.red;
-
-            i++;
+            {
+                child.transform.FindChild("ScoreBG").GetComponent<Image>().color = Color.yellow;
+                child.transform.FindChild("NameBG").GetComponent<Image>().color = Color.yellow;
+            }
         }
 
     }
+
+    
 }

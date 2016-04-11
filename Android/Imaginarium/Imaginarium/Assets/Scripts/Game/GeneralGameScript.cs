@@ -66,45 +66,51 @@ public class GeneralGameScript : MonoBehaviour {
                 case 1:
                     
                     prefs.setStage(1);
-                    if (response["isHead"] == "false")
+                    if (response["currentHead"] != prefs.getToken())
                         prefs.setIsHead(0);
                     else
                         prefs.setIsHead(1);
 
+                prefs.SetHeadToken(response["currentHead"]);
                     int[] cards = new int[6];
                     for (int i = 0; i < 6; i++)
                         cards[i] = Convert.ToInt32(response[("card#" + i)]);
                     prefs.setCards(cards);
 
-                    prefs.setScore(Convert.ToInt32(response["score"]));
 
-                    if (Convert.ToBoolean(response["isHead"]) && response["isDone"] == "false")
+                    if (prefs.getIsHead() && response["isDone"] == "false")
                         SceneManager.LoadSceneAsync("FirstStage");
                     break;
                 case 2:
+                    prefs.setStage(2);
                     prefs.setText(response["text"]);
                     if (!prefs.getHead() && response["isDone"] == "false")
                         SceneManager.LoadSceneAsync("SecondStage");
                     break;
                 case 3:
-                    int[] chosenCards = new int[5];
-                    for (int i = 0; i < 5; i++)
+                    prefs.setStage(3);
+                    int[] chosenCards = new int[prefs.getSize()-1];
+                    for (int i = 0; i < (prefs.getSize()-1); i++)
                         chosenCards[i] = Convert.ToInt32(response[("card#" + i)]);
                     prefs.setChosenCards(chosenCards);
                     if (!prefs.getHead() && response["isDone"] == "false")
                         SceneManager.LoadSceneAsync("ThirdStage");
                     break;
                 case 4:
-                    int[] VoteForCards = new int[6];
-                    int[] CardsForVote = new int[6];
-                    for (int i = 0; i < 6; i++)
-                        VoteForCards[i] = Convert.ToInt32(response[("vote#" + i)]);
-                    for (int i = 0; i < 6; i++)
-                        CardsForVote[i] = Convert.ToInt32(response[("card#" + i)]);
+                    prefs.setStage(4);
+                    int[] VoteForCards = new int[prefs.getSize()];
+                    int[] CardsForVote = new int[prefs.getSize()];
+                    string[] PlayersForVote = new string[prefs.getSize()];
+                for (int i = 0; i < prefs.getSize(); i++)
+                {
+                    PlayersForVote[i] = response[("player#" + i)];
+                    VoteForCards[i] = Convert.ToInt32(response[("vote#" + i)]);
+                    CardsForVote[i] = Convert.ToInt32(response[("card#" + i)]);
+                }
 
+                    prefs.setPlayersForVote(PlayersForVote);
                     prefs.setVoteForCards(VoteForCards);
                     prefs.setCardsForVote(CardsForVote);
-                    prefs.setHeadCard(Convert.ToInt32(response["cardOfHead"]));
 
                 if (response["isDone"] == "false")
                     SceneManager.LoadSceneAsync("FourthStage");
@@ -122,12 +128,22 @@ public class GeneralGameScript : MonoBehaviour {
 
         }
 
+
+
     public int getCountOfPlayers() {
         return countOfDonePlayers;
     }
+
+
     public void Exit() {
         Debug.Log("exit");
         SceneManager.LoadSceneAsync("Menu");
+    }
+
+    public void Scoreboard()
+    {
+        Debug.Log("ScoreBoardClick!");
+        SceneManager.LoadSceneAsync("Scoreboard");
     }
 }
 
