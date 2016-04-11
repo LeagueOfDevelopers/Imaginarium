@@ -2,8 +2,6 @@ package com.nirus.game.services;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.nirus.api_params.GameParams;
 import com.nirus.basics.Player;
 import com.nirus.game.basics.CardsContainer;
@@ -76,11 +74,11 @@ public class CardGame {
         //Integer i = 0;
         for (Player player : players.getHashSet()){
             PlayerModel playerModel = new PlayerModel();
-            playerModel.player = player.getId().toString();
+            playerModel.token = player.getId().toString();
             playerModel.score = scores.getScoreByPlayer(player).getScore();
             playerModels.add(playerModel);
-            //responseGame.addField("player#" + i.toString(), player.getId().toString());
-            //responseGame.addField("score#" + i.toString(), scores.getScoreByPlayer(player).getScore().toString());
+            //responseGame.addField("token#" + i.toString(), token.getId().toString());
+            //responseGame.addField("score#" + i.toString(), scores.getScoreByPlayer(token).getScore().toString());
             //i++;
         }
         scoreModel.players = playerModels.toArray(new PlayerModel[]{});
@@ -176,13 +174,13 @@ public class CardGame {
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getChosenMap().keySet()){
                 PlayerModel playerModel = new PlayerModel();
-                playerModel.player = player1.getId().toString();
+                playerModel.token = player1.getId().toString();
                 playerModels.add(playerModel);
             }
             firstStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             //responseGame.setResult(gson.toJson(firstStage));
             //responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
-            //Boolean isDone = !currentHead.equals(player) || playedCards.howMuchChosen() > 0;
+            //Boolean isDone = !currentHead.equals(token) || playedCards.howMuchChosen() > 0;
             //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() == 1){
@@ -191,14 +189,14 @@ public class CardGame {
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getChosenMap().keySet()){
                 PlayerModel playerModel = new PlayerModel();
-                playerModel.player = player1.getId().toString();
+                playerModel.token = player1.getId().toString();
                 playerModels.add(playerModel);
             }
             secondStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             responseGame.setResult(gson.toJson(secondStage));
 
             //responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
-            //Boolean isDone = playedCards.containsChosenCardByPlayer(player);
+            //Boolean isDone = playedCards.containsChosenCardByPlayer(token);
             //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() == 2){
@@ -207,15 +205,15 @@ public class CardGame {
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getVotedPlayers()){
                 PlayerModel playerModel = new PlayerModel();
-                playerModel.player = player1.getId().toString();
+                playerModel.token = player1.getId().toString();
                 playerModels.add(playerModel);
             }
             thirdStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             responseGame.setResult(gson.toJson(thirdStage));
 
             //responseGame.updateField("countOfPlayers", playedCards.howMuchVoted().toString());
-            //Boolean isDone = playedCards.containsVotedCard(player);
-            //if(player.getId().equals(currentHead.getId())){
+            //Boolean isDone = playedCards.containsVotedCard(token);
+            //if(token.getId().equals(currentHead.getId())){
             //    isDone = true;
             //}
             //responseGame.updateField("isDone", isDone.toString());
@@ -226,14 +224,14 @@ public class CardGame {
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: fourthStagePlayers.getHashSet()){
                 PlayerModel playerModel = new PlayerModel();
-                playerModel.player = player1.getId().toString();
+                playerModel.token = player1.getId().toString();
                 playerModels.add(playerModel);
             }
             fourthStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             responseGame.setResult(gson.toJson(fourthStage));
 
             //responseGame.updateField("countOfPlayers", fourthStagePlayers.size().toString());
-            //Boolean isDone = fourthStagePlayers.contains(player);
+            //Boolean isDone = fourthStagePlayers.contains(token);
             //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() < 0){
@@ -260,15 +258,15 @@ public class CardGame {
                 continue;
             }
             PlayerModel currentH = new PlayerModel();
-            currentH.player = currentHead.getId().toString();
+            currentH.token = currentHead.getId().toString();
             firstStage.currentHead = currentH;
-            //Boolean isHead = currentHead.equals(player);
+            //Boolean isHead = currentHead.equals(token);
             //isHead = !isHead;
             //response.addField("isDone", isHead.toString());
             //response.addField("countOfPlayers", "0");
             //response.addField("stage", "1");
             //response.addField("currentHead",  currentHead.getId().toString());
-            //response.addField("score", scores.getScoreByPlayer(player).getScore().toString());
+            //response.addField("score", scores.getScoreByPlayer(token).getScore().toString());
             //response.addField("amountOfCards", standardDeck.size().toString());
             CardsContainer cards = hands.getHandByPlayer(player);
             if(cards == null){
@@ -282,7 +280,7 @@ public class CardGame {
                     CardModel cardModel = new CardModel();
                     cardModel.id = card.getId();
                     PlayerModel playerModel = new PlayerModel();
-                    playerModel.player = player.getId().toString();
+                    playerModel.token = player.getId().toString();
                     cardModel.owner = playerModel;
                     cardModels.add(cardModel);
                     cards.addCard(card);
@@ -316,12 +314,12 @@ public class CardGame {
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getChosenMap().keySet()){
                 PlayerModel playerModel = new PlayerModel();
-                playerModel.player = player1.getId().toString();
+                playerModel.token = player1.getId().toString();
                 playerModels.add(playerModel);
             }
             secondStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             response.setResult(gson.toJson(secondStage));
-            //Boolean isDone = playedCards.containsChosenCardByPlayer(player);
+            //Boolean isDone = playedCards.containsChosenCardByPlayer(token);
             //response.addField("isDone", isDone.toString());
             //response.addField("countOfPlayers", "1");
             //response.addField("stage", "2");
@@ -338,11 +336,11 @@ public class CardGame {
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getVotedPlayers()){
                 PlayerModel playerModel = new PlayerModel();
-                playerModel.player = player1.getId().toString();
+                playerModel.token = player1.getId().toString();
                 playerModels.add(playerModel);
             }
             thirdStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
-            //Boolean isDone = currentHead.equals(player);
+            //Boolean isDone = currentHead.equals(token);
             //response.addField("isDone", isDone.toString());
             //response.addField("countOfPlayers", "1");
             //response.addField("stage", "3");
@@ -374,7 +372,7 @@ public class CardGame {
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: fourthStagePlayers.getHashSet()){
                 PlayerModel playerModel = new PlayerModel();
-                playerModel.player = player1.getId().toString();
+                playerModel.token = player1.getId().toString();
                 playerModels.add(playerModel);
             }
             fourthStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
@@ -383,14 +381,14 @@ public class CardGame {
                 Player player1 = playedCards.getPlayerByChosenCard(card);
                 CardModel cardModel = new CardModel();
                 PlayerModel playerModel = new PlayerModel();
-                playerModel.player = player1.getId().toString();
+                playerModel.token = player1.getId().toString();
                 cardModel.id = card.getId();
                 cardModel.owner = playerModel;
                 ArrayList<PlayerModel> playerModels1 = new ArrayList<PlayerModel>();
                 for(Player player2: players.getHashSet()){
                     if(playedCards.getVotedCardByPlayer(player2).getId().equals(card.getId())){
                         PlayerModel playerModel1 = new PlayerModel();
-                        playerModel1.player = player2.getId().toString();
+                        playerModel1.token = player2.getId().toString();
                         playerModels1.add(playerModel1);
                     }
                 }
@@ -406,7 +404,7 @@ public class CardGame {
             //Integer i = 0;
             //for(Card card: points.keySet()){
             //    Player player1 = playedCards.getPlayerByChosenCard(card);
-            //    response.addField("player#" + i.toString(), player1.getId().toString());
+            //    response.addField("token#" + i.toString(), player1.getId().toString());
             //    response.addField("card#" + i.toString(), card.getId().toString());
             //    response.addField("vote#" + i.toString(), points.get(card).toString());
             //    i++;

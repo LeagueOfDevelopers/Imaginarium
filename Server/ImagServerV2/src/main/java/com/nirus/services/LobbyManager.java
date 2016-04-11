@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.nirus.api_params.GameParams;
 import com.nirus.api_params.LobbyParams;
 import com.nirus.basics.Lobby;
 import com.nirus.basics.Player;
@@ -52,9 +51,9 @@ public class LobbyManager implements ILobbyManager {
         //Integer i = 0;
         for(Player player: lobbies.getLobbyByPlayer(newPlayer).getPlayers().getHashSet()){
             PlayerModel playerModel = new PlayerModel();
-            playerModel.player = player.getId().toString();
+            playerModel.token = player.getId().toString();
             playerModels.add(playerModel);
-            //response.addField("player#" + i.toString(), player.getId().toString());
+            //response.addField("token#" + i.toString(), token.getId().toString());
             //i++;
         }
         lobbyModel.players = playerModels.toArray(new PlayerModel[]{});
@@ -75,15 +74,15 @@ public class LobbyManager implements ILobbyManager {
                 lobbyModel.token = player.getId().toString();
                 lobbyModel.status = "READY";
                 ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
-                //response.addField("token", player.getId().toString());
+                //response.addField("token", token.getId().toString());
                 //response.addField("status", "READY");
-                //response.addField("countOfPlayers", lobbies.getLobbyByPlayer(player).size().toString());
+                //response.addField("countOfPlayers", lobbies.getLobbyByPlayer(token).size().toString());
                 //Integer i = 0;
                 for(Player player1: lobbies.getLobbyByPlayer(player).getPlayers().getHashSet()){
                     PlayerModel playerModel = new PlayerModel();
-                    playerModel.player = player1.getId().toString();
+                    playerModel.token = player1.getId().toString();
                     playerModels.add(playerModel);
-                    //response.addField("player#" + i.toString(), player1.getId().toString());
+                    //response.addField("token#" + i.toString(), player1.getId().toString());
                     //i++;
                 }
                 lobbyModel.players = playerModels.toArray(new PlayerModel[]{});
@@ -99,15 +98,15 @@ public class LobbyManager implements ILobbyManager {
                 lobbyModel.token = player.getId().toString();
                 lobbyModel.status = "WAITING";
                 ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
-                //response.addField("token", player.getId().toString());
+                //response.addField("token", token.getId().toString());
                 //response.addField("status", "WAITING");
-                //response.addField("countOfPlayers", lobbies.getLobbyByPlayer(player).size().toString());
+                //response.addField("countOfPlayers", lobbies.getLobbyByPlayer(token).size().toString());
                 //Integer i = 0;
                 for(Player player1: lobbies.getLobbyByPlayer(player).getPlayers().getHashSet()){
                     PlayerModel playerModel = new PlayerModel();
-                    playerModel.player = player1.getId().toString();
+                    playerModel.token = player1.getId().toString();
                     playerModels.add(playerModel);
-                    //response.addField("player#" + i.toString(), player1.getId().toString());
+                    //response.addField("token#" + i.toString(), player1.getId().toString());
                     //i++;
                 }
                 lobbyModel.players = playerModels.toArray(new PlayerModel[]{});
@@ -123,7 +122,7 @@ public class LobbyManager implements ILobbyManager {
             lobbyModel.token = player.getId().toString();
             lobbyModel.status = "ERROR";
             response.setResult(gson.toJson(lobbyModel));
-            //response.addField("token", player.getId().toString());
+            //response.addField("token", token.getId().toString());
             //response.addField("status", "ERROR");
             return response;
         }
