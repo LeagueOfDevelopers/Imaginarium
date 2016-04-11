@@ -60,9 +60,9 @@ public class CardGame {
     public ResponseGame setUpdate(GameParams params){
         ResponseGame response = new ResponseGame();
         if(updateGameSituation(params)){
-            response.addField("status", "OK");
+            response.setResult("{\"status\":\"OK\"}");
         } else{
-            response.addField("status", "ERROR");
+            response.setResult("{\"status\":\"ERROR\"}");
         }
         return response;
     }
@@ -356,7 +356,7 @@ public class CardGame {
                 //response.addField("card#" + i.toString(), card.getId().toString());
                 //i++;
             }
-            thirdStage.cardModels = cardModels.toArray(new CardModel[]{});
+            thirdStage.cards = cardModels.toArray(new CardModel[]{});
             response.setResult(gson.toJson(thirdStage));
             responses.addResponse(response, player);
         }
