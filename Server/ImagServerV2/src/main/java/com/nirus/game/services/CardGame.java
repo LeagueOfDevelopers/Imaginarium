@@ -88,8 +88,9 @@ public class CardGame {
 
     public ResponseGame leaveGame(GameParams params){
         gameStage.endGame(-3);
+        leavingPlayer = params.getPlayer();
         ResponseGame response = new ResponseGame();
-        response.addField("status", "OK");
+        response.setResult("{\"status\":\"OK\"}");
         return response;
     }
 
@@ -170,7 +171,7 @@ public class CardGame {
         ResponseGame responseGame = responses.getResponseByPlayerSafe(player);
         if(gameStage.getStage() == 0){
             FirstStage firstStage;
-            firstStage = gson.fromJson(responses.getResponseByPlayerSafe(player).getResponse(), FirstStage.class);
+            firstStage = gson.fromJson(responseGame.getResponse(), FirstStage.class);
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getChosenMap().keySet()){
                 PlayerModel playerModel = new PlayerModel();
@@ -178,14 +179,14 @@ public class CardGame {
                 playerModels.add(playerModel);
             }
             firstStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
-            //responseGame.setResult(gson.toJson(firstStage));
+            responseGame.setResult(gson.toJson(firstStage));
             //responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
             //Boolean isDone = !currentHead.equals(token) || playedCards.howMuchChosen() > 0;
             //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() == 1){
             SecondStage secondStage;
-            secondStage = gson.fromJson(responses.getResponseByPlayerSafe(player).getResponse(), SecondStage.class);
+            secondStage = gson.fromJson(responseGame.getResponse(), SecondStage.class);
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getChosenMap().keySet()){
                 PlayerModel playerModel = new PlayerModel();
@@ -201,7 +202,7 @@ public class CardGame {
         }
         if(gameStage.getStage() == 2){
             ThirdStage thirdStage;
-            thirdStage = gson.fromJson(responses.getResponseByPlayerSafe(player).getResponse(), ThirdStage.class);
+            thirdStage = gson.fromJson(responseGame.getResponse(), ThirdStage.class);
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getVotedPlayers()){
                 PlayerModel playerModel = new PlayerModel();
@@ -220,7 +221,7 @@ public class CardGame {
         }
         if(gameStage.getStage() == 3){
             FourthStage fourthStage;
-            fourthStage = gson.fromJson(responses.getResponseByPlayerSafe(player).getResponse(), FourthStage.class);
+            fourthStage = gson.fromJson(responseGame.getResponse(), FourthStage.class);
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: fourthStagePlayers.getHashSet()){
                 PlayerModel playerModel = new PlayerModel();
@@ -235,7 +236,21 @@ public class CardGame {
             //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() < 0){
-            responseGame.setResult("{\"stage\":0}");
+            GameOverModel gameOverModel = new GameOverModel();
+            gameOverModel.stage = 0;
+            if(gameStage.getStage() == -1){
+                gameOverModel.reason = "OUT_OF_CARDS";
+            }
+            if(gameStage.getStage() == -2){
+                gameOverModel.reason = "RUN_OUT_OF_TIME";
+            }
+            if(gameStage.getStage() == -3){
+                gameOverModel.reason = "PLAYER_LEAVED";
+                PlayerModel playerModel = new PlayerModel();
+                playerModel.token = leavingPlayer.getId().toString();
+                gameOverModel.player = playerModel;
+            }
+            responseGame.setResult(gson.toJson(gameOverModel));
             //responseGame.updateField("stage", "0");
         }
     }
@@ -257,6 +272,7 @@ public class CardGame {
                 gameStage.endGame(-1);
                 continue;
             }
+            firstStage.stage = 1;
             PlayerModel currentH = new PlayerModel();
             currentH.token = currentHead.getId().toString();
             firstStage.currentHead = currentH;
@@ -277,14 +293,16 @@ public class CardGame {
             for(int i = 0; i < 6 - handSize; i++){
                 Card card = standardDeck.getRandomCard();
                 if(card != null){
-                    CardModel cardModel = new CardModel();
-                    cardModel.id = card.getId();
-                    PlayerModel playerModel = new PlayerModel();
-                    playerModel.token = player.getId().toString();
-                    cardModel.owner = playerModel;
-                    cardModels.add(cardModel);
                     cards.addCard(card);
                 }
+            }
+            for(Card card: cards.getHashSet()){
+                CardModel cardModel = new CardModel();
+                cardModel.id = card.getId();
+                PlayerModel playerModel = new PlayerModel();
+                playerModel.token = player.getId().toString();
+                cardModel.owner = playerModel;
+                cardModels.add(cardModel);
             }
             firstStage.cards = cardModels.toArray(new CardModel[]{});
             response.setResult(gson.toJson(firstStage));
@@ -385,7 +403,7 @@ public class CardGame {
                 cardModel.id = card.getId();
                 cardModel.owner = playerModel;
                 ArrayList<PlayerModel> playerModels1 = new ArrayList<PlayerModel>();
-                for(Player player2: players.getHashSet()){
+                for(Player player2: playedCards.getVotedPlayers()){
                     if(playedCards.getVotedCardByPlayer(player2).getId().equals(card.getId())){
                         PlayerModel playerModel1 = new PlayerModel();
                         playerModel1.token = player2.getId().toString();
@@ -490,6 +508,7 @@ public class CardGame {
     private Stage gameStage;
     private Iterator<Player> headIterator;
     private Player currentHead;
+    private Player leavingPlayer;
     private PlayersScores scores;
     private PlayersHands hands;
     private ResponsesContainer responses;
