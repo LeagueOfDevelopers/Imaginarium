@@ -12,4 +12,6 @@ public class FirstStage {
     public PlayerModel currentHead;
     public CardModel[] cards;
     public int amountOfCards;
+    public Long remainingTime;
+    public PlayerModel[] playersThatFuckedUp;
 }

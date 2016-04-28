@@ -23,7 +23,14 @@ public class LobbyParams {
     public Integer getLobbyMaxSize(){
         return lobbyMaxSize;
     }
+    public Integer getSpeed() {
+        return speed;
+    }
+    public void setSpeed(Integer speed) {
+        this.speed = speed;
+    }
     private Integer lobbyMaxSize;
     private Player player;
     private Instant instant;
+    private Integer speed;
 }

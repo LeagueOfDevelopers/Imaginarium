@@ -8,5 +8,5 @@ import com.nirus.game.models.basics.PlayerModel;
 public class GameOverModel {
     public Integer stage;
     public String reason;
-    public PlayerModel player;
+    public PlayerModel leftPlayer;
 }

@@ -9,4 +9,5 @@ public class SecondStage {
     public int stage;
     public PlayerModel[] donePlayers;
     public String text;
+    public Long remainingTime;
 }

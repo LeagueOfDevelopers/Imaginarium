@@ -10,4 +10,5 @@ public class ThirdStage {
     public int stage;
     public PlayerModel[] donePlayers;
     public CardModel[] cards;
+    public Long remainingTime;
 }

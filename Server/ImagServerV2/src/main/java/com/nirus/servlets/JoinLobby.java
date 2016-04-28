@@ -31,6 +31,12 @@ public class JoinLobby extends javax.servlet.http.HttpServlet {
         catch (Exception e){
             params.setLobbyMaxSize(6);
         }
+        try {
+            params.setSpeed(parser.GetStringByKey("speed").equals("fast") ? 2 : 1);
+        }
+        catch (Exception e){
+            params.setSpeed(1);
+        }
         ResponseLobby responseLobby = lobby.JoinLobby(params);
         logger.debug(responseLobby);
         response.getWriter().append(responseLobby.getResponse());

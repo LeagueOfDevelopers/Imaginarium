@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nirus.api_params.GameParams;
 import com.nirus.basics.Player;
-import com.nirus.game.basics.CardsContainer;
 import com.nirus.containers.PlayersContainer;
 import com.nirus.containers.ResponsesContainer;
 import com.nirus.game.basics.*;
@@ -23,11 +22,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * Created by ndiezel on 28.01.2016.
+ * Created by ndiezel on 22.04.2016.
  */
-public class CardGame implements CardGameInterface {
-    public CardGame(Integer size, PlayersContainer players){
-        Integer[] a = new Integer[]{0,0,0,96,75,72,98};
+public class FastCardGame implements CardGameInterface {
+    public FastCardGame(Integer size, PlayersContainer players){
+        Integer[] a = new Integer[]{0,0,0,36, 42, 48,54};
         standardDeck = new Deck(a[size - 1]);
         responses = new ResponsesContainer();
         hands = new PlayersHands();
@@ -35,6 +34,7 @@ public class CardGame implements CardGameInterface {
         gameStage = new Stage();
         playedCards = new PlayedCards();
         fourthStagePlayers = new PlayersContainer();
+        timer = new SimpleTimer();
 
         builder.setPrettyPrinting();
 
@@ -45,7 +45,8 @@ public class CardGame implements CardGameInterface {
 
         this.players = players;
         headIterator = this.players.getHashSet().iterator();
-        initFirstTurn();
+        builder.setPrettyPrinting();
+        initFirstTurn(null);
         logCurrentState();
     }
 
@@ -162,7 +163,7 @@ public class CardGame implements CardGameInterface {
                 if(fourthStagePlayers.size().equals(players.size())) {
                     gameStage.nextStage();
                     fourthStagePlayers.clear();
-                    initFirstTurn();
+                    initFirstTurn(null);
                     logCurrentState();
                 }
             }
@@ -173,6 +174,7 @@ public class CardGame implements CardGameInterface {
         if(gameStage.getStage() == 0){
             FirstStage firstStage;
             firstStage = gson.fromJson(responseGame.getResponse(), FirstStage.class);
+            firstStage.remainingTime = timer.getRemainingTime();
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getChosenMap().keySet()){
                 PlayerModel playerModel = new PlayerModel();
@@ -181,13 +183,11 @@ public class CardGame implements CardGameInterface {
             }
             firstStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             responseGame.setResult(gson.toJson(firstStage));
-            //responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
-            //Boolean isDone = !currentHead.equals(token) || playedCards.howMuchChosen() > 0;
-            //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() == 1){
             SecondStage secondStage;
             secondStage = gson.fromJson(responseGame.getResponse(), SecondStage.class);
+            secondStage.remainingTime = timer.getRemainingTime();
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getChosenMap().keySet()){
                 PlayerModel playerModel = new PlayerModel();
@@ -196,14 +196,11 @@ public class CardGame implements CardGameInterface {
             }
             secondStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             responseGame.setResult(gson.toJson(secondStage));
-
-            //responseGame.updateField("countOfPlayers", playedCards.howMuchChosen().toString());
-            //Boolean isDone = playedCards.containsChosenCardByPlayer(token);
-            //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() == 2){
             ThirdStage thirdStage;
             thirdStage = gson.fromJson(responseGame.getResponse(), ThirdStage.class);
+            thirdStage.remainingTime = timer.getRemainingTime();
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getVotedPlayers()){
                 PlayerModel playerModel = new PlayerModel();
@@ -212,17 +209,11 @@ public class CardGame implements CardGameInterface {
             }
             thirdStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             responseGame.setResult(gson.toJson(thirdStage));
-
-            //responseGame.updateField("countOfPlayers", playedCards.howMuchVoted().toString());
-            //Boolean isDone = playedCards.containsVotedCard(token);
-            //if(token.getId().equals(currentHead.getId())){
-            //    isDone = true;
-            //}
-            //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() == 3){
             FourthStage fourthStage;
             fourthStage = gson.fromJson(responseGame.getResponse(), FourthStage.class);
+            fourthStage.remainingTime = timer.getRemainingTime();
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: fourthStagePlayers.getHashSet()){
                 PlayerModel playerModel = new PlayerModel();
@@ -231,10 +222,6 @@ public class CardGame implements CardGameInterface {
             }
             fourthStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             responseGame.setResult(gson.toJson(fourthStage));
-
-            //responseGame.updateField("countOfPlayers", fourthStagePlayers.size().toString());
-            //Boolean isDone = fourthStagePlayers.contains(token);
-            //responseGame.updateField("isDone", isDone.toString());
         }
         if(gameStage.getStage() < 0){
             GameOverModel gameOverModel = new GameOverModel();
@@ -252,10 +239,11 @@ public class CardGame implements CardGameInterface {
                 gameOverModel.leftPlayer = playerModel;
             }
             responseGame.setResult(gson.toJson(gameOverModel));
-            //responseGame.updateField("stage", "0");
         }
     }
-    private void initFirstTurn(){
+    private void initFirstTurn(PlayersContainer playersThatFuckedUp){
+        timer.setFinalTime(90);
+        timer.start();
         responses.clear();
         playedCards.clear();
         if(!headIterator.hasNext()){
@@ -268,23 +256,24 @@ public class CardGame implements CardGameInterface {
             if(hands.getHandByPlayer(player).size() == 0 && standardDeck.size() == 0){
                 firstStage.stage = 0;
                 response.setResult(gson.toJson(firstStage));
-                //response.addField("stage", "0");
                 responses.addResponse(response, player);
                 gameStage.endGame(-1);
                 continue;
             }
             firstStage.stage = 1;
+            firstStage.remainingTime = timer.getRemainingTime();
+            if(playersThatFuckedUp != null){
+                ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
+                for(Player player1: playersThatFuckedUp.getHashSet()){
+                    PlayerModel playerModel = new PlayerModel();
+                    playerModel.token = player1.getId().toString();
+                    playerModels.add(playerModel);
+                }
+                firstStage.playersThatFuckedUp = playerModels.toArray(new PlayerModel[]{});
+            }
             PlayerModel currentH = new PlayerModel();
             currentH.token = currentHead.getId().toString();
             firstStage.currentHead = currentH;
-            //Boolean isHead = currentHead.equals(token);
-            //isHead = !isHead;
-            //response.addField("isDone", isHead.toString());
-            //response.addField("countOfPlayers", "0");
-            //response.addField("stage", "1");
-            //response.addField("currentHead",  currentHead.getId().toString());
-            //response.addField("score", scores.getScoreByPlayer(token).getScore().toString());
-            //response.addField("amountOfCards", standardDeck.size().toString());
             CardsContainer cards = hands.getHandByPlayer(player);
             if(cards == null){
                 cards = new CardsContainer();
@@ -307,11 +296,6 @@ public class CardGame implements CardGameInterface {
             }
             firstStage.cards = cardModels.toArray(new CardModel[]{});
             response.setResult(gson.toJson(firstStage));
-            //Integer i = 0;
-            //for(Card card : cards.getHashSet()){
-            //    response.addField("card#" + i.toString(), card.getId().toString());
-            //    i++;
-            //}
             responses.addResponse(response, player);
         }
         for(Player player: players.getHashSet()){
@@ -324,12 +308,14 @@ public class CardGame implements CardGameInterface {
         }
     }
     private void initSecondStage(){
+        timer.restart(60);
         responses.clear();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
             SecondStage secondStage = new SecondStage();
             secondStage.stage = 2;
             secondStage.text = headsText;
+            secondStage.remainingTime = timer.getRemainingTime();
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getChosenMap().keySet()){
                 PlayerModel playerModel = new PlayerModel();
@@ -338,20 +324,17 @@ public class CardGame implements CardGameInterface {
             }
             secondStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
             response.setResult(gson.toJson(secondStage));
-            //Boolean isDone = playedCards.containsChosenCardByPlayer(token);
-            //response.addField("isDone", isDone.toString());
-            //response.addField("countOfPlayers", "1");
-            //response.addField("stage", "2");
-            //response.addField("text", headsText);
             responses.addResponse(response, player);
         }
     }
     private void initThirdStage(){
+        timer.restart(45);
         responses.clear();
         for(Player player: players.getHashSet()){
             ResponseGame response = new ResponseGame();
             ThirdStage thirdStage = new ThirdStage();
             thirdStage.stage = 3;
+            thirdStage.remainingTime = timer.getRemainingTime();
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: playedCards.getVotedPlayers()){
                 PlayerModel playerModel = new PlayerModel();
@@ -359,11 +342,6 @@ public class CardGame implements CardGameInterface {
                 playerModels.add(playerModel);
             }
             thirdStage.donePlayers = playerModels.toArray(new PlayerModel[]{});
-            //Boolean isDone = currentHead.equals(token);
-            //response.addField("isDone", isDone.toString());
-            //response.addField("countOfPlayers", "1");
-            //response.addField("stage", "3");
-            //Integer i = 0;
             ArrayList<CardModel> cardModels = new ArrayList<CardModel>();
             for(Card card: playedCards.getChosenCards()){
                 if(card.getId().equals(playedCards.getChosenCardByPlayer(player).getId())){
@@ -372,8 +350,6 @@ public class CardGame implements CardGameInterface {
                 CardModel cardModel = new CardModel();
                 cardModel.id = card.getId();
                 cardModels.add(cardModel);
-                //response.addField("card#" + i.toString(), card.getId().toString());
-                //i++;
             }
             thirdStage.cards = cardModels.toArray(new CardModel[]{});
             response.setResult(gson.toJson(thirdStage));
@@ -381,6 +357,7 @@ public class CardGame implements CardGameInterface {
         }
     }
     private void initFourthStage(){
+        timer.restart(30);
         HashMap<Card, Integer> points = calculateScore();
 
         responses.clear();
@@ -388,6 +365,7 @@ public class CardGame implements CardGameInterface {
             ResponseGame response = new ResponseGame();
             FourthStage fourthStage = new FourthStage();
             fourthStage.stage = 4;
+            fourthStage.remainingTime = timer.getRemainingTime();
             ArrayList<PlayerModel> playerModels = new ArrayList<PlayerModel>();
             for(Player player1: fourthStagePlayers.getHashSet()){
                 PlayerModel playerModel = new PlayerModel();
@@ -471,9 +449,55 @@ public class CardGame implements CardGameInterface {
     }
     private void checkPlayersTiming(){
         for(Player player: players.getHashSet()){
-            if(players.getPlayerInstant(player).isBefore(Instant.now().minus(12, ChronoUnit.HOURS))){
+            if(players.getPlayerInstant(player).isBefore(Instant.now().minus(12, ChronoUnit.HOURS))) {
                 gameStage.endGame(-2);
                 break;
+            }
+        }
+        if(timer.hasTimeRunOut()){
+            if(gameStage.getStage() == 0){
+                if(playedCards.getChosenMap().size() < 1){
+                    scores.changePlayerScore(currentHead, -3);
+                    PlayersContainer playersThatFuckedUp = new PlayersContainer();
+                    playersThatFuckedUp.addPlayer(currentHead);
+                    initFirstTurn(playersThatFuckedUp);
+                }
+            }
+            if(gameStage.getStage() == 1){
+                boolean playersFailed = false;
+                PlayersContainer playersThatFuckedUp = new PlayersContainer();
+                for(Player player: players.getHashSet()){
+                    if(playedCards.getChosenCardByPlayer(player) == null){
+                        playersThatFuckedUp.addPlayer(player);
+                        scores.changePlayerScore(player, -3);
+                        playersFailed = true;
+                    }
+                }
+                if(playersFailed){
+                    for(Player player: players.getHashSet()){
+                        if(playedCards.getChosenCardByPlayer(player) != null){
+                            hands.addCardToHand(player, playedCards.getChosenCardByPlayer(player));
+                        }
+                    }
+                    initFirstTurn(playersThatFuckedUp);
+                }
+            }
+            if(gameStage.getStage() == 2){
+                boolean playersFailed = false;
+                PlayersContainer playersThatFuckedUp = new PlayersContainer();
+                for(Player player: players.getHashSet()){
+                    if(playedCards.getVotedCardByPlayer(player) == null && !player.getId().equals(currentHead.getId())){
+                        playersThatFuckedUp.addPlayer(player);
+                        scores.changePlayerScore(player, -3);
+                        playersFailed = true;
+                    }
+                }
+                if(playersFailed){
+                    initFirstTurn(playersThatFuckedUp);
+                }
+            }
+            if(gameStage.getStage() == 3){
+                initFirstTurn(null);
             }
         }
     }
@@ -504,6 +528,7 @@ public class CardGame implements CardGameInterface {
 
     private Logger logger = LogManager.getLogger(CardGame.class);
 
+    private SimpleTimer timer;
     private String headsText;
     private PlayedCards playedCards;
     private Stage gameStage;
