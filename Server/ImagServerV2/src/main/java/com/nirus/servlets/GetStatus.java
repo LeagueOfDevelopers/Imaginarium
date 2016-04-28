@@ -29,8 +29,13 @@ public class GetStatus extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JSONRequestParser parser = new JSONRequestParser(request);
         GameParams params = new GameParams(new Player(UUID.fromString(parser.GetStringByKey("token"))));
-        ResponseGame responseGame = roomManager.getGameStatus(params);
-        response.getWriter().append(responseGame.getResponse());
+        try {
+            ResponseGame responseGame = roomManager.getGameStatus(params);
+            response.getWriter().append(responseGame.getResponse());
+        } catch (Exception e){
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().append("{\"status\":\"ERROR\"");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

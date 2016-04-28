@@ -36,8 +36,13 @@ public class UpdateStatus extends HttpServlet {
             params.setText(parser.GetStringByKey("text"));
         }
         catch (Exception e){}
-        ResponseGame responseGame = roomManager.updateGameStatus(params);
-        response.getWriter().append(responseGame.getResponse());
+        try {
+            ResponseGame responseGame = roomManager.updateGameStatus(params);
+            response.getWriter().append(responseGame.getResponse());
+        } catch (Exception e){
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().append("{\"status\":\"ERROR\"");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

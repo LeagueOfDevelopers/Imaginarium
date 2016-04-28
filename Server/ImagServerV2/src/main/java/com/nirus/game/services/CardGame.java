@@ -8,6 +8,7 @@ import com.nirus.game.basics.CardsContainer;
 import com.nirus.containers.PlayersContainer;
 import com.nirus.containers.ResponsesContainer;
 import com.nirus.game.basics.*;
+import com.nirus.game.interfaces.CardGameInterface;
 import com.nirus.game.models.*;
 import com.nirus.game.models.basics.CardModel;
 import com.nirus.game.models.basics.PlayerModel;
@@ -24,7 +25,7 @@ import java.util.Iterator;
 /**
  * Created by ndiezel on 28.01.2016.
  */
-public class CardGame {
+public class CardGame implements CardGameInterface {
     public CardGame(Integer size, PlayersContainer players){
         Integer[] a = new Integer[]{0,0,0,96,75,72,98};
         standardDeck = new Deck(a[size - 1]);
@@ -140,19 +141,19 @@ public class CardGame {
     private void updateForNextStage(){
         if(responses.getAmmountOfRequest().equals(players.size())){
             if(gameStage.getStage() == 0){
-                if(playedCards.howMuchChosen() == 1){
+                if(playedCards.getChosenMap().size() == 1){
                     gameStage.nextStage();
                     initSecondStage();
                     logCurrentState();
                 }
             }else if(gameStage.getStage() == 1){
-                if(playedCards.howMuchChosen().equals(players.size())){
+                if(playedCards.getChosenMap().size() == players.size()){
                     gameStage.nextStage();
                     initThirdStage();
                     logCurrentState();
                 }
             }else if(gameStage.getStage() == 2){
-                if(playedCards.howMuchVoted() == players.size() - 1){
+                if(playedCards.getVotedMap().size() == players.size() - 1){
                     gameStage.nextStage();
                     initFourthStage();
                     logCurrentState();
@@ -245,10 +246,10 @@ public class CardGame {
                 gameOverModel.reason = "RUN_OUT_OF_TIME";
             }
             if(gameStage.getStage() == -3){
-                gameOverModel.reason = "PLAYER_LEAVED";
+                gameOverModel.reason = "PLAYER_LEFT";
                 PlayerModel playerModel = new PlayerModel();
                 playerModel.token = leavingPlayer.getId().toString();
-                gameOverModel.player = playerModel;
+                gameOverModel.leftPlayer = playerModel;
             }
             responseGame.setResult(gson.toJson(gameOverModel));
             //responseGame.updateField("stage", "0");
@@ -299,9 +300,9 @@ public class CardGame {
             for(Card card: cards.getHashSet()){
                 CardModel cardModel = new CardModel();
                 cardModel.id = card.getId();
-                PlayerModel playerModel = new PlayerModel();
-                playerModel.token = player.getId().toString();
-                cardModel.owner = playerModel;
+                //PlayerModel playerModel = new PlayerModel();
+                //playerModel.token = player.getId().toString();
+                //cardModel.owner = playerModel;
                 cardModels.add(cardModel);
             }
             firstStage.cards = cardModels.toArray(new CardModel[]{});

@@ -8,9 +8,10 @@ import java.util.HashSet;
  * Created by ndiezel on 27.01.2016.
  */
 public class Lobby {
-    public Lobby(Integer maxSize){
+    public Lobby(Integer maxSize, Integer speed){
         players = new PlayersContainer();
         this.maxSize = maxSize;
+        this.speed = speed;
     }
     public boolean addPlayer(Player player){
         return players.addPlayer(player);
@@ -28,10 +29,13 @@ public class Lobby {
     public Integer size(){
         return players.size();
     }
-
+    public Integer getSpeed(){
+        return speed;
+    }
     public Integer maxSize(){
         return maxSize;
     }
     private PlayersContainer players;
     private Integer maxSize;
+    private Integer speed;
 }

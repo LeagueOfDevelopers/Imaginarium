@@ -24,14 +24,14 @@ public class LobbiesContainer {
         }
         return null;
     }
-    public Lobby getLobbyBySizeForNewPlayer(Integer size){
+    public Lobby getLobbyBySizeAndSpeedForNewPlayer(Integer size, Integer speed){
         for (Lobby lobby:
                 lobbies) {
-            if (lobby.maxSize().equals(size) && !lobby.isItFull()){
+            if (lobby.maxSize().equals(size) && lobby.getSpeed().equals(speed) && !lobby.isItFull()){
                 return lobby;
             }
         }
-        Lobby newLobby = new Lobby(size);
+        Lobby newLobby = new Lobby(size, speed);
         addLobby(newLobby);
         return newLobby;
     }

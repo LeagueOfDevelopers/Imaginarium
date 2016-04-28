@@ -30,11 +30,11 @@ public class LobbyManager implements ILobbyManager {
     }
     public ResponseLobby JoinLobby(LobbyParams params) {
         Player newPlayer = params.getPlayer();
-        Lobby lobby = lobbies.getLobbyBySizeForNewPlayer(params.getLobbyMaxSize());
+        Lobby lobby = lobbies.getLobbyBySizeAndSpeedForNewPlayer(params.getLobbyMaxSize(), params.getSpeed());
         lobby.addPlayer(newPlayer);
         lobby.getPlayers().updatePlayerInstant(newPlayer, params.getInstant());
         if(lobby.isItFull()){
-            roomManager.createRoom(lobby.getPlayers(), lobby.size());
+            roomManager.createRoom(lobby.getPlayers(), lobby.size(), lobby.getSpeed());
         }
 
         ResponseLobby response = new ResponseLobby();

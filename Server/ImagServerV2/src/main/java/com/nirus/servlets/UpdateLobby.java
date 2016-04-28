@@ -28,8 +28,13 @@ public class UpdateLobby extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JSONRequestParser parser = new JSONRequestParser(request);
         LobbyParams params = new LobbyParams(new Player(UUID.fromString(parser.GetStringByKey("token"))));
-        ResponseLobby responseLobby = lobby.UpdateLobby(params);
-        response.getWriter().append(responseLobby.getResponse());
+        try{
+            ResponseLobby responseLobby = lobby.UpdateLobby(params);
+            response.getWriter().append(responseLobby.getResponse());
+        } catch (Exception e){
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().append("{\"status\":\"ERROR\"");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
