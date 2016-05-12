@@ -453,7 +453,7 @@ public class CardGame implements CardGameInterface {
                     scores.changePlayerScore(currentHead, -3);
                 } else{
                     scores.changePlayerScore(currentHead,
-                            points.get(playerCard) * 3);
+                            points.get(playerCard) + 3);
                 }
             } else{
                 if(points.get(playedCards.getChosenCardByPlayer(currentHead)) != players.size() - 1){
